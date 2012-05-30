@@ -51,3 +51,10 @@ desc "Open console (Scala REPL)"
 task :repl do
   system "scala -classpath #{java_archives.join(':')}:#{latest_package}"
 end
+
+desc "Run specs"
+task :spec do
+  raise NotImplementedError.new("TODO")
+  # 1. Build spec *.scala sources
+  # 2. Run specs2
+end
