@@ -28,6 +28,14 @@ def bin_directory
   @bin_directory
 end
 
+def packages
+  @packages ||= Dir.glob("pkg/**/*.jar").sort
+end
+
+def latest_package
+  @latest_package ||= packages.last
+end
+
 desc "Compile sources"
 task :compile do
   system "javac -classpath #{java_archives.join(':')} -sourcepath #{java_source_directories.join(':')} -d #{bin_directory} #{java_sources.join(' ')}"
@@ -37,4 +45,9 @@ desc "Package *.jar file"
 task :package => :compile do
   jar = File.join("jquantlib-#{Time.now.to_s.scan(/\d+/).join}.jar")
   system "jar cf #{jar} -C #{bin_directory} ."
+end
+
+desc "Open console (Scala REPL)"
+task :repl do
+  system "scala -classpath #{java_archives.join(':')}:#{latest_package}"
 end
