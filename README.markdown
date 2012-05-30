@@ -7,6 +7,11 @@ JQuantLib is based on QuantLib, which is written in C++, aiming to be a complete
 The [repository here](https://github.com/imperialft/jquantlib) is an unofficial fork of JQuantLib with many in-house modifications.
 If you were looking for the original codebase, please see [jquantlib.org](http://www.jquantlib.org).
 
+Downloads
+---------
+
+The latest snapshot of packaged Java archive can be found [here](https://github.com/imperialft/jquantlib/tree/master/pkg).
+
 License
 -------
 
