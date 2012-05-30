@@ -15,11 +15,15 @@ The latest snapshot of packaged Java archive can be found [here](https://github.
 License
 -------
 
-JQuantLib is licensed under [The BSD 3-Clause License](http://www.opensource.org/licenses/bsd-license.php). Please see LICENSE for more information.
+JQuantLib is licensed under [The BSD 3-Clause License](http://www.opensource.org/licenses/bsd-license.php). Please see [LICENSE](https://github.com/imperialft/jquantlib/blob/master/LICENSE) for more information.
 
-The libraries under "lib" directory are redistributed under each of the corresponding license.
+The libraries under _lib_ directory are redistributed under each of the corresponding license.
 
 * [JCommon](http://www.jfree.org/jcommon) 
 * [JFreeChart](http://www.jfree.org/jfreechart)
 * [Joda Primitives](http://joda-primitives.sourceforge.net)
 * [Simple Logging Facade for Java](http://www.slf4j.org)
+
+Same applies to the software packages under _vendor_ directory:
+
+* [specs2](http://etorreborre.github.com/specs2)
