@@ -1,4 +1,4 @@
-jquantlib
+JQuantLib
 =========
 
-extension to jquantlib library
+TODO
