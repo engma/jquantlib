@@ -2,6 +2,10 @@ def java_archives
   @java_archives ||= Dir.glob("lib/**/*.jar")
 end
 
+def vendor_java_archives
+  @vendor_java_archives ||= Dir.glob("vendor/**/*.jar")
+end
+
 def java_source_directories
   @java_source_directories ||= Dir.glob("*/src/main/java")
 end
@@ -18,12 +22,12 @@ def java_sources
 end
 
 def java_classes
-  @java_classes ||= Dir.glob("tmp/bin/**/*.class")
+  @java_classes ||= Dir.glob(File.join(bin_directory, "**/*.class"))
 end
 
 def bin_directory
   return @bin_directory if @bin_directory
-  @bin_directory = File.expand_path("tmp/bin")
+  @bin_directory = "tmp/bin"
   Dir.mkdir @bin_directory unless File.exists?(@bin_directory)
   @bin_directory
 end
@@ -52,9 +56,42 @@ task :repl do
   system "scala -classpath #{java_archives.join(':')}:#{latest_package}"
 end
 
-desc "Run specs"
-task :spec do
-  raise NotImplementedError.new("TODO")
-  # 1. Build spec *.scala sources
-  # 2. Run specs2
+namespace :spec do
+  def scala_spec_sources
+    @scala_spec_sources ||= Dir.glob("spec/**/*Spec.scala")
+  end
+  def scala_spec_bin_directory
+    return @scala_spec_bin_directory if @scala_spec_bin_directory
+    @scala_spec_bin_directory = "tmp/spec_bin"
+    Dir.mkdir @scala_spec_bin_directory unless File.exists?(@scala_spec_bin_directory)
+    @scala_spec_bin_directory
+  end
+  def scala_spec_classes
+    @scala_spec_classes ||= Dir.glob(File.join(scala_spec_bin_directory, "**/*Spec.class")).map do |clazz|
+      clazz = File.basename(clazz)
+      clazz[0..clazz.index(".")-1]
+    end
+  end
+  desc "Compile specs"
+  task :compile do
+    system "scalac -classpath #{(java_archives + vendor_java_archives).join(':')}:#{bin_directory} -d #{scala_spec_bin_directory} #{scala_spec_sources.join(' ')}"
+  end
+  desc "Clean compiled specs"
+  task :clean do
+    require "fileutils"
+    FileUtils.rm_rf scala_spec_bin_directory
+  end
+  desc "Run specs"
+  task :run do
+    at_exit do
+      require "fileutils"
+      FileUtils.rm_rf "target"
+    end
+    scala_spec_classes.each do |clazz|
+      system "scala -classpath #{(java_archives + vendor_java_archives).join(':')}:#{scala_spec_bin_directory} specs2.run #{clazz}"
+    end
+  end
 end
+
+desc "Run specs (alias to spec:run)"
+task :spec => :"spec:run"
