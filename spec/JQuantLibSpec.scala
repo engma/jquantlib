@@ -1,4 +1,4 @@
-import org.specs2._
+import org.specs2.mutable._
 import org.jquantlib._
 
 class JQuantLibSpec extends Specification {
