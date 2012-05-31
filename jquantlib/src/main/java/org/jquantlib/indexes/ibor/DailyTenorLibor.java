@@ -43,7 +43,7 @@ import org.jquantlib.currencies.Currency;
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Period;
@@ -69,7 +69,7 @@ public class DailyTenorLibor extends IborIndex {
 			final Currency currency,
 			final Calendar financialCenterCalendar,
 			final DayCounter dayCounter,
-			final Handle<YieldTermStructure> h) { 
+			final YieldTermStructure h) { 
     	super(familyName,
     		  new Period(1,TimeUnit.Days),
     		  settlementDays,

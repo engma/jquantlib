@@ -44,7 +44,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.QL;
 import org.jquantlib.currencies.America.USDCurrency;
 import org.jquantlib.daycounters.ActualActual;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -70,12 +70,12 @@ import org.jquantlib.time.calendars.UnitedStates;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public class BMAIndex extends InterestRateIndex {
 
-    private final Handle<YieldTermStructure> termStructure;
+    private final YieldTermStructure termStructure;
     
     public BMAIndex() {
-    	this(new Handle<YieldTermStructure>());
+    	this(null);
     }
-    public BMAIndex(final Handle<YieldTermStructure> h) {
+    public BMAIndex(final YieldTermStructure h) {
         super("BMA", new Period(1,TimeUnit.Weeks), 1, new USDCurrency(), new UnitedStates(UnitedStates.Market.NYSE), new ActualActual(ActualActual.Convention.ISDA));
 
         this.termStructure = h;
@@ -84,7 +84,7 @@ public class BMAIndex extends InterestRateIndex {
         }
     }
 
-    public BMAIndex clone(final Handle<YieldTermStructure> h) {
+    public BMAIndex clone(final YieldTermStructure h) {
         final BMAIndex clone = new BMAIndex(h);
         return clone;
     }
@@ -104,10 +104,10 @@ public class BMAIndex extends InterestRateIndex {
     
     @Override
     protected double forecastFixing(final Date fixingDate) {
-        QL.require(! termStructure.empty() , "no forecasting term structure set to " + name());  // TODO: message
+        QL.require(termStructure != null , "no forecasting term structure set to " + name());  // TODO: message
         final Date start = fixingCalendar().advance(fixingDate, 1, TimeUnit.Days);
         final Date end  = maturityDate(start);
-        return termStructure.currentLink().forwardRate(start, 
+        return termStructure.forwardRate(start, 
         											   end,
         											   dayCounter,
         											   Compounding.Simple).rate();
@@ -128,7 +128,7 @@ public class BMAIndex extends InterestRateIndex {
     }    
     
     @Override
-    public Handle<YieldTermStructure> termStructure() {
+    public YieldTermStructure termStructure() {
         return termStructure;
     }
 

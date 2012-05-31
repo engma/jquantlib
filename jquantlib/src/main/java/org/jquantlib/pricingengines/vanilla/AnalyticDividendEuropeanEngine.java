@@ -97,32 +97,32 @@ public class AnalyticDividendEuropeanEngine extends DividendVanillaOption.Engine
         final StrikedTypePayoff payoff = (StrikedTypePayoff) a.payoff;
         QL.require(payoff!=null, "non-striked payoff given"); // TODO: message
 
-        final Date settlementDate = process.riskFreeRate().currentLink().referenceDate();
+        final Date settlementDate = process.riskFreeRate().referenceDate();
         double riskless = 0.0;
         for (int i=0; i<a.cashFlow.size(); i++) {
             final CashFlow cashflow = a.cashFlow.get(i);
             if (cashflow.date().gt(settlementDate)) {
-                riskless += cashflow.amount() * process.riskFreeRate().currentLink().discount(cashflow.date());
+                riskless += cashflow.amount() * process.riskFreeRate().discount(cashflow.date());
             }
         }
 
-        final double spot = process.stateVariable().currentLink().value() - riskless;
+        final double spot = process.stateVariable().value() - riskless;
         QL.require(spot > 0.0, "negative or null underlying after subtracting dividends"); // TODO: message
 
-        final /*@DiscountFactor*/ double dividendDiscount = process.dividendYield().currentLink().discount(a.exercise.lastDate());
-        final /*@DiscountFactor*/ double riskFreeDiscount = process.riskFreeRate().currentLink().discount(a.exercise.lastDate());
+        final /*@DiscountFactor*/ double dividendDiscount = process.dividendYield().discount(a.exercise.lastDate());
+        final /*@DiscountFactor*/ double riskFreeDiscount = process.riskFreeRate().discount(a.exercise.lastDate());
         final double forwardPrice = spot * dividendDiscount / riskFreeDiscount;
 
-        final double variance = process.blackVolatility().currentLink().blackVariance(a.exercise.lastDate(), payoff.strike());
+        final double variance = process.blackVolatility().blackVariance(a.exercise.lastDate(), payoff.strike());
         final BlackCalculator black = new BlackCalculator(payoff, forwardPrice, Math.sqrt(variance), riskFreeDiscount);
 
         r.value = black.value();
         greeks.delta = black.delta(spot);
         greeks.gamma = black.gamma(spot);
 
-        final DayCounter rfdc  = process.riskFreeRate().currentLink().dayCounter();
-        final DayCounter voldc = process.blackVolatility().currentLink().dayCounter();
-        /*@Time*/ double t = voldc.yearFraction(process.blackVolatility().currentLink().referenceDate(), a.exercise.lastDate());
+        final DayCounter rfdc  = process.riskFreeRate().dayCounter();
+        final DayCounter voldc = process.blackVolatility().dayCounter();
+        /*@Time*/ double t = voldc.yearFraction(process.blackVolatility().referenceDate(), a.exercise.lastDate());
         greeks.vega = black.vega(t);
 
         double delta_theta = 0.0, delta_rho = 0.0;
@@ -131,9 +131,9 @@ public class AnalyticDividendEuropeanEngine extends DividendVanillaOption.Engine
             final Date d = cashflow.date();
             if (d.gt(settlementDate)) {
                 delta_theta -= cashflow.amount()
-                * process.riskFreeRate().currentLink().zeroRate(d, rfdc, Compounding.Continuous, Frequency.Annual).rate()
-                * process.riskFreeRate().currentLink().discount(d);
-                delta_rho += cashflow.amount() * process.time(d) * process.riskFreeRate().currentLink().discount(t);
+                * process.riskFreeRate().zeroRate(d, rfdc, Compounding.Continuous, Frequency.Annual).rate()
+                * process.riskFreeRate().discount(d);
+                delta_rho += cashflow.amount() * process.time(d) * process.riskFreeRate().discount(t);
             }
         }
         t = process.time(a.exercise.lastDate());

@@ -24,7 +24,7 @@ package org.jquantlib.indexes.inflation;
 import org.jquantlib.currencies.Europe.GBPCurrency;
 import org.jquantlib.indexes.UKRegion;
 import org.jquantlib.indexes.YoYInflationIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YoYInflationTermStructure;
 import org.jquantlib.time.Frequency;
 import org.jquantlib.time.Period;
@@ -44,14 +44,14 @@ public class YYUKRPIr extends YoYInflationIndex {
    	      final boolean revised,
    	      final boolean interpolated) {
 			
-	this(frequency, revised, interpolated, new Handle<YoYInflationTermStructure>());
+	this(frequency, revised, interpolated, null);
 	   
  }
 	
     public YYUKRPIr(final Frequency frequency,
             	  final boolean revised,
             	  final boolean interpolated,
-            	  final Handle<YoYInflationTermStructure> termStructure) {
+            	  final YoYInflationTermStructure termStructure) {
     	
     	super("YYR_RPI",
               new UKRegion(),

@@ -3,7 +3,6 @@ package org.jquantlib.samples;
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.Actual365Fixed;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
 import org.jquantlib.termstructures.Compounding;
@@ -49,7 +48,7 @@ public class YieldCurveTermStructures implements Runnable {
 
         System.out.println("//==========================================FlatForward termstructure===================");
         final SimpleQuote interestRateQuote = new SimpleQuote(0.3);
-        final RelinkableHandle<Quote>  handleToInterestRateQuote = new RelinkableHandle<Quote>(interestRateQuote);
+        final Quote  handleToInterestRateQuote = interestRateQuote;
         final YieldTermStructure flatforward = new FlatForward(2,new UnitedStates(Market.NYSE),handleToInterestRateQuote,new Actual365Fixed(), Compounding.Continuous,Frequency.Daily);
 
         final Date today  = Date.todaysDate();
@@ -77,9 +76,9 @@ public class YieldCurveTermStructures implements Runnable {
         //As the name suggests this termstructure adds a spread to the forward rates it calculates by getting the spread rate
         //from the spread rate quote
         final SimpleQuote spreadRateQuote = new SimpleQuote(0.2);
-        final RelinkableHandle<Quote>  handleToSpreadRateQuote = new RelinkableHandle<Quote>(spreadRateQuote);
+        final Quote  handleToSpreadRateQuote = spreadRateQuote;
 
-        final ForwardRateStructure forwardSpreadedTermStructure = new ForwardSpreadedTermStructure(new RelinkableHandle<YieldTermStructure>(flatforward),handleToSpreadRateQuote);
+        final ForwardRateStructure forwardSpreadedTermStructure = new ForwardSpreadedTermStructure(flatforward,handleToSpreadRateQuote);
 
         //Calculating discount factor.This termstructure adds the spread as specified by the spread quote and then calculates the discount.
         System.out.println("The discount factor for the date 30 days from today is = "+forwardSpreadedTermStructure.discount(date30.clone()));
@@ -97,7 +96,7 @@ public class YieldCurveTermStructures implements Runnable {
 
         //As the name suggests the implied termstructure holds a reference to an underlying tremstructure and gives the same calulated values
         //as the underlying termstructure.Here the FlatForward termstructure instantiated right at the top has been taken as an underlying.
-        final YieldTermStructure impliedTermStructure = new ImpliedTermStructure(new RelinkableHandle<YieldTermStructure>(flatforward), today);
+        final YieldTermStructure impliedTermStructure = new ImpliedTermStructure(flatforward, today);
         //TODO as the code has to be updated for the implied term structure.
 
         //===========================================InterpolatedDiscountCurve=======================

@@ -45,7 +45,6 @@ import org.jquantlib.Settings;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.indexes.IndexManager;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.TimeUnit;
@@ -153,7 +152,7 @@ public class IborCoupon extends FloatingRateCoupon {
         if (isInArrears())
             return index_.fixing(fixingDate());
         else {
-            final Handle<YieldTermStructure> termStructure = index_.termStructure();
+            final YieldTermStructure termStructure = index_.termStructure();
             QL.require(termStructure != null , NULL_TERM_STRUCTURE);  // QA:[RG]::verified
             final Date today = settings.evaluationDate();
             final Date fixing_date = fixingDate();
@@ -176,14 +175,14 @@ public class IborCoupon extends FloatingRateCoupon {
             // start discount
             final Date fixingValueDate = index_.fixingCalendar()
                 .advance(fixing_date, index_.fixingDays(), TimeUnit.Days);
-            final double startDiscount = termStructure.currentLink().discount(fixingValueDate);
+            final double startDiscount = termStructure.discount(fixingValueDate);
 
             // end discount
             final Date nextFixingDate = index_.fixingCalendar()
                 .advance(accrualEndDate_, -(fixingDays()), TimeUnit.Days);
             final Date nextFixingValueDate = index_.fixingCalendar()
                 .advance (nextFixingDate, index_.fixingDays(), TimeUnit.Days);
-            final double endDiscount = termStructure.currentLink().discount(nextFixingValueDate);
+            final double endDiscount = termStructure.discount(nextFixingValueDate);
 
             // spanning time
             final double spanningTime = index_.dayCounter()

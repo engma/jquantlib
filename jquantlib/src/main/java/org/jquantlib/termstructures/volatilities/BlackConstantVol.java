@@ -42,7 +42,7 @@ package org.jquantlib.termstructures.volatilities;
 
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolatilityTermStructure;
@@ -64,7 +64,7 @@ import org.jquantlib.util.Visitor;
  */
 public class BlackConstantVol extends BlackVolatilityTermStructure {
 
-    private final Handle<? extends Quote> volatility;
+    private final Quote volatility;
 
     public BlackConstantVol(
             final Date referenceDate,
@@ -72,13 +72,13 @@ public class BlackConstantVol extends BlackVolatilityTermStructure {
             /*@Volatility*/ final double volatility,
             final DayCounter dc) {
         super(referenceDate, cal, BusinessDayConvention.Following, dc);
-        this.volatility = new Handle<Quote>(new SimpleQuote(volatility));
+        this.volatility = new SimpleQuote(volatility);
     }
 
     public BlackConstantVol(
                 final Date referenceDate,
                 final Calendar cal,
-                final Handle<? extends Quote> volatility,
+                final Quote volatility,
                 final DayCounter dc) {
         super(referenceDate, cal, BusinessDayConvention.Following, dc);
         this.volatility = volatility;
@@ -91,13 +91,13 @@ public class BlackConstantVol extends BlackVolatilityTermStructure {
                 /*@Volatility*/ final double volatility,
                 final DayCounter dc) {
         super(settlementDays, cal, BusinessDayConvention.Following, dc);
-        this.volatility = new Handle<Quote>(new SimpleQuote(volatility));
+        this.volatility = new SimpleQuote(volatility);
     }
 
     public BlackConstantVol(
                 /*@Natural*/ final int settlementDays,
                 final Calendar cal,
-                final Handle<? extends Quote> volatility,
+                final Quote volatility,
                 final DayCounter dc) {
         super(settlementDays, cal, BusinessDayConvention.Following, dc);
         this.volatility = volatility;
@@ -131,7 +131,7 @@ public class BlackConstantVol extends BlackVolatilityTermStructure {
 
     @Override
     protected final /*@Volatility*/ double blackVolImpl(final /*@Time*/ double maturity, final /*@Real*/ double strike) {
-        return volatility.currentLink().value();
+        return volatility.value();
     }
 
 

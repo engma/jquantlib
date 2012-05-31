@@ -23,7 +23,7 @@
 /*
  Copyright (C) 2000, 2001, 2002, 2003 RiskMap srl
  Copyright (C) 2003, 2004 StatPro Italia srl
- Copyright (C) 2003 Nicolas Di C�sar�
+ Copyright (C) 2003 Nicolas Di C�ｽsar�ｽ
  Copyright (C) 2006, 2007 Cristina Duminuco
  Copyright (C) 2006 Ferdinando Ametrano
  Copyright (C) 2007 Giorgio Facchinetti
@@ -48,7 +48,6 @@ import org.jquantlib.QL;
 import org.jquantlib.Settings;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.InterestRateIndex;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Date;
@@ -137,8 +136,8 @@ public class FloatingRateCoupon extends Coupon implements Observer {
         }
     }
 
-    public double price(final Handle<YieldTermStructure> yts) {
-        return amount() * yts.currentLink().discount(date());
+    public double price(final YieldTermStructure yts) {
+        return amount() * yts.discount(date());
     }
 
     public DayCounter dayCounter() {

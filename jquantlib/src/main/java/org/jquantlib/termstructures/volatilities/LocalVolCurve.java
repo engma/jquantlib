@@ -40,7 +40,7 @@
 package org.jquantlib.termstructures.volatilities;
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.LocalVolTermStructure;
 import org.jquantlib.termstructures.TermStructure;
 import org.jquantlib.time.Date;
@@ -56,11 +56,11 @@ public class LocalVolCurve extends LocalVolTermStructure {
 
     private final BlackVarianceCurve blackVarianceCurve;
 
-    public LocalVolCurve(final Handle<BlackVarianceCurve> curve) {
-        super(curve.currentLink().calendar(),
-              curve.currentLink().businessDayConvention(),
-              curve.currentLink().dayCounter());
-        blackVarianceCurve = curve.currentLink();
+    public LocalVolCurve(BlackVarianceCurve curve) {
+        super(curve.calendar(),
+              curve.businessDayConvention(),
+              curve.dayCounter());
+        blackVarianceCurve = curve;
         this.blackVarianceCurve.addObserver(this);
     }
 

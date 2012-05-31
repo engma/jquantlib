@@ -24,7 +24,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.currencies.Asia.JPYCurrency;
 import org.jquantlib.daycounters.ActualActual;
 import org.jquantlib.indexes.ibor.JPYLibor;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Period;
@@ -46,10 +46,10 @@ import org.jquantlib.time.calendars.Target;
 public class JpyLiborSwapIsdaFixPm extends SwapIndex {
 
     public JpyLiborSwapIsdaFixPm(final Period tenor) {
-    	this(tenor, new Handle<YieldTermStructure>());
+    	this(tenor, null);
     }
 	
-    public JpyLiborSwapIsdaFixPm(final Period tenor, final Handle<YieldTermStructure> h) {
+    public JpyLiborSwapIsdaFixPm(final Period tenor, YieldTermStructure h) {
         super( "JpyLiborSwapIsdaFixPm",
                 tenor,
                 2, // settlement days

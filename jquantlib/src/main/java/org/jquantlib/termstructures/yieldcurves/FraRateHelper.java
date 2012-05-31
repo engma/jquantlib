@@ -27,9 +27,8 @@ import org.jquantlib.QL;
 import org.jquantlib.currencies.Currency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.termstructures.BootstrapHelper;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -56,7 +55,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
 	private Date fixingDate;
 	private final Period periodToStart;
 	private final IborIndex iborIndex;
-	private final RelinkableHandle<YieldTermStructure> termStructureHandle = new RelinkableHandle<YieldTermStructure>(null);
+	private YieldTermStructure termStructureHandle = null;
 
 	
 	//
@@ -64,7 +63,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
 	//
 
 	public FraRateHelper(
-			final Handle<Quote> rate,
+			final Quote rate,
 			final/* @Natural */int monthsToStart,
 			final/* @Natural */int monthsToEnd,
 			final/* @Natural */int fixingDays, 
@@ -116,7 +115,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
 	}
 
 	public FraRateHelper(
-			final Handle<Quote> rate,
+			final Quote rate,
 			final/* @Natural */int monthsToStart, 
 			final IborIndex i) {
 		
@@ -154,7 +153,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
 	}
 
 	public FraRateHelper(
-			final Handle<Quote> rate, 
+			final Quote rate, 
 			final Period periodToStart,
 			final/* @Natural */int lengthInMonths,
 			final/* @Natural */int fixingDays, 
@@ -203,7 +202,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
 	}
 
 	public FraRateHelper(
-			final Handle<Quote> rate, 
+			final Quote rate, 
 			final Period periodToStart,
 			final IborIndex i) {
 		
@@ -256,7 +255,7 @@ public class FraRateHelper extends RelativeDateRateHelper {
     @Override
     public void setTermStructure(final YieldTermStructure t) {
         // no need to register---the index is not lazy
-        termStructureHandle.linkTo(t, false);
+        termStructureHandle = t;
         super.setTermStructure(t);
     }
 

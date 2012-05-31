@@ -21,7 +21,7 @@
  */
 package org.jquantlib.indexes;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Period;
 import org.jquantlib.time.TimeUnit;
@@ -39,9 +39,9 @@ public class Euribor10M extends Euribor {
     //
 
     public Euribor10M() {
-    	this(new Handle<YieldTermStructure>());
+    	this(null);
     }
-    public Euribor10M(final Handle<YieldTermStructure> h) {
+    public Euribor10M(final YieldTermStructure h) {
         super(new Period(10, TimeUnit.Months), h);
     }
 

@@ -24,7 +24,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.QL;
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.Actual360;
-import org.jquantlib.quotes.Handle;
+;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Period;
 import org.jquantlib.time.TimeUnit;
@@ -42,10 +42,10 @@ import org.jquantlib.time.calendars.Target;
 public class Euribor extends IborIndex {
 
     public Euribor(final Period tenor) {
-    	this(tenor, new Handle<YieldTermStructure>());
+    	this(tenor, null);
     }
 	
-    public Euribor(final Period tenor, final Handle<YieldTermStructure> h) {
+    public Euribor(final Period tenor, final YieldTermStructure h) {
         super("Euribor",
                 tenor,
                 2, // settlement days

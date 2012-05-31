@@ -45,7 +45,6 @@ import org.jquantlib.QL;
 import org.jquantlib.instruments.Instrument;
 import org.jquantlib.instruments.Stock;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.testsuite.util.Flag;
 import org.junit.Test;
@@ -63,7 +62,7 @@ public class InstrumentsTest {
 
 
         final SimpleQuote me1 = new SimpleQuote(0.0);
-        final RelinkableHandle<Quote>  h = new RelinkableHandle<Quote>(me1);
+        final Quote h = null;
         final Instrument s = new Stock(h);
 
         final Flag f = new Flag();
@@ -79,7 +78,7 @@ public class InstrumentsTest {
         f.lower();
         final SimpleQuote me2 = new SimpleQuote(0.0);
 
-        h.linkTo(me2);
+        h = me2;
         if (!f.isUp()) {
             fail("Observer was not notified of instrument change");
         }

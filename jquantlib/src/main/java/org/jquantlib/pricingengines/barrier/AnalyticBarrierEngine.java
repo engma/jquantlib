@@ -206,7 +206,7 @@ public class AnalyticBarrierEngine extends BarrierOption.EngineImpl {
     }
 
     private double /*@Volatility*/  volatility()  {
-        return this.process.blackVolatility().currentLink().blackVol(residualTime(), strike());
+        return this.process.blackVolatility().blackVol(residualTime(), strike());
     }
 
     private double  stdDeviation()  {
@@ -222,23 +222,23 @@ public class AnalyticBarrierEngine extends BarrierOption.EngineImpl {
     }
 
     private double /*@Rate*/  riskFreeRate()  {
-        final InterestRate rate =  this.process.riskFreeRate().currentLink().zeroRate(residualTime(), Compounding.Continuous,
+        final InterestRate rate =  this.process.riskFreeRate().zeroRate(residualTime(), Compounding.Continuous,
                 Frequency.NoFrequency, false);
         return rate.rate();
     }
 
     private double /*@DiscountFactor*/  riskFreeDiscount()  {
-        return this.process.riskFreeRate().currentLink().discount(residualTime());
+        return this.process.riskFreeRate().discount(residualTime());
     }
 
     private double /*@Rate*/  dividendYield()  {
-        final InterestRate yield = this.process.dividendYield().currentLink().zeroRate(
+        final InterestRate yield = this.process.dividendYield().zeroRate(
                 residualTime(), Compounding.Continuous, Frequency.NoFrequency, false);
         return yield.rate();
     }
 
     private double /*@DiscountFactor*/  dividendDiscount()  {
-        return this.process.dividendYield().currentLink().discount(residualTime());
+        return this.process.dividendYield().discount(residualTime());
     }
 
     private double /*@Rate*/  mu()  {

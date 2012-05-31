@@ -46,7 +46,7 @@ import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.instruments.Bond;
 import org.jquantlib.math.Constants;
 import org.jquantlib.math.matrixutilities.Array;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
@@ -122,7 +122,7 @@ public class FloatingRateBond extends Bond {
 							final Date maturityDate,
 							final Frequency couponFrequency,
 							final Calendar calendar,
-							final Handle<IborIndex> index,
+							IborIndex index,
 							final DayCounter accrualDayCounter,
 							final BusinessDayConvention accrualConvention,
 							final BusinessDayConvention paymentConvention,
@@ -165,7 +165,7 @@ public class FloatingRateBond extends Bond {
 								calendar_, accrualConvention, accrualConvention,
 								rule, endOfMonth, firstDate, nextToLastDate);
 
-		cashflows_ = new IborLeg(schedule, index.currentLink())
+		cashflows_ = new IborLeg(schedule, index)
 						.withNotionals(faceAmount)
 						.withPaymentDayCounter(accrualDayCounter)
 						.withPaymentAdjustment(paymentConvention)
@@ -191,7 +191,7 @@ public class FloatingRateBond extends Bond {
 			final Date maturityDate,
 			final Frequency couponFrequency,
 			final Calendar calendar,
-			final Handle<IborIndex> index,
+			IborIndex index,
 			final DayCounter accrualDayCounter) {
 		this(settlementDays, faceAmount, startDate, maturityDate,
 				couponFrequency, calendar, index,

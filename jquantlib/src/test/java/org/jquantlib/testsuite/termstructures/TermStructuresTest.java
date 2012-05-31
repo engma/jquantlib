@@ -45,9 +45,7 @@ import org.jquantlib.QL;
 import org.jquantlib.Settings;
 import org.jquantlib.daycounters.Actual360;
 import org.jquantlib.math.Closeness;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -227,7 +225,7 @@ public class TermStructuresTest {
         //
         // see: http://bugs.jquantlib.org/view.php?id=465
         //
-        final RelinkableHandle<YieldTermStructure> h = new RelinkableHandle<YieldTermStructure>(
+        final YieldTermStructure h = 
                 new AbstractYieldTermStructure() {
                     @Override
                     protected double discountImpl(final double t) {
@@ -237,7 +235,7 @@ public class TermStructuresTest {
                     public Date maxDate() {
                         throw new UnsupportedOperationException();
                     }
-                } );
+                } ;
 
         final YieldTermStructure implied = new ImpliedTermStructure<YieldTermStructure>(h, newSettlement);
 
@@ -253,7 +251,7 @@ public class TermStructuresTest {
         final Quote quote = new SimpleQuote(100.0);
         final Flag anotherFlag = new Flag();
         quote.addObserver(anotherFlag);
-        h.linkTo(new FlatForward(today, new Handle<Quote>(quote), new Actual360()));
+        h = new FlatForward(today, quote, new Actual360());
         if (!anotherFlag.isUp()) {
             fail("Observer was not notified of term structure change");
         }
@@ -284,7 +282,7 @@ public class TermStructuresTest {
 
         //	    final double tolerance = 1.0e-10;
         //	    final Quote me = new SimpleQuote(0.01);
-        //	    final Handle<Quote> mh = new Handle(me);
+        //	    Quote mh = new Handle(me);
         //
         //	    YieldTermStructure spreaded = new ForwardSpreadedTermStructure( new Handle<YieldTermStructure>(termStructure), mh);
         //	    Date testDate = termStructure.referenceDate().increment(5 * Period.ONE_YEAR_FORWARD.length());

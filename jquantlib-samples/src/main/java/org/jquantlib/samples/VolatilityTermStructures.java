@@ -27,7 +27,6 @@ import org.jquantlib.daycounters.Actual365Fixed;
 import org.jquantlib.math.matrixutilities.Array;
 import org.jquantlib.math.matrixutilities.Matrix;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
 import org.jquantlib.termstructures.BlackVarianceTermStructure;
@@ -98,7 +97,7 @@ public class VolatilityTermStructures implements Runnable {
         //Following example explains that when volatility is assumed to be constant BlackConstantVol termstructure can be used to represent
         //such a volatility termstructure.
         final SimpleQuote volatilityQuote = new SimpleQuote(0.3);
-        final RelinkableHandle<Quote>  handleToVolatilityQuote = new RelinkableHandle<Quote>(volatilityQuote);
+        final Quote  handleToVolatilityQuote = volatilityQuote;
         BlackVolatilityTermStructure constantVolatility = new BlackConstantVol(2,new UnitedStates(Market.NYSE),handleToVolatilityQuote, new Actual365Fixed());
 
         //Calculating blackVolatility using maturity as 10 days after today and strike as 20
@@ -310,7 +309,7 @@ public class VolatilityTermStructures implements Runnable {
         //as well.
 
         //Lets use underlying as varianceCurve defined above by creating a relinkable handle as shown below
-        final RelinkableHandle<BlackVolTermStructure> varianceCurveHandle = new RelinkableHandle<BlackVolTermStructure>(varianceCurve);
+        final BlackVolTermStructure varianceCurveHandle = varianceCurve;
         final BlackVarianceTermStructure impliedVolTermStructure = new ImpliedVolTermStructure(varianceCurveHandle, today);
 
         //Calculating blackVolatility using maturity as 12 days after today and strike as 20
@@ -398,7 +397,7 @@ public class VolatilityTermStructures implements Runnable {
         System.out.println("//================================LocalVolCurve==========================================");
 
         //LocalVolatility curve wraps BlackVarianceCurve and uses it to calculate the interpolated local volatility
-        final LocalVolTermStructure localVolatilityCurve = new LocalVolCurve(new RelinkableHandle<BlackVarianceCurve>((BlackVarianceCurve)varianceCurve));
+        final LocalVolTermStructure localVolatilityCurve = new LocalVolCurve((BlackVarianceCurve)varianceCurve);
 
         //Calculating blackVolatility using maturity as 12 days after today and strike as 20
         volatility1 = localVolatilityCurve.localVol(date12.clone(), 20,true);

@@ -24,7 +24,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.currencies.Europe.GBPCurrency;
 import org.jquantlib.daycounters.Actual365Fixed;
 import org.jquantlib.indexes.ibor.GBPLibor;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Period;
@@ -46,10 +46,10 @@ import org.jquantlib.time.calendars.Target;
 public class GbpLiborSwapIsdaFix extends SwapIndex {
 
     public GbpLiborSwapIsdaFix(final Period tenor) {
-    	this(tenor, new Handle<YieldTermStructure>());
+    	this(tenor, null);
     }
 	
-    public GbpLiborSwapIsdaFix(final Period tenor, final Handle<YieldTermStructure> h) {
+    public GbpLiborSwapIsdaFix(final Period tenor, YieldTermStructure h) {
         super( "GbpLiborSwapIsdaFix",
                 tenor,
                 2, // settlement days

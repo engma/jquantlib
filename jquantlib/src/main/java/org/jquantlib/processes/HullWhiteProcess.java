@@ -39,7 +39,7 @@
 package org.jquantlib.processes;
 
 import org.jquantlib.math.Constants;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Frequency;
@@ -54,18 +54,18 @@ import org.jquantlib.time.Frequency;
 public class HullWhiteProcess extends StochasticProcess1D {
 
     protected OrnsteinUhlenbeckProcess   process;
-    protected Handle<YieldTermStructure> h;
+    protected YieldTermStructure h;
     protected double                     a;
     protected double                     sigma;
 
     public HullWhiteProcess(
-            final Handle<YieldTermStructure> h,
+            final YieldTermStructure h,
             final double a,
             final double sigma) {
         this.process = new OrnsteinUhlenbeckProcess(
                 a,
                 sigma,
-                h.currentLink()
+                h
                     .forwardRate(
                             0.0,
                             0.0,
@@ -91,7 +91,7 @@ public class HullWhiteProcess extends StochasticProcess1D {
     public double alpha(final /* @Time */ double t) /* @ReadOnly */{
         double alfa = a > Constants.QL_EPSILON ? (sigma / a) * (1 - Math.exp(-a * t)) : sigma * t;
         alfa *= 0.5 * alfa;
-        alfa += h.currentLink().forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
+        alfa += h.forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
         return alfa;
     }
 
@@ -110,8 +110,8 @@ public class HullWhiteProcess extends StochasticProcess1D {
             final double x) /* @ReadOnly */{
         double alpha_drift = sigma * sigma / (2 * a) * (1 - Math.exp(-2 * a * t));
         final double shift = 0.0001;
-        final double f = h.currentLink().forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
-        final double fup = h.currentLink().forwardRate(t + shift, t + shift, Compounding.Continuous, Frequency.NoFrequency).rate();
+        final double f = h.forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
+        final double fup = h.forwardRate(t + shift, t + shift, Compounding.Continuous, Frequency.NoFrequency).rate();
         final double f_prime = (fup - f) / shift;
         alpha_drift += a * f + f_prime;
         return process.drift(t, x) + alpha_drift;

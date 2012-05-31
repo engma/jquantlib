@@ -27,7 +27,7 @@ package org.jquantlib.pricingengines.capfloor;
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.annotation.Volatility;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.termstructures.volatilities.optionlet.OptionletVolatilityStructure;
@@ -43,7 +43,7 @@ public class BlackCapFloorEngine //TODO:: extends CapFloor.Engine
 //    private Handle <OptionletVolatilityStructure> volatility;
 
 
-    public BlackCapFloorEngine (final Handle <YieldTermStructure> termStructureHandle,
+    public BlackCapFloorEngine (final YieldTermStructure termStructureHandle,
                                 final Volatility v,
                                 final DayCounter dc)
 
@@ -58,8 +58,8 @@ public class BlackCapFloorEngine //TODO:: extends CapFloor.Engine
     }
 
 
-    public BlackCapFloorEngine (final Handle <YieldTermStructure> termStructureHandle,
-                                final Handle <Quote> v,
+    public BlackCapFloorEngine (final YieldTermStructure termStructureHandle,
+                                final Quote v,
                                 final DayCounter dc)
     {
         QL.validateExperimentalMode();
@@ -73,8 +73,8 @@ public class BlackCapFloorEngine //TODO:: extends CapFloor.Engine
     }
 
 
-    public BlackCapFloorEngine (final Handle <YieldTermStructure> termStructureHandle,
-                                final Handle <OptionletVolatilityStructure> vol)
+    public BlackCapFloorEngine (final YieldTermStructure termStructureHandle,
+                                final OptionletVolatilityStructure vol)
 
     {
         QL.validateExperimentalMode();

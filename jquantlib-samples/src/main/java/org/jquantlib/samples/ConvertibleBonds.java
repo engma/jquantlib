@@ -47,7 +47,6 @@ import org.jquantlib.methods.lattices.Trigeorgis;
 import org.jquantlib.pricingengines.BinomialConvertibleEngine;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
@@ -199,20 +198,17 @@ public class ConvertibleBonds implements Runnable {
         final Exercise europeanExercise = new EuropeanExercise(exerciseDate);
         final Exercise americanExercise = new AmericanExercise(settlementDate,exerciseDate);
 
-        final Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(underlying));
-        final Handle<YieldTermStructure> flatTermStructure = new Handle<YieldTermStructure>(
-                new FlatForward(settlementDate, riskFreeRate, dayCounter));
-        final Handle<YieldTermStructure> flatDividendTS = new Handle<YieldTermStructure>(
-                new FlatForward(settlementDate, dividendYield, dayCounter));
-        final Handle<BlackVolTermStructure> flatVolTS = new Handle<BlackVolTermStructure>(
-                new BlackConstantVol(settlementDate, calendar, volatility, dayCounter));
+        final Quote underlyingH = new SimpleQuote(underlying);
+        final YieldTermStructure flatTermStructure = new FlatForward(settlementDate, riskFreeRate, dayCounter);
+        final YieldTermStructure flatDividendTS = new FlatForward(settlementDate, dividendYield, dayCounter);
+        final BlackVolTermStructure flatVolTS = new BlackConstantVol(settlementDate, calendar, volatility, dayCounter);
 
         final BlackScholesMertonProcess stochasticProcess = new BlackScholesMertonProcess(
                 underlyingH, flatDividendTS, flatTermStructure, flatVolTS);
 
         final int timeSteps = 801;
 
-        final Handle<Quote> creditSpread = new Handle<Quote>(new SimpleQuote(spreadRate));
+        final Quote creditSpread = new SimpleQuote(spreadRate);
 
         //XXX rate and discountCurve not being used in original QuantLib/C++ sources
         // final Quote rate = new SimpleQuote(riskFreeRate);

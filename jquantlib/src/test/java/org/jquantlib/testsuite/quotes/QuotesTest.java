@@ -23,10 +23,8 @@
 package org.jquantlib.testsuite.quotes;
 
 import static org.junit.Assert.fail;
-
 import org.jquantlib.QL;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.testsuite.util.Flag;
 import org.junit.Test;
@@ -72,7 +70,7 @@ public class QuotesTest {
 		QL.info("Testing observability of quote handles...");
 
 	    final SimpleQuote me1 = new SimpleQuote(0.0);
-	    final RelinkableHandle<Quote> h = new RelinkableHandle(me1);
+	    Quote h = me1;
 
 	    final Flag f = new Flag();
 	    h.addObserver(f);
@@ -85,7 +83,7 @@ public class QuotesTest {
 	    f.lower();
 	    final SimpleQuote me2 = new SimpleQuote(0.0);
 
-	    h.linkTo(me2);
+	    h = me2;
 	    if (!f.isUp()) {
             fail("Observer was not notified of quote change");
         }

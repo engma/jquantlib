@@ -183,7 +183,7 @@ public abstract class OneFactorModel extends ShortRateModel {
             final double vMin = -100.0;
             final double vMax = 100.0;
             for (int i=0; i<(timeGrid.size() - 1); i++) {
-                final double discountBond = theta.termStructure().currentLink().discount(t.get(i+1));
+                final double discountBond = theta.termStructure().discount(t.get(i+1));
                 final Helper finder = new Helper(i, discountBond, theta, this);
                 final Brent s1d = new Brent();
                 s1d.setMaxEvaluations(1000);

@@ -38,7 +38,7 @@ import org.jquantlib.instruments.StrikedTypePayoff;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.barrier.AnalyticBarrierEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -179,10 +179,7 @@ public class BarrierOptionTest {
             final StrikedTypePayoff payoff = new PlainVanillaPayoff(value.type, value.strike);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+            		spot, qTS, rTS, volTS);
             final PricingEngine engine = new AnalyticBarrierEngine(stochProcess);
 
             final BarrierOption barrierOption = new BarrierOption(value.barrierType, value.barrier, value.rebate, payoff, exercise);
@@ -249,10 +246,7 @@ public class BarrierOptionTest {
             final StrikedTypePayoff callPayoff = new PlainVanillaPayoff(Option.Type.Call, value.strike);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(underlying),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+            		underlying, qTS, rTS, volTS);
 
             final PricingEngine engine = new AnalyticBarrierEngine(stochProcess);
 
@@ -312,10 +306,7 @@ public class BarrierOptionTest {
             final StrikedTypePayoff callPayoff = new PlainVanillaPayoff(Option.Type.Call, value.strike);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(underlying),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+            		underlying, qTS, rTS, volTS);
             final PricingEngine engine = new AnalyticBarrierEngine(stochProcess);
 
 

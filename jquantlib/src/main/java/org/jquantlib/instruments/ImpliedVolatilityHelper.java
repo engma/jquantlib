@@ -42,7 +42,7 @@ package org.jquantlib.instruments;
 import org.jquantlib.math.solvers1D.Brent;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -94,17 +94,17 @@ public class ImpliedVolatilityHelper {
     public static GeneralizedBlackScholesProcess clone(
             final GeneralizedBlackScholesProcess process,
             final SimpleQuote volQuote) {
-        final Handle<? extends Quote> stateVariable = process.stateVariable();
-        final Handle<YieldTermStructure> dividendYield = process.dividendYield();
-        final Handle<YieldTermStructure> riskFreeRate = process.riskFreeRate();
+        Quote stateVariable = process.stateVariable();
+        YieldTermStructure dividendYield = process.dividendYield();
+        YieldTermStructure riskFreeRate = process.riskFreeRate();
 
-        final Handle<BlackVolTermStructure> blackVol = process.blackVolatility();
-        final Handle<BlackVolTermStructure> volatility = new Handle<BlackVolTermStructure>(
+        BlackVolTermStructure blackVol = process.blackVolatility();
+        BlackVolTermStructure volatility = 
                 new BlackConstantVol(
-                        blackVol.currentLink().referenceDate(),
-                        blackVol.currentLink().calendar(),
-                        new Handle<Quote>(volQuote),
-                        blackVol.currentLink().dayCounter()));
+                        blackVol.referenceDate(),
+                        blackVol.calendar(),
+                        volQuote,
+                        blackVol.dayCounter());
 
         return new GeneralizedBlackScholesProcess(stateVariable, dividendYield, riskFreeRate, volatility);
     }

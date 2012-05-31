@@ -45,7 +45,7 @@ import org.jquantlib.QL;
 import org.jquantlib.currencies.Currency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.exceptions.LibraryException;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
@@ -62,7 +62,7 @@ import org.jquantlib.time.Period;
 public class IborIndex extends InterestRateIndex {
 
     private final BusinessDayConvention convention;
-    private final Handle<YieldTermStructure> termStructure;
+    private final YieldTermStructure termStructure;
     private final boolean endOfMonth;
 
     public IborIndex(
@@ -74,7 +74,7 @@ public class IborIndex extends InterestRateIndex {
             final BusinessDayConvention convention,
             final boolean endOfMonth,
             final DayCounter dayCounter,
-            final Handle<YieldTermStructure> h) {
+            final YieldTermStructure h) {
         super(familyName, tenor, fixingDays, currency, fixingCalendar, dayCounter);
 
         this.convention = convention;
@@ -95,11 +95,11 @@ public class IborIndex extends InterestRateIndex {
             final boolean endOfMonth,
             final DayCounter dayCounter) {
     	this(familyName, tenor, fixingDays, currency, fixingCalendar, 
-    		convention, endOfMonth, dayCounter, new Handle<YieldTermStructure>());
+    		convention, endOfMonth, dayCounter, null);
     }
 
 
-    public Handle<IborIndex> clone(final Handle<YieldTermStructure> h) {
+    public IborIndex clone(final YieldTermStructure h) {
         final IborIndex clone = new IborIndex(
                 					this.familyName(),
                 					this.tenor(),
@@ -110,7 +110,7 @@ public class IborIndex extends InterestRateIndex {
                 					this.endOfMonth(),
                 					this.dayCounter(),
                 					h);
-        return new Handle<IborIndex>(clone) ;
+        return clone ;
     }
 
 
@@ -234,17 +234,17 @@ public class IborIndex extends InterestRateIndex {
     
     @Override
     protected double forecastFixing(final Date fixingDate) {
-        QL.require(! termStructure.empty() , "no forecasting term structure set to " + name());  // TODO: message
+        QL.require(termStructure != null , "no forecasting term structure set to " + name());  // TODO: message
         final Date fixingValueDate = valueDate(fixingDate);
         final Date endValueDate = maturityDate(fixingValueDate);
-        final double fixingDiscount = termStructure.currentLink().discount(fixingValueDate);
-        final double endDiscount = termStructure.currentLink().discount(endValueDate);
+        final double fixingDiscount = termStructure.discount(fixingValueDate);
+        final double endDiscount = termStructure.discount(endValueDate);
         final double fixingPeriod = dayCounter().yearFraction(fixingValueDate, endValueDate);
         return (fixingDiscount / endDiscount - 1.0) / fixingPeriod;
     }
 
     @Override
-    public Handle<YieldTermStructure> termStructure() {
+    public YieldTermStructure termStructure() {
         return termStructure;
     }
 

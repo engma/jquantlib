@@ -222,11 +222,11 @@ public abstract class Option extends Instrument {
                 final GeneralizedBlackScholesProcess p,
                 final /*@Real*/ double value, final /*@Real*/ double delta, final /*@Real*/ double gamma) {
 
-            /*@Real*/ final double u = p.stateVariable().currentLink().value();
+            /*@Real*/ final double u = p.stateVariable().value();
             //TODO update zeroRate so that we do not need to set frequency and extrapolate
-            /*@Rate*/ final double r = p.riskFreeRate().currentLink().zeroRate(0.0, Compounding.Continuous, Frequency.Annual, false).rate();
-            /*@Rate*/ final double q = p.dividendYield().currentLink().zeroRate(0.0, Compounding.Continuous, Frequency.Annual, false).rate();
-            /*@Volatility*/ final double v = p.localVolatility().currentLink().localVol(0.0, u);
+            /*@Rate*/ final double r = p.riskFreeRate().zeroRate(0.0, Compounding.Continuous, Frequency.Annual, false).rate();
+            /*@Rate*/ final double q = p.dividendYield().zeroRate(0.0, Compounding.Continuous, Frequency.Annual, false).rate();
+            /*@Volatility*/ final double v = p.localVolatility().localVol(0.0, u);
 
             return r*value -(r-q)*u*delta - 0.5*v*v*u*u*gamma;
         }

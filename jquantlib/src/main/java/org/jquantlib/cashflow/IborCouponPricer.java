@@ -21,8 +21,6 @@
  */
 
 package org.jquantlib.cashflow;
-
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.termstructures.volatilities.optionlet.OptionletVolatilityStructure;
 
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
@@ -30,22 +28,22 @@ public abstract class IborCouponPricer extends FloatingRateCouponPricer {
 
     public static final String no_adequate_capletVol_given = "no adequate capletVol given";
 
-    private Handle<OptionletVolatilityStructure> capletVol_;
+    private OptionletVolatilityStructure capletVol_;
 
-    public IborCouponPricer(final Handle<OptionletVolatilityStructure> capletVol){
+    public IborCouponPricer(final OptionletVolatilityStructure capletVol){
         this.capletVol_ = capletVol;
         this.capletVol_.addObserver(this);
         //XXX:registerWith
         //registerWith(this.capletVol_);
     }
 
-    public Handle<OptionletVolatilityStructure> capletVolatility(){
+    public OptionletVolatilityStructure capletVolatility(){
         return capletVol_;
     }
 
-    public void setCapletVolatility(final Handle<OptionletVolatilityStructure> capletVol){
+    public void setCapletVolatility(final OptionletVolatilityStructure capletVol){
         if (capletVol!=null) {
-            capletVol.currentLink().deleteObserver(this);
+            capletVol.deleteObserver(this);
         }
         this.capletVol_ = capletVol;
         if (this.capletVol_!=null) {

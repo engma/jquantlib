@@ -24,7 +24,7 @@ package org.jquantlib.termstructures.yieldcurves;
 
 import org.jquantlib.QL;
 import org.jquantlib.Settings;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.RateHelper;
 import org.jquantlib.time.Date;
@@ -78,7 +78,7 @@ public abstract class RelativeDateRateHelper extends RateHelper {
         //registerWith(this.evaluationDate);
     }
 
-    public RelativeDateRateHelper(final Handle<Quote> quote) {
+    public RelativeDateRateHelper(Quote quote) {
         super(quote);
         this.evaluationDate = new Settings().evaluationDate();
         this.evaluationDate.addObserver(this);
@@ -87,7 +87,7 @@ public abstract class RelativeDateRateHelper extends RateHelper {
     }
 
 //XXX
-//    public RelativeDateRateHelper(final Handle<Quote> quote, final T termStructure, final Date earliestDate, final Date latestDate) {
+//    public RelativeDateRateHelper(Quote quote, final T termStructure, final Date earliestDate, final Date latestDate) {
 //        super(quote, termStructure, earliestDate, latestDate);
 //        QL.validateExperimentalMode();
 //        this.evaluationDate = new Settings().evaluationDate();

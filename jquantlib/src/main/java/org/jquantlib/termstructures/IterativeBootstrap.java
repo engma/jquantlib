@@ -176,7 +176,7 @@ public class IterativeBootstrap<Curve extends PiecewiseYieldCurve> implements Bo
             final double previousData[] = data.clone(); // TODO: verify if clone() is needed
             // restart from the previous interpolation
             if (validCurve) {
-                ts.setInterpolation(interpolator.interpolate(new Array(times), new Array(data)));
+            	ts.setInterpolation(interpolator.interpolate(new Array(times), new Array(data)));
             }
 
             for (int i=1; i<n+1; ++i) {
@@ -221,7 +221,7 @@ public class IterativeBootstrap<Curve extends PiecewiseYieldCurve> implements Bo
                 if (! validCurve && iteration == 0) {
                     // extend interpolation a point at a time
                     try {
-                        ts.setInterpolation(interpolator.interpolate (new Array(times, i+1), new Array(data)));
+                    	ts.setInterpolation(interpolator.interpolate (new Array(times, i+1), new Array(data)));
                     } catch (final Exception e) {
                         // no chance to fix it in a later iteration
                         if (ts.interpolator().global()) {
@@ -252,7 +252,7 @@ public class IterativeBootstrap<Curve extends PiecewiseYieldCurve> implements Bo
                 break; // no need for convergence loop
             } else if (!validCurve && iteration == 0) {
                 // ensure the target interpolation is used
-                ts.setInterpolation(interpolator.interpolate (new Array(times), new Array(data)));
+            	ts.setInterpolation(interpolator.interpolate (new Array(times), new Array(data)));
 
                 // at least one more iteration is needed to check convergence
                 continue;

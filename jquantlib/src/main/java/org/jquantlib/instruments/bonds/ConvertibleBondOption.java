@@ -39,7 +39,7 @@ import org.jquantlib.lang.reflect.ReflectConstants;
 import org.jquantlib.math.Constants;
 import org.jquantlib.pricingengines.GenericEngine;
 import org.jquantlib.pricingengines.PricingEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Schedule;
@@ -55,7 +55,7 @@ public class ConvertibleBondOption extends OneAssetOption {
     private final double conversionRatio_;
     private final CallabilitySchedule callability_;
     private final DividendSchedule  dividends_;
-    private final Handle<Quote> creditSpread_;
+    private final Quote creditSpread_;
     private final Leg cashflows_;
     private final DayCounter dayCounter_;
     private final Date issueDate_;
@@ -68,7 +68,7 @@ public class ConvertibleBondOption extends OneAssetOption {
                                  final double conversionRatio,
                                  final DividendSchedule dividends,
                                  final CallabilitySchedule callability,
-                                 final Handle<Quote> creditSpread,
+                                 final Quote creditSpread,
                                  final Leg cashflows,
                                  final DayCounter dayCounter,
                                  final Schedule schedule,
@@ -184,7 +184,7 @@ public class ConvertibleBondOption extends OneAssetOption {
     static public class ArgumentsImpl extends OneAssetOption.ArgumentsImpl implements Arguments {
 
         public double conversionRatio;
-        public Handle<Quote> creditSpread;
+        public Quote creditSpread;
         public DividendSchedule dividends;
         public List<Date> dividendDates;
         public List<Date> callabilityDates;

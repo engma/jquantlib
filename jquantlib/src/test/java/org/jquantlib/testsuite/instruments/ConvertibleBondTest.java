@@ -72,9 +72,7 @@ import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
 import org.jquantlib.pricingengines.vanilla.BinomialVanillaEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -111,13 +109,13 @@ public class ConvertibleBondTest {
 		Frequency frequency;
 		int settlementDays;
 
-		RelinkableHandle<Quote> underlying = new RelinkableHandle<Quote>();
-		RelinkableHandle<YieldTermStructure> dividendYield = new RelinkableHandle<YieldTermStructure>();
-		RelinkableHandle<YieldTermStructure> riskFreeRate = new RelinkableHandle<YieldTermStructure>();
-		RelinkableHandle<BlackVolTermStructure> volatility = new RelinkableHandle<BlackVolTermStructure>();
+		Quote underlying = null;
+		YieldTermStructure dividendYield = null;
+		YieldTermStructure riskFreeRate = null;
+		BlackVolTermStructure volatility = null;
 		BlackScholesMertonProcess process;
 
-		RelinkableHandle<Quote> creditSpread = new RelinkableHandle<Quote>();
+		Quote creditSpread = null;
 
 		CallabilitySchedule no_callability = new CallabilitySchedule();
 		DividendSchedule no_dividends = new DividendSchedule();
@@ -143,21 +141,21 @@ public class ConvertibleBondTest {
 			// reset to avoid inconsistencies as the schedule is backwards
 			issueDate = calendar.advance(maturityDate, -10, TimeUnit.Years);
 
-			underlying.linkTo(new SimpleQuote(50.0));
-			dividendYield.linkTo(Utilities.flatRate(today, 0.02, dayCounter));
-			riskFreeRate.linkTo(Utilities.flatRate(today, 0.05, dayCounter));
-			volatility.linkTo(Utilities.flatVol(today, 0.15, dayCounter));
+			underlying = new SimpleQuote(50.0);
+			dividendYield = Utilities.flatRate(today, 0.02, dayCounter);
+			riskFreeRate = Utilities.flatRate(today, 0.05, dayCounter);
+			volatility = Utilities.flatVol(today, 0.15, dayCounter);
 
 			process = new BlackScholesMertonProcess(underlying, dividendYield,
 					riskFreeRate, volatility);
 
-			creditSpread.linkTo(new SimpleQuote(0.005));
+			creditSpread = new SimpleQuote(0.005);
 
 			// it fails with 1000000
 			// faceAmount = 1000000.0;
 			faceAmount = 100.0;
 			redemption = 100.0;
-			conversionRatio = redemption / underlying.currentLink().value();
+			conversionRatio = redemption / underlying.value();
 		}
 	}
 
@@ -184,9 +182,9 @@ public class ConvertibleBondTest {
 				CoxRossRubinstein.class,
 				vars.process, timeSteps);
 
-		final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(
+		YieldTermStructure discountCurve = 
 				new ForwardSpreadedTermStructure(vars.riskFreeRate,
-						vars.creditSpread));
+						vars.creditSpread);
 
 		// zero-coupon
 		Schedule schedule = new MakeSchedule(vars.issueDate, vars.maturityDate,
@@ -301,7 +299,7 @@ public class ConvertibleBondTest {
 		amFloating.setPricingEngine(engine);
 
 		final IborCouponPricer pricer = new BlackIborCouponPricer(
-				new Handle<OptionletVolatilityStructure>());
+				null);
 
 		final Schedule floatSchedule = new Schedule(vars.issueDate,
 				vars.maturityDate, new Period(vars.frequency), vars.calendar,
@@ -358,7 +356,7 @@ public class ConvertibleBondTest {
 		final PricingEngine engine = new BinomialConvertibleEngine<CoxRossRubinstein>(CoxRossRubinstein.class, vars.process, timeSteps);
 		final PricingEngine vanillaEngine = new BinomialVanillaEngine<CoxRossRubinstein>(CoxRossRubinstein.class, vars.process, timeSteps);
 
-		vars.creditSpread.linkTo(new SimpleQuote(0.0));
+		vars.creditSpread = new SimpleQuote(0.0);
 
 		final double conversionStrike = vars.redemption / vars.conversionRatio;
 		final StrikedTypePayoff payoff = new PlainVanillaPayoff(Option.Type.Call,
@@ -382,7 +380,7 @@ public class ConvertibleBondTest {
 		final double expected = vars.faceAmount
 				/ 100.0
 				* (vars.redemption
-						* vars.riskFreeRate.currentLink().discount(
+						* vars.riskFreeRate.discount(
 								vars.maturityDate) + vars.conversionRatio
 						* euOption.NPV());
 		final double error = Math.abs(euZero.NPV() - expected);

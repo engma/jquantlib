@@ -52,9 +52,7 @@ import org.jquantlib.math.interpolations.factories.LogLinear;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
 import org.jquantlib.pricingengines.swap.DiscountingSwapEngine;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.Bootstrap;
 import org.jquantlib.termstructures.IterativeBootstrap;
@@ -301,9 +299,9 @@ public class PiecewiseYieldCurveTest {
             schedules   = new Schedule[bonds];
             bmaHelpers  = new RateHelper[bmas];
             
-            final IborIndex euribor6m = new Euribor(new Period(6, TimeUnit.Months), new Handle<YieldTermStructure>());
+            final IborIndex euribor6m = new Euribor(new Period(6, TimeUnit.Months), null);
             for (int i=0; i<deposits; i++) {
-                final Handle<Quote> r = new Handle<Quote>(rates[i]);
+                final Quote r = rates[i];
                 instruments[i] = new
                     DepositRateHelper(r, new Period(depositData[i].n,depositData[i].units),
                                       euribor6m.fixingDays(), calendar,
@@ -313,7 +311,7 @@ public class PiecewiseYieldCurveTest {
             }
 
             for (int i=0; i<swaps; i++) {
-                final Handle<Quote> r = new Handle<Quote>(rates[i+deposits]);
+                final Quote r = rates[i+deposits];
                 instruments[i+deposits] = new
                     SwapRateHelper(r, new Period(swapData[i].n, swapData[i].units),
                                    calendar,
@@ -321,9 +319,9 @@ public class PiecewiseYieldCurveTest {
                                    fixedLegDayCounter, euribor6m);
             }
 
-            final Euribor euribor3m = new Euribor(new Period(3, TimeUnit.Months), new Handle<YieldTermStructure>());
+            final Euribor euribor3m = new Euribor(new Period(3, TimeUnit.Months), null);
             for (int i=0; i<fras; i++) {
-                final Handle<Quote> r = new Handle<Quote>(fraRates[i]);
+                final Quote r = fraRates[i];
                 fraHelpers[i] = new
                     FraRateHelper(r, fraData[i].n, fraData[i].n + 3,
                                   euribor3m.fixingDays(),
@@ -334,7 +332,7 @@ public class PiecewiseYieldCurveTest {
             }
 
             for (int i=0; i<bonds; i++) {
-                final Handle<Quote> p = new Handle<Quote>(prices[i]);
+                final Quote p = prices[i];
                 final Date maturity = calendar.advance(today, bondData[i].n, bondData[i].units);
                 final Date issue = calendar.advance(maturity, -bondData[i].length, TimeUnit.Years);
                 
@@ -392,13 +390,13 @@ public class PiecewiseYieldCurveTest {
 										classT, classI, classB,
 										vars.settlement, vars.instruments,
 										new Actual360(),
-										new Handle/*<Quote>*/[0],
+										null,
 										new Date[0],
 										1.0e-12,
 										interpolator);
 
-        final RelinkableHandle<YieldTermStructure> curveHandle = new RelinkableHandle<YieldTermStructure>();
-        curveHandle.linkTo(vars.termStructure);
+        final YieldTermStructure curveHandle = null;
+        curveHandle = vars.termStructure;
 
         // check deposits
         for (int i=0; i<vars.deposits; i++) {
@@ -448,12 +446,12 @@ public class PiecewiseYieldCurveTest {
 									classT, classI, classB,
 									vars.settlement, vars.bondHelpers,
 									new Actual360(),
-									new Handle/*<Quote>*/[0],
+									null,
 									new Date[0],
 									1.0e-12,
 									interpolator);
         
-        curveHandle.linkTo(vars.termStructure);
+        curveHandle = vars.termStructure;
 
         for (int i=0; i<vars.bonds; i++) {
             final Date maturity = vars.calendar.advance(vars.today, bondData[i].n, bondData[i].units);
@@ -486,11 +484,11 @@ public class PiecewiseYieldCurveTest {
         							classT, classI, classB,
         							vars.settlement, vars.fraHelpers,
                                     new Actual360(),
-									new Handle/*<Quote>*/[0],
+									null,
 									new Date[0],
                                     1.0e-12,
                                     interpolator);
-        curveHandle.linkTo(vars.termStructure);
+        curveHandle = vars.termStructure;
 
         final IborIndex euribor3m = new Euribor3M(curveHandle);
         for (int i=0; i<vars.fras; i++) {
@@ -558,12 +556,12 @@ public class PiecewiseYieldCurveTest {
         vars.settlement = vars.calendar.advance(vars.today, vars.settlementDays, TimeUnit.Days);
 
 
-        final Handle<YieldTermStructure> riskFreeCurve = new Handle<YieldTermStructure>(new FlatForward(vars.settlement, 0.04, new Actual360()));
+        YieldTermStructure riskFreeCurve = new FlatForward(vars.settlement, 0.04, new Actual360());
 
         final BMAIndex bmaIndex = new BMAIndex();
         final IborIndex liborIndex = new USDLibor(new Period(3, TimeUnit.Months), riskFreeCurve);
         for (int i=0; i<vars.bmas; ++i) {
-            final Handle<Quote> f = new Handle<Quote>(vars.fractions[i]);
+            Quote f = vars.fractions[i];
             vars.bmaHelpers[i] = // boost::shared_ptr<RateHelper>(
                       new BMASwapRateHelper(f, new Period(bmaData[i].n, bmaData[i].units),
                                             vars.settlementDays,
@@ -584,13 +582,13 @@ public class PiecewiseYieldCurveTest {
         							classT, classI, classB,
         							vars.settlement, vars.bmaHelpers,
                                     new Actual360(),
-                                    new Handle/*<Quote>*/[0],
+                                    null,
                                     new Date[0],
                                     1.0e-12,
                                     interpolator);
 
-        final RelinkableHandle<YieldTermStructure> curveHandle = new RelinkableHandle<YieldTermStructure>();
-        curveHandle.linkTo(vars.termStructure);
+        final YieldTermStructure curveHandle = null;
+        curveHandle = vars.termStructure;
 
         // check BMA swaps
         final BMAIndex bma = new BMAIndex(curveHandle);
@@ -853,7 +851,7 @@ public class PiecewiseYieldCurveTest {
 	    final IborIndex euribor6m = new Euribor6M();
 
 	    for (int i=0; i<vars.swaps; i++) {
-	        final Handle<Quote> r = new Handle<Quote>(vars.rates[i+vars.deposits]);
+	        Quote r = vars.rates[i+vars.deposits];
 	        swapHelpers[i] = new SwapRateHelper(
 	        		           r, new Period(swapData[i].n, swapData[i].units),
 	                           vars.calendar,
@@ -867,7 +865,7 @@ public class PiecewiseYieldCurveTest {
 			    				swapHelpers, 
 			                    new Actual360());
 
-	    final Handle<YieldTermStructure> curveHandle = new Handle<YieldTermStructure>(vars.termStructure);
+	    YieldTermStructure curveHandle = vars.termStructure;
 
 	    final IborIndex index = new Euribor6M(curveHandle);
 	    for (int i=0; i<vars.swaps; i++) {
@@ -953,7 +951,7 @@ public class PiecewiseYieldCurveTest {
 
 	    final IborIndex index = new JPYLibor(new Period(6, TimeUnit.Months));
 	    for (int i=0; i<vars.swaps; i++) {
-	        final Handle<Quote> r = new Handle<Quote>(vars.rates[i]);
+	        Quote r = vars.rates[i];
 	        vars.instruments[i] = new SwapRateHelper(
 	        							r, new Period(swapData[i].n, swapData[i].units),
 	        							vars.calendar,                         // TODO: code review on this line!!!!
@@ -965,12 +963,12 @@ public class PiecewiseYieldCurveTest {
 	    								Discount.class, LogLinear.class, IterativeBootstrap.class, 
 	                                    vars.settlement, vars.instruments,
 	                                    new Actual360(),
-										new Handle/*<Quote>*/[0],
+										null,
 										new Date[0],
 	                                    1.0e-12);
 
-        final RelinkableHandle<YieldTermStructure> curveHandle = new RelinkableHandle<YieldTermStructure>();
-	    curveHandle.linkTo(vars.termStructure);
+        final YieldTermStructure curveHandle = null;
+	    curveHandle = vars.termStructure;
 
 	    // check swaps
 	    final IborIndex jpylibor6m = new JPYLibor(new Period(6, TimeUnit.Months), curveHandle);

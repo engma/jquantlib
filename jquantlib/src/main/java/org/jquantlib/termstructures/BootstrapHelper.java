@@ -44,7 +44,7 @@ import java.util.List;
 
 import org.jquantlib.QL;
 import org.jquantlib.lang.exceptions.LibraryException;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.time.Date;
@@ -66,28 +66,28 @@ import org.jquantlib.util.Visitor;
  */
 public abstract class BootstrapHelper <TS extends TermStructure> implements Observer, Observable, PolymorphicVisitable {
 
-    protected Handle <Quote> quote;
+    protected Quote quote;
     protected TS termStructure;
     protected Date earliestDate;
     protected Date latestDate;
 
-    public BootstrapHelper(final Handle<Quote> quote) {
+    public BootstrapHelper(final Quote quote) {
         this.quote = quote;
         this.quote.addObserver(this);
     }
 
     public BootstrapHelper(final double quote) {
-        this.quote = new Handle<Quote>(new SimpleQuote(quote));
+        this.quote = new SimpleQuote(quote);
     }
 
     public abstract double impliedQuote();
 
     public double quoteError() {
-        return quote.currentLink().value() - impliedQuote();
+        return quote.value() - impliedQuote();
     }
 
     public boolean quoteIsValid() {
-        return quote.currentLink().isValid();
+        return quote.isValid();
     }
 
     public void setTermStructure(final TS c) {

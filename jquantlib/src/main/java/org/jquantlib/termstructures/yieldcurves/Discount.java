@@ -70,7 +70,8 @@ public class Discount implements Traits {
 
     @Override
     public double initialGuess() {
-        return 1.0 / (1.0 + averageRate * 0.25);
+        throw new UnsupportedOperationException("Method should not be used");
+//        return 1.0 / (1.0 + averageRate * 0.25);
     }
 
     @Override
@@ -80,18 +81,20 @@ public class Discount implements Traits {
 
     @Override
     public double minValueAfter(final int i, final double[] data) {
-        return Constants.QL_EPSILON;
+        throw new UnsupportedOperationException("Method should not be used");    	
+//      return Constants.QL_EPSILON;
     }
 
     @Override
     public double maxValueAfter(final int i, final double[] data) {
-        if (new Settings().isNegativeRates()) {
-            // discount are not required to be decreasing --all bets are off.
-            // We choose as max a value very unlikely to be exceeded.
-            return 3.0;
-        }
-        // discounts cannot decrease
-        return data[i-1];
+        throw new UnsupportedOperationException("Method should not be used");
+//        if (new Settings().isNegativeRates()) {
+//            // discount are not required to be decreasing --all bets are off.
+//            // We choose as max a value very unlikely to be exceeded.
+//            return 3.0;
+//        }
+//        // discounts cannot decrease
+//        return data[i-1];
     }
 
     @Override

@@ -34,7 +34,6 @@ import org.jquantlib.instruments.BarrierType;
 import org.jquantlib.instruments.Option;
 import org.jquantlib.instruments.Payoff;
 import org.jquantlib.instruments.PlainVanillaPayoff;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
@@ -74,11 +73,11 @@ public class Replication implements Runnable {
             final double rebate = 0.0;
             final Option.Type type = Option.Type.Put;
             final double underlyingValue = 100;
-            final Handle<SimpleQuote> underlying = new Handle<SimpleQuote>(new SimpleQuote(underlyingValue));
+            final SimpleQuote underlying = new SimpleQuote(underlyingValue);
 
             final double strike = 100.0;
-            final Handle<SimpleQuote> riskFreeRate = new Handle<SimpleQuote>(new SimpleQuote(0.04));
-            final Handle<SimpleQuote> volatility = new Handle<SimpleQuote>(new SimpleQuote(0.20));
+            final SimpleQuote riskFreeRate = new SimpleQuote(0.04);
+            final SimpleQuote volatility = new SimpleQuote(0.20);
             final Date maturity = today.add(Period.ONE_YEAR_FORWARD);
 
             System.out.println("\n");
@@ -106,10 +105,10 @@ public class Replication implements Runnable {
 
             //bootstrap the yield/vol curves
             final DayCounter dayCounter = new Actual365Fixed();
-            final Handle<Quote> h1 = new Handle<Quote>(riskFreeRate.currentLink());
-            final Handle<Quote> h2 = new Handle<Quote>(volatility.currentLink());
-            final Handle<YieldTermStructure> flatRate = new Handle<YieldTermStructure>(new FlatForward(0, new NullCalendar(), h1, dayCounter));
-            final Handle<BlackConstantVol> flatVol = new Handle<BlackConstantVol>(new BlackConstantVol(0, new NullCalendar(), h2, dayCounter));
+            final Quote h1 = riskFreeRate;
+            final Quote h2 = volatility;
+            final YieldTermStructure flatRate = new FlatForward(0, new NullCalendar(), h1, dayCounter);
+            final BlackConstantVol flatVol = new BlackConstantVol(0, new NullCalendar(), h2, dayCounter);
 
             //instantiate the option
             final Exercise exercise = new EuropeanExercise(maturity);

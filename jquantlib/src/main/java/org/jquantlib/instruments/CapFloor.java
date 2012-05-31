@@ -23,7 +23,7 @@
 /*
  Copyright (C) 2001, 2002, 2003 Sadruddin Rejeb
  Copyright (C) 2006 Ferdinando Ametrano
- Copyright (C) 2006 Fran�ois du Vignaud
+ Copyright (C) 2006 Fran�ｽois du Vignaud
  Copyright (C) 2006, 2007 StatPro Italia srl
 
  This file is part of QuantLib, a free-software/open-source library
@@ -52,7 +52,7 @@ import org.jquantlib.cashflow.FloatingRateCoupon;
 import org.jquantlib.cashflow.Leg;
 import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.pricingengines.PricingEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
 
@@ -71,14 +71,14 @@ public class CapFloor extends Instrument {
     private final Leg floatingLeg_;
     private List</*@Rate*/ Double> capRates_;
     private List</*@Rate*/ Double> floorRates_;
-    private final Handle<YieldTermStructure> termStructure_;
+    private final YieldTermStructure termStructure_;
 
     public CapFloor(
             final CapFloor.Type type,
             final Leg floatingLeg,
             final List</*@Rate*/ Double> capRates,
             final List</*@Rate*/ Double> floorRates,
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final PricingEngine engine){
 
     	QL.validateExperimentalMode();
@@ -126,7 +126,7 @@ public class CapFloor extends Instrument {
             final Type type,
             final Leg floatingLeg,
             final List</*@Rate*/ Double> strikes,
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final PricingEngine engine){
 
         if (System.getProperty("EXPERIMENTAL") == null)
@@ -177,7 +177,7 @@ public class CapFloor extends Instrument {
             //FIXME: kind of ugly... intention: get the last date of all dates in the floatingdate c++ max syntax.
             lastPaymentDate = lastPaymentDate.le(floatingLeg_.get(i).date())?floatingLeg_.get(i).date():lastPaymentDate;
         }
-        return lastPaymentDate.le(termStructure_.currentLink().referenceDate());
+        return lastPaymentDate.le(termStructure_.referenceDate());
     }
 
     public Date startDate(){

@@ -109,10 +109,10 @@ public class JuQuadraticApproximationEngine extends VanillaOption.EngineImpl {
         QL.require(a.payoff instanceof StrikedTypePayoff , NON_STRIKE_PAYOFF_GIVEN); // QA:[RG]::verified
         final StrikedTypePayoff payoff = (StrikedTypePayoff)a.payoff;
 
-        final double /* @Real */variance = process.blackVolatility().currentLink().blackVariance(ex.lastDate(), payoff.strike());
-        final double /* @DiscountFactor */dividendDiscount = process.dividendYield().currentLink().discount(ex.lastDate());
-        final double /* @DiscountFactor */riskFreeDiscount = process.riskFreeRate().currentLink().discount(ex.lastDate());
-        final double /* @Real */spot = process.stateVariable().currentLink().value();
+        final double /* @Real */variance = process.blackVolatility().blackVariance(ex.lastDate(), payoff.strike());
+        final double /* @DiscountFactor */dividendDiscount = process.dividendYield().discount(ex.lastDate());
+        final double /* @DiscountFactor */riskFreeDiscount = process.riskFreeRate().discount(ex.lastDate());
+        final double /* @Real */spot = process.stateVariable().value();
         QL.require(spot > 0.0, "negative or null underlying given"); // TODO: message
         final double /* @Real */forwardPrice = spot * dividendDiscount / riskFreeDiscount;
         final BlackCalculator black = new BlackCalculator(payoff, forwardPrice, Math.sqrt(variance), riskFreeDiscount);
@@ -125,16 +125,16 @@ public class JuQuadraticApproximationEngine extends VanillaOption.EngineImpl {
             moreGreeks.elasticity   = black.elasticity(spot);
             greeks.gamma            = black.gamma(spot);
 
-            final DayCounter rfdc  = process.riskFreeRate().currentLink().dayCounter();
-            final DayCounter divdc = process.dividendYield().currentLink().dayCounter();
-            final DayCounter voldc = process.blackVolatility().currentLink().dayCounter();
-            double /*@Time*/ t = rfdc.yearFraction(process.riskFreeRate().currentLink().referenceDate(), a.exercise.lastDate());
+            final DayCounter rfdc  = process.riskFreeRate().dayCounter();
+            final DayCounter divdc = process.dividendYield().dayCounter();
+            final DayCounter voldc = process.blackVolatility().dayCounter();
+            double /*@Time*/ t = rfdc.yearFraction(process.riskFreeRate().referenceDate(), a.exercise.lastDate());
             greeks.rho = black.rho(t);
 
-            t = divdc.yearFraction(process.dividendYield().currentLink().referenceDate(), a.exercise.lastDate());
+            t = divdc.yearFraction(process.dividendYield().referenceDate(), a.exercise.lastDate());
             greeks.dividendRho = black.dividendRho(t);
 
-            t = voldc.yearFraction(process.blackVolatility().currentLink().referenceDate(), a.exercise.lastDate());
+            t = voldc.yearFraction(process.blackVolatility().referenceDate(), a.exercise.lastDate());
             greeks.vega            = black.vega(t);
             greeks.theta           = black.theta(spot, t);
             moreGreeks.thetaPerDay = black.thetaPerDay(spot, t);

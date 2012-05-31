@@ -53,7 +53,7 @@ import org.jquantlib.methods.lattices.BlackScholesLattice;
 import org.jquantlib.methods.lattices.Tree;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
 import org.jquantlib.processes.StochasticProcess1D;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.BlackVolTermStructure;
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -155,24 +155,24 @@ public class BinomialVanillaEngine<T extends Tree> extends VanillaOption.EngineI
         //QL.require(a.exercise.type() == Exercise.Type.European || a.exercise.type() == Exercise.Type.American,
         //           "neither European nor American option"); // TODO: message
 
-        final DayCounter rfdc  = process.riskFreeRate().currentLink().dayCounter();
-        final DayCounter divdc = process.dividendYield().currentLink().dayCounter();
-        final DayCounter voldc = process.blackVolatility().currentLink().dayCounter();
-        final Calendar volcal  = process.blackVolatility().currentLink().calendar();
+        final DayCounter rfdc  = process.riskFreeRate().dayCounter();
+        final DayCounter divdc = process.dividendYield().dayCounter();
+        final DayCounter voldc = process.blackVolatility().dayCounter();
+        final Calendar volcal  = process.blackVolatility().calendar();
 
-        final double s0 = process.stateVariable().currentLink().value();
+        final double s0 = process.stateVariable().value();
         QL.require(s0 > 0.0 , "negative or null underlying given"); // TODO: message
-        final double v = process.blackVolatility().currentLink().blackVol(a.exercise.lastDate(), s0);
+        final double v = process.blackVolatility().blackVol(a.exercise.lastDate(), s0);
         final Date maturityDate = a.exercise.lastDate();
 
-        final double rRate = process.riskFreeRate().currentLink().zeroRate(maturityDate, rfdc, Compounding.Continuous, Frequency.NoFrequency).rate();
-        final double qRate = process.dividendYield().currentLink().zeroRate(maturityDate, divdc, Compounding.Continuous, Frequency.NoFrequency).rate();
-        final Date referenceDate = process.riskFreeRate().currentLink().referenceDate();
+        final double rRate = process.riskFreeRate().zeroRate(maturityDate, rfdc, Compounding.Continuous, Frequency.NoFrequency).rate();
+        final double qRate = process.dividendYield().zeroRate(maturityDate, divdc, Compounding.Continuous, Frequency.NoFrequency).rate();
+        final Date referenceDate = process.riskFreeRate().referenceDate();
 
         // binomial trees with constant coefficient
-        final Handle<YieldTermStructure> flatRiskFree = new Handle<YieldTermStructure>(new FlatForward(referenceDate, rRate, rfdc));
-        final Handle<YieldTermStructure> flatDividends = new Handle<YieldTermStructure>(new FlatForward(referenceDate, qRate, divdc));
-        final Handle<BlackVolTermStructure> flatVol = new Handle<BlackVolTermStructure>(new BlackConstantVol(referenceDate, volcal, v, voldc));
+        YieldTermStructure flatRiskFree = new FlatForward(referenceDate, rRate, rfdc);
+        YieldTermStructure flatDividends = new FlatForward(referenceDate, qRate, divdc);
+        BlackVolTermStructure flatVol = new BlackConstantVol(referenceDate, volcal, v, voldc);
         final PlainVanillaPayoff payoff = (PlainVanillaPayoff) a.payoff;
         QL.require(payoff!=null , "non-plain payoff given"); // TODO: message
 

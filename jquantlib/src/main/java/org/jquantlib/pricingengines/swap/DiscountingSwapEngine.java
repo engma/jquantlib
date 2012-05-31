@@ -4,7 +4,7 @@ import org.jquantlib.QL;
 import org.jquantlib.cashflow.CashFlows;
 import org.jquantlib.instruments.Swap;
 import org.jquantlib.math.Constants;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.util.Observer;
 
@@ -12,9 +12,9 @@ import org.jquantlib.util.Observer;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public class DiscountingSwapEngine extends Swap.EngineImpl implements /* Swap.Engine, */ Observer {
 
-    private final Handle<YieldTermStructure> discountCurve;
+    private final YieldTermStructure discountCurve;
 
-    public DiscountingSwapEngine(final Handle<YieldTermStructure> discountCurve) /* @ReadOnly */ {
+    public DiscountingSwapEngine(final YieldTermStructure discountCurve) /* @ReadOnly */ {
         if (System.getProperty("EXPERIMENTAL") == null)
             throw new UnsupportedOperationException("Work in progress");
         this.discountCurve = discountCurve;
@@ -23,7 +23,7 @@ public class DiscountingSwapEngine extends Swap.EngineImpl implements /* Swap.En
 
     @Override
     public void calculate() /* @ReadOnly */ {
-        QL.require(!discountCurve.empty() , "no discounting term structure set"); // TODO: message
+        QL.require(discountCurve != null , "no discounting term structure set"); // TODO: message
 
         final Swap.ArgumentsImpl a = (Swap.ArgumentsImpl)arguments_;
         final Swap.ResultsImpl   r = (Swap.ResultsImpl)results_;

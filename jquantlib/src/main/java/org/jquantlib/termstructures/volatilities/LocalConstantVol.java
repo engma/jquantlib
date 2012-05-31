@@ -40,7 +40,7 @@
 package org.jquantlib.termstructures.volatilities;
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.LocalVolTermStructure;
@@ -60,7 +60,7 @@ import org.jquantlib.time.calendars.NullCalendar;
  */
 public class LocalConstantVol extends LocalVolTermStructure {
 
-    private final Handle<Quote> volatility;
+    private final Quote volatility;
     private final DayCounter dayCounter;
 
     public LocalConstantVol(
@@ -68,13 +68,13 @@ public class LocalConstantVol extends LocalVolTermStructure {
             final /*@Volatility*/ double volatility,
             final DayCounter dayCounter) {
         super(referenceDate);
-        this.volatility = new Handle<Quote>(new SimpleQuote(volatility));
+        this.volatility = new SimpleQuote(volatility);
         this.dayCounter = dayCounter;
     }
 
     public LocalConstantVol(
             final Date referenceDate,
-            final Handle<Quote> volatility,
+            final Quote volatility,
             final DayCounter dayCounter) {
         super(referenceDate);
         this.volatility = volatility;
@@ -89,14 +89,14 @@ public class LocalConstantVol extends LocalVolTermStructure {
             final /*@Volatility*/ double volatility,
             final DayCounter dayCounter) {
         super(settlementDays, new NullCalendar());
-        this.volatility = new Handle<Quote>(new SimpleQuote(volatility));
+        this.volatility = new SimpleQuote(volatility);
         this.dayCounter = dayCounter;
     }
 
     public LocalConstantVol(
             final int settlementDays,
             final Calendar cal,
-            final Handle<Quote> volatility,
+            final Quote volatility,
             final DayCounter dayCounter) {
         super(settlementDays, new NullCalendar());
         this.volatility = volatility;
@@ -127,7 +127,7 @@ public class LocalConstantVol extends LocalVolTermStructure {
     protected final /*@Volatility*/ double localVolImpl(
             final /*@Time*/ double maturity,
             final /*@Real*/ double strike) {
-        return this.volatility.currentLink().value();
+        return this.volatility.value();
     }
 
 }

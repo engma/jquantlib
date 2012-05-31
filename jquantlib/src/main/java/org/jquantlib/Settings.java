@@ -184,7 +184,7 @@ public class Settings {
         public Map<String,Object> initialValue() {
             final Map<String, Object> map = new TreeMap<String, Object>();
             map.put(ENFORCES_TODAYS_HISTORIC_FIXINGS, false);
-            map.put(NEGATIVE_RATES, false);
+            map.put(NEGATIVE_RATES, true); // negative rates enabled (at least for discounting)
             map.put(EXTRA_SAFETY_CHECKS, true);
             map.put(TODAYS_PAYMENTS, true);
             map.put(USE_INDEXED_COUPON, false);

@@ -33,7 +33,7 @@ import org.jquantlib.methods.lattices.Lattice;
 import org.jquantlib.methods.lattices.TrinomialTree;
 import org.jquantlib.model.Parameter;
 import org.jquantlib.model.TermStructureFittingParameter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Frequency;
@@ -60,7 +60,7 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
     private final TermStructureConsistentModelClass termstructureConsistentModel;
     private Parameter phi_;
 
-    public ExtendedCoxIngersollRoss(final Handle<YieldTermStructure> termStructure,
+    public ExtendedCoxIngersollRoss(final YieldTermStructure termStructure,
             final double theta, final double k, final double sigma, final double x0){
         super(x0, theta, k, sigma);
         termstructureConsistentModel = new TermStructureConsistentModelClass(termStructure);
@@ -79,8 +79,8 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
 
     @Override
     public double A(final double t, final double s)  {
-        final double pt = termstructureConsistentModel.termStructure().currentLink().discount(t);
-        final double ps = termstructureConsistentModel.termStructure().currentLink().discount(s);
+        final double pt = termstructureConsistentModel.termStructure().discount(t);
+        final double ps = termstructureConsistentModel.termStructure().discount(s);
         final double value = super.A(t,s)*Math.exp(B(t,s)*phi_.get(t))*
         (ps*super.A(0.0,t)*Math.exp(-B(0.0,t)*x0()))/
         (pt*super.A(0.0,s)*Math.exp(-B(0.0,s)*x0()));
@@ -94,8 +94,8 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
             final double t,
             final double s) {
         QL.require(strike > 0.0 , STRIKE_MUST_BE_POSITIVE); // TODO: message
-        final double discountT = termstructureConsistentModel.termStructure().currentLink().discount(t);
-        final double discountS = termstructureConsistentModel.termStructure().currentLink().discount(s);
+        final double discountT = termstructureConsistentModel.termStructure().discount(t);
+        final double discountS = termstructureConsistentModel.termStructure().discount(s);
         if (t<Constants.QL_EPSILON)
             switch (type) {
                 case Call:
@@ -107,7 +107,7 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
             }
         final double sigma2 = sigma() * sigma();
         final double h = Math.sqrt(k() * k() + 2 * sigma2);
-        final double r0 = termstructureConsistentModel.termStructure().currentLink().forwardRate(0.0, 0.0, Compounding.Continuous,
+        final double r0 = termstructureConsistentModel.termStructure().forwardRate(0.0, 0.0, Compounding.Continuous,
                 Frequency.NoFrequency).rate();
         final double b = B(t, s);
 
@@ -195,7 +195,7 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
     private static class FittingParameter extends TermStructureFittingParameter {
 
         public FittingParameter(
-                final Handle<YieldTermStructure> termStructure,
+                final YieldTermStructure termStructure,
                 final double theta,
                 final double k,
                 final double sigma,
@@ -203,7 +203,7 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
             super(new Impl(termStructure, theta, k, sigma, x0));
         }
 
-        public FittingParameter(final Handle<YieldTermStructure> term) {
+        public FittingParameter(final YieldTermStructure term) {
             super(term);
         }
 
@@ -212,14 +212,14 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
         //
 
         private static class Impl implements Parameter.Impl {
-            private final Handle<YieldTermStructure> termStructure;
+            private final YieldTermStructure termStructure;
             private final double theta;
             private final double k;
             private final double sigma;
             private final double x0;
 
             public Impl(
-                    final Handle<YieldTermStructure> termStructure,
+                    final YieldTermStructure termStructure,
                     final double theta,
                     final double k,
                     final double sigma,
@@ -233,7 +233,7 @@ public class ExtendedCoxIngersollRoss extends CoxIngersollRoss {
 
             @Override
             public double value(final Array params, final double t) {
-                final double forwardRate = termStructure.currentLink().forwardRate(
+                final double forwardRate = termStructure.forwardRate(
                         t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
                 final double h = Math.sqrt(k*k + 2.0 * sigma * sigma);
                 final double expth = Math.exp(t*h);

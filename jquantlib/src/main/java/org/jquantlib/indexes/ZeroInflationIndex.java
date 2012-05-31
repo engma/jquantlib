@@ -28,7 +28,7 @@ import org.jquantlib.currencies.Currency;
 import org.jquantlib.lang.annotation.Rate;
 import org.jquantlib.lang.annotation.Real;
 import org.jquantlib.lang.annotation.Time;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.InflationTermStructure;
 import org.jquantlib.termstructures.ZeroInflationTermStructure;
 import org.jquantlib.time.Date;
@@ -46,7 +46,7 @@ import org.jquantlib.util.Pair;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public abstract class ZeroInflationIndex extends InflationIndex {
     
-    private Handle<ZeroInflationTermStructure> zeroInflation;
+    private ZeroInflationTermStructure zeroInflation;
     
     public ZeroInflationIndex(final String familyName,
 			 final Region region,
@@ -55,7 +55,7 @@ public abstract class ZeroInflationIndex extends InflationIndex {
 			 final Frequency frequency,
 			 final Period availabilityLag,
 			 final Currency currency) {
-    	this(familyName, region, revised, interpolated, frequency, availabilityLag, currency, new Handle<ZeroInflationTermStructure>());
+    	this(familyName, region, revised, interpolated, frequency, availabilityLag, currency, null);
     }
     
     public ZeroInflationIndex(final String familyName,
@@ -65,7 +65,7 @@ public abstract class ZeroInflationIndex extends InflationIndex {
             				 final Frequency frequency,
             				 final Period availabilityLag,
             				 final Currency currency,
-            				 final Handle<ZeroInflationTermStructure> zeroInflation) {
+            				 final ZeroInflationTermStructure zeroInflation) {
     	super(familyName, region, revised, interpolated, frequency, availabilityLag, currency);
     	this.zeroInflation = zeroInflation;
     	this.zeroInflation.addObserver(this);	
@@ -95,13 +95,13 @@ public abstract class ZeroInflationIndex extends InflationIndex {
     	}
     }
     
-    public Handle<ZeroInflationTermStructure> zeroInflationTermStructure() {
+    public ZeroInflationTermStructure zeroInflationTermStructure() {
     	return zeroInflation;
     }
     
     private /* @Rate */ double forecastFixing(final Date fixingDate) {
     	// the term structure is relative to the fixing value at the base date.
-    	Date baseDate = zeroInflation.currentLink().baseDate();
+    	Date baseDate = zeroInflation.baseDate();
     	@Real double baseFixing = fixing(baseDate);
     	
     	// get the relevant period end
@@ -120,8 +120,8 @@ public abstract class ZeroInflationIndex extends InflationIndex {
     	
         // Assume annual compounding (we're using a zero inflation
         // term structure)
-    	@Rate double zero = zeroInflation.currentLink().zeroRate(d);
-    	@Time double t = zeroInflation.currentLink().dayCounter().yearFraction(trueBaseDate, d);
+    	@Rate double zero = zeroInflation.zeroRate(d);
+    	@Time double t = zeroInflation.dayCounter().yearFraction(trueBaseDate, d);
     	
     	return baseFixing * Math.pow((1.0 + zero), t);
     }

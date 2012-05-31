@@ -23,7 +23,7 @@ package org.jquantlib.indexes;
 
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.Thirty360;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Period;
@@ -46,10 +46,10 @@ import org.jquantlib.time.calendars.Target;
 public class EurLiborSwapIsdaFixA extends SwapIndex {
 
     public EurLiborSwapIsdaFixA(final Period tenor) {
-    	this(tenor, new Handle<YieldTermStructure>());
+    	this(tenor, null);
     }
 	
-    public EurLiborSwapIsdaFixA(final Period tenor, final Handle<YieldTermStructure> h) {
+    public EurLiborSwapIsdaFixA(final Period tenor, YieldTermStructure h) {
         super( "EurLiborSwapIsdaFixA",
                 tenor,
                 2, // settlement days

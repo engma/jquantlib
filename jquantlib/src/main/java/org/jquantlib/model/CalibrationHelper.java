@@ -30,7 +30,7 @@ import org.jquantlib.lang.annotation.Time;
 import org.jquantlib.math.Ops;
 import org.jquantlib.math.solvers1D.Brent;
 import org.jquantlib.pricingengines.PricingEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.util.Observable;
@@ -45,14 +45,14 @@ import org.jquantlib.util.Observer;
 public abstract class CalibrationHelper implements Observer, Observable {
 
     protected double/* @Real */marketValue;
-    protected Handle<Quote> volatility_;
-    protected Handle<YieldTermStructure> termStructure_;
+    protected Quote volatility_;
+    protected YieldTermStructure termStructure_;
     protected PricingEngine engine_;
     private boolean calibrateVolatility_ = false;
 
     public CalibrationHelper(
-            final Handle<Quote> volatility,
-            final Handle<YieldTermStructure> termStructure,
+            final Quote volatility,
+            final YieldTermStructure termStructure,
             final boolean calibrateVolatility) {
 
         if (System.getProperty("EXPERIMENTAL") == null)
@@ -94,7 +94,7 @@ public abstract class CalibrationHelper implements Observer, Observable {
                 implied = 10.0;
             else
                 implied = impliedVolatility(modelPrice, 1e-12, 5000, 0.001, 10);
-            return implied - volatility_.currentLink().value();
+            return implied - volatility_.value();
         } else
             return Math.abs(marketValue() - modelValue())/marketValue();
 
@@ -106,7 +106,7 @@ public abstract class CalibrationHelper implements Observer, Observable {
         final ImpliedVolatilityHelper f = new ImpliedVolatilityHelper(this, targetValue);
         final Brent solver = new Brent();
         solver.setMaxEvaluations(maxEvaluations);
-        return solver.solve(f, accuracy, volatility_.currentLink().value(), minVol, maxVol);
+        return solver.solve(f, accuracy, volatility_.value(), minVol, maxVol);
     }
 
     public void setPricingEngine(final PricingEngine engine) {
@@ -143,7 +143,7 @@ public abstract class CalibrationHelper implements Observer, Observable {
 
     @Override
     public void update() {
-        marketValue = blackPrice(volatility_.currentLink().value());
+        marketValue = blackPrice(volatility_.value());
         notifyObservers();
     }
 

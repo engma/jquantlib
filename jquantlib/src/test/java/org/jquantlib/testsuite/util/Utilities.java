@@ -41,7 +41,7 @@ package org.jquantlib.testsuite.util;
 
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.math.matrixutilities.Array;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -115,7 +115,7 @@ public class Utilities {
     }
 
     static public YieldTermStructure flatRate(final Date today, final Quote forward, final DayCounter dc) {
-        return new FlatForward(today, new Handle<Quote>(forward), dc);
+        return new FlatForward(today, forward, dc);
     }
 
     static public YieldTermStructure flatRate(final Date today, final/* @Rate */double forward, final DayCounter dc) {
@@ -123,7 +123,7 @@ public class Utilities {
     }
 
     static public YieldTermStructure flatRate(final Quote forward, final DayCounter dc) {
-        return new FlatForward(0, new NullCalendar(), new Handle<Quote>(forward), dc);
+        return new FlatForward(0, new NullCalendar(), forward, dc);
     }
 
     static public YieldTermStructure flatRate(final/* @Rate */double forward, final DayCounter dc) {
@@ -131,7 +131,7 @@ public class Utilities {
     }
 
     static public BlackVolTermStructure flatVol(final Date today, final Quote vol, final DayCounter dc) {
-        return new BlackConstantVol(today, new NullCalendar(), new Handle<Quote>(vol), dc);
+        return new BlackConstantVol(today, new NullCalendar(), vol, dc);
     }
 
     static public BlackVolTermStructure flatVol(final Date today, final/* @Volatility */double vol, final DayCounter dc) {
@@ -139,7 +139,7 @@ public class Utilities {
     }
 
     static public BlackVolTermStructure flatVol(final Quote vol, final DayCounter dc) {
-        return new BlackConstantVol(0, new NullCalendar(), new Handle<Quote>(vol), dc);
+        return new BlackConstantVol(0, new NullCalendar(), vol, dc);
     }
 
     static public BlackVolTermStructure flatVol(final/* @Volatility */double vol, final DayCounter dc) {

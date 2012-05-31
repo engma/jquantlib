@@ -29,9 +29,7 @@ import org.jquantlib.QL;
 import org.jquantlib.currencies.Currency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.termstructures.BootstrapHelper;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -57,7 +55,7 @@ public class DepositRateHelper extends RelativeDateRateHelper {
 	private final static String TS_NOT_SET = "term structure not set";
     private Date fixingDate;
     private final IborIndex iborIndex;
-    private final RelinkableHandle<YieldTermStructure> termStructureHandle = new RelinkableHandle <YieldTermStructure> (null);
+    private YieldTermStructure termStructureHandle = null;
 
     //
 	// public constructors
@@ -74,7 +72,7 @@ public class DepositRateHelper extends RelativeDateRateHelper {
      * @param dayCounter
      */
     public DepositRateHelper(
-                final Handle<Quote> rate,
+                final Quote rate,
                 final Period tenor,
                 final /*@Natural*/ int fixingDays,
                 final Calendar calendar,
@@ -124,7 +122,7 @@ public class DepositRateHelper extends RelativeDateRateHelper {
 	 * @param rate
 	 * @param iborIndex
 	 */
-	public DepositRateHelper(final Handle<Quote> rate,
+	public DepositRateHelper(final Quote rate,
                 final IborIndex iborIndex) {
         super(rate);
         QL.validateExperimentalMode();
@@ -178,7 +176,7 @@ public class DepositRateHelper extends RelativeDateRateHelper {
 	@Override
 	public void setTermStructure(final YieldTermStructure term) {
 		// no need to register---the index is not lazy
-		this.termStructureHandle.linkTo(term, false);
+		this.termStructureHandle = term;
 		super.setTermStructure(term);
 	}
 

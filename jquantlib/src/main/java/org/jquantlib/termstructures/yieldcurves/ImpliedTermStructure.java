@@ -40,7 +40,7 @@
 package org.jquantlib.termstructures.yieldcurves;
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Calendar;
@@ -57,9 +57,9 @@ import org.jquantlib.time.Date;
 //TEST observability against changes in the underlying term structure is checked.
 public class ImpliedTermStructure<T extends YieldTermStructure> extends AbstractYieldTermStructure {
 
-    private final Handle<T>	originalCurve;
+    private final T	originalCurve;
 
-    public ImpliedTermStructure(final Handle<T> h, final Date referenceDate) {
+    public ImpliedTermStructure(final T h, final Date referenceDate) {
         super(referenceDate);
         this.originalCurve = h;
         this.originalCurve.addObserver(this);
@@ -67,21 +67,21 @@ public class ImpliedTermStructure<T extends YieldTermStructure> extends Abstract
 
     @Override
     public DayCounter dayCounter() /* @ReadOnly */ {
-        return originalCurve.currentLink().dayCounter();
+        return originalCurve.dayCounter();
     }
 
     @Override
     public Calendar calendar() /* @ReadOnly */ {
-        return originalCurve.currentLink().calendar();
+        return originalCurve.calendar();
     }
 
     @Override
     public /*@Natural*/ int settlementDays() /* @ReadOnly */ {
-        return originalCurve.currentLink().settlementDays();
+        return originalCurve.settlementDays();
     }
 
     public Date maxDate() /* @ReadOnly */ {
-        return originalCurve.currentLink().maxDate();
+        return originalCurve.maxDate();
     }
 
     @Override
@@ -90,11 +90,11 @@ public class ImpliedTermStructure<T extends YieldTermStructure> extends Abstract
            and needs to be converted to the time relative
            to the reference date of the original curve */
         final Date ref = referenceDate();
-        final /*@Time*/ double originalTime = t + dayCounter().yearFraction(originalCurve.currentLink().referenceDate(), ref);
+        final /*@Time*/ double originalTime = t + dayCounter().yearFraction(originalCurve.referenceDate(), ref);
         /* discount at evaluation date cannot be cached
            since the original curve could change between
            invocations of this method */
-        return originalCurve.currentLink().discount(originalTime, true) / originalCurve.currentLink().discount(ref, true);
+        return originalCurve.discount(originalTime, true) / originalCurve.discount(ref, true);
     }
 
 }

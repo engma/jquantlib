@@ -87,7 +87,7 @@ public class FDDividendEngineMerton73 extends FDDividendEngineBase {
         for (int i=0; i<events.size(); i++)
             if (getDividendTime(i) >= 0.0)
                 paidDividends += getDiscountedDividend(i);
-        super.setGridLimits(process.stateVariable().currentLink().value()-paidDividends, getResidualTime());
+        super.setGridLimits(process.stateVariable().value()-paidDividends, getResidualTime());
         ensureStrikeInGrid();
     }
 

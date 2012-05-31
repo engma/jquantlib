@@ -42,7 +42,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.annotation.Natural;
 import org.jquantlib.lang.annotation.Rate;
 import org.jquantlib.lang.annotation.Time;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Frequency;
@@ -63,7 +63,7 @@ public abstract class YoYInflationTermStructure extends InflationTermStructure {
 						    		  final Period lag,
 						    		  final Frequency frequency,
 						    		  final @Rate double baseYoYRate,
-						    		  final Handle<YieldTermStructure> yTS) {
+						    		  YieldTermStructure yTS) {
     	super(lag, frequency, baseYoYRate, yTS, dayCounter);
     	
     }
@@ -75,7 +75,7 @@ public abstract class YoYInflationTermStructure extends InflationTermStructure {
 						  		  	  final Period lag,
 									  final Frequency frequency,
 									  final @Rate double baseYoYRate,
-									  final Handle<YieldTermStructure> yTS) {
+									  YieldTermStructure yTS) {
 
     	super(referenceDate, lag, frequency, baseYoYRate, yTS, calendar, dayCounter);
     }
@@ -87,7 +87,7 @@ public abstract class YoYInflationTermStructure extends InflationTermStructure {
 	    							  final Period lag,
 	    							  final Frequency frequency,
 	    							  final @Rate double baseYoYRate,
-	    							  final Handle<YieldTermStructure> yTS) {
+	    							  YieldTermStructure yTS) {
     	
     	super(settlementDays, calendar, lag, frequency,baseYoYRate, yTS, dayCounter);
     }  

@@ -40,7 +40,7 @@
 package org.jquantlib.instruments;
 
 import org.jquantlib.QL;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 
 /**
@@ -57,14 +57,14 @@ public class Stock extends Instrument {
     // private final fields
     //
 
-    private final Handle<Quote> quote;
+    private final Quote quote;
 
 
     //
     // public constructors
     //
 
-    public Stock(final Handle<Quote> quote) {
+    public Stock(final Quote quote) {
         QL.require(quote != null , NULL_QUOTE); // QA:[RG]::verified
         this.quote = quote;
 
@@ -88,8 +88,8 @@ public class Stock extends Instrument {
 
     @Override
     protected void performCalculations() /* @ReadOnly */ {
-        QL.require(!quote.empty() , NULL_QUOTE); // QA:[RG]::verified
-        NPV = quote.currentLink().value();
+        QL.require(quote != null, NULL_QUOTE); // QA:[RG]::verified
+        NPV = quote.value();
     }
 
 }

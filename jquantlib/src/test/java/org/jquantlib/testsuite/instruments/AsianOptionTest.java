@@ -65,7 +65,7 @@ import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.asian.AnalyticContinuousGeometricAveragePriceAsianEngine;
 import org.jquantlib.pricingengines.asian.AnalyticDiscreteGeometricAveragePriceAsianEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -108,8 +108,8 @@ public class AsianOptionTest {
         final SimpleQuote vol = new SimpleQuote(0.20);
         final BlackVolTermStructure volTS = Utilities.flatVol(today, vol.value(), dc);
 
-        final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS), new Handle<YieldTermStructure>(rTS), new Handle<BlackVolTermStructure>(volTS));
+        final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot,
+                qTS, rTS, volTS);
 
         final PricingEngine engine = new AnalyticDiscreteGeometricAveragePriceAsianEngine(stochProcess);
 
@@ -188,10 +188,10 @@ public class AsianOptionTest {
         final BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         final BlackScholesMertonProcess process = new BlackScholesMertonProcess(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS));
+                spot,
+                qTS,
+                rTS,
+                volTS);
 
         final Date today = new Settings().evaluationDate();
 
@@ -332,8 +332,7 @@ public class AsianOptionTest {
         final BlackVolTermStructure volTS = Utilities.flatVol(today, vol, dc);
 
         final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                new Handle<Quote>(spot), new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS), new Handle<BlackVolTermStructure>(volTS));
+                spot, qTS, rTS, volTS);
         final PricingEngine engine = new AnalyticContinuousGeometricAveragePriceAsianEngine(stochProcess);
 
         final AverageType averageType = AverageType.Geometric;
@@ -415,10 +414,7 @@ public class AsianOptionTest {
         final BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS));
+                spot, qTS, rTS, volTS);
 
         final PricingEngine engine = new AnalyticContinuousGeometricAveragePriceAsianEngine(stochProcess);
 

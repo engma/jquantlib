@@ -27,7 +27,7 @@ import org.jquantlib.Settings;
 import org.jquantlib.currencies.Currency;
 import org.jquantlib.lang.annotation.Rate;
 import org.jquantlib.lang.annotation.Real;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.InflationTermStructure;
 import org.jquantlib.termstructures.YoYInflationTermStructure;
 import org.jquantlib.time.Date;
@@ -50,7 +50,7 @@ import org.jquantlib.util.Pair;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public abstract class YoYInflationIndex extends InflationIndex {
     
-    private Handle<YoYInflationTermStructure> yoyInflation;
+    private YoYInflationTermStructure yoyInflation;
     private boolean ratio;
     
     public YoYInflationIndex(final String familyName,
@@ -61,7 +61,7 @@ public abstract class YoYInflationIndex extends InflationIndex {
 			 final Frequency frequency,
 			 final Period availabilityLag,
 			 final Currency currency) {
-    	this(familyName, region, revised, interpolated, ratio, frequency, availabilityLag, currency, new Handle<YoYInflationTermStructure	>());
+    	this(familyName, region, revised, interpolated, ratio, frequency, availabilityLag, currency, null);
   	
     }
     
@@ -73,7 +73,7 @@ public abstract class YoYInflationIndex extends InflationIndex {
             				 final Frequency frequency,
             				 final Period availabilityLag,
             				 final Currency currency,
-            				 final Handle<YoYInflationTermStructure> yoyInflation) {
+            				 final YoYInflationTermStructure yoyInflation) {
     	super(familyName, region, revised, interpolated, frequency, availabilityLag, currency);
     	this.ratio = ratio;
     	this.yoyInflation = yoyInflation;
@@ -110,7 +110,7 @@ public abstract class YoYInflationIndex extends InflationIndex {
     	}
     }    
     
-    public Handle<YoYInflationTermStructure> yoyInflationTermStructure() {
+    public YoYInflationTermStructure yoyInflationTermStructure() {
     	return yoyInflation;
     }
     
@@ -129,7 +129,7 @@ public abstract class YoYInflationIndex extends InflationIndex {
     		d = lim.first().add(n);
         }
 
-        return yoyInflation.currentLink().yoyRate(d);
+        return yoyInflation.yoyRate(d);
     }
        
 }

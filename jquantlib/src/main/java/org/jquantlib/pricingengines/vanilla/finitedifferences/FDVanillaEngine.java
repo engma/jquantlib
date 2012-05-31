@@ -88,7 +88,7 @@ public class FDVanillaEngine {
     //
 
     protected void setGridLimits() {
-        setGridLimits(process.stateVariable().currentLink().value(), getResidualTime());
+        setGridLimits(process.stateVariable().value(), getResidualTime());
         ensureStrikeInGrid();
     }
 
@@ -106,7 +106,7 @@ public class FDVanillaEngine {
         if (newGridPoints > intrinsicValues.size())
             intrinsicValues = new SampledCurve(newGridPoints);
 
-        /* Real */final double volSqrtTime = Math.sqrt(process.blackVolatility().currentLink().blackVariance(t, center));
+        /* Real */final double volSqrtTime = Math.sqrt(process.blackVolatility().blackVariance(t, center));
 
         // the prefactor fine tunes performance at small volatilities
         /* Real */final double prefactor = 1.0 + 0.02 / volSqrtTime;

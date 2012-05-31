@@ -47,7 +47,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.math.interpolations.Interpolation;
 import org.jquantlib.math.interpolations.Interpolation.Interpolator;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.Bootstrap;
 import org.jquantlib.termstructures.Compounding;
@@ -110,7 +110,7 @@ public class PiecewiseYieldCurve<
 
 
     private final RateHelper[] instruments;
-    private final Handle<Quote>[] jumps;
+    private final Quote[] jumps;
     private final double accuracy;
     
     
@@ -146,7 +146,7 @@ public class PiecewiseYieldCurve<
             final DayCounter dayCounter) {
     	this(	classT, classI, classB,
                 referenceDate, instruments, dayCounter,
-                new Handle/*<Quote>*/[0],
+                new Quote[0],
                 new Date[0],
                 1.0e-12,
                 constructInterpolator(classI),
@@ -162,7 +162,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps) {
+            final Quote[] jumps) {
     	this(	classT, classI, classB,
                 referenceDate, instruments, dayCounter,
                 jumps,
@@ -181,7 +181,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates) {
     	this(	classT, classI, classB,
                 referenceDate, instruments, dayCounter,
@@ -201,7 +201,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy) {
     	this(	classT, classI, classB,
@@ -222,7 +222,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy,
             final Interpolator interpolator) {
@@ -236,21 +236,21 @@ public class PiecewiseYieldCurve<
     	);
     }
     public PiecewiseYieldCurve(
-            final Class<T> classT,
-            final Class<I> classI,
-            final Class<B> classB,
+            final Class<T> classT, // Trait class 
+            final Class<I> classI, // Interpolator class
+            final Class<B> classB, // Bootstrap class
             //--
-            final Date referenceDate,
+            final Date referenceDate, 
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy,
             final Interpolator interpolator,
-            final Bootstrap bootstrap) {
+            final Bootstrap bootstrap) { 
     	
-        QL.validateExperimentalMode();
+//        QL.validateExperimentalMode();
 
 		QL.require(classT!=null, "Generic type for Traits is null");
 		QL.require(classI!=null, "Generic type for Interpolation is null");
@@ -268,14 +268,14 @@ public class PiecewiseYieldCurve<
         this.baseCurve = constructBaseClass(classT, classI, referenceDate, dayCounter, this.interpolator);
         this.instruments = instruments; // TODO: clone() ?
         
-        this.jumps        = jumps==null            ?  new Handle /*<Quote>*/ [0]   : jumps;
+        this.jumps        = jumps==null            ?  new Quote[0]   : jumps;
         this.jumpDates    = jumpDates==null        ? new Date[0]                   : jumpDates;
         this.accuracy     = Double.isNaN(accuracy) ? 1.0e-12                       : accuracy;
         this.traits       = constructTraits(classT);
 
         this.jumpTimes = new double[jumpDates.length];
         setJumps();
-        for (final Handle<Quote> jump : jumps) {
+        for (final Quote jump : jumps) {
             jump.addObserver(this);
         }
         bootstrap.setup(this);
@@ -299,7 +299,7 @@ public class PiecewiseYieldCurve<
         this(
         		classT, classI, classB,
                 settlementDays, calendar, instruments, dayCounter,
-                new Handle /*<Quote>*/ [0],
+                new Quote[0],
                 new Date[0],
                 1.0e-12,
                 constructInterpolator(classI),
@@ -316,7 +316,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps) {
+            final Quote[] jumps) {
         this(
         		classT, classI, classB,
                 settlementDays, calendar, instruments, dayCounter,
@@ -337,7 +337,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates) {
         this(
         		classT, classI, classB,
@@ -359,7 +359,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy) {
         this(
@@ -382,7 +382,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy,
             final Interpolator interpolator) {
@@ -406,7 +406,7 @@ public class PiecewiseYieldCurve<
             final RateHelper[] instruments,
             final DayCounter dayCounter,
             //----
-            final Handle<Quote>[] jumps,
+            final Quote[] jumps,
             final Date[] jumpDates,
             final /*@Real*/ double accuracy,
             final Interpolator interpolator,
@@ -430,14 +430,14 @@ public class PiecewiseYieldCurve<
         this.baseCurve = constructBaseClass(classT, classI, settlementDays, calendar, dayCounter, this.interpolator);
         this.instruments = instruments;
         
-        this.jumps        = jumps==null            ? new Handle /*<Quote>*/ [0]    : jumps;
+        this.jumps        = jumps==null            ? null    : jumps;
         this.jumpDates    = jumpDates==null        ? new Date[0]                   : jumpDates;
         this.accuracy     = Double.isNaN(accuracy) ? 1.0e-12                       : accuracy;
         this.traits       = constructTraits(classT);
 
         this.jumpTimes = new double[jumpDates.length];
         setJumps();
-        for (final Handle<Quote> jump : jumps) {
+        for (final Quote jump : jumps) {
             jump.addObserver(this);
         }
         bootstrap.setup(this);
@@ -634,8 +634,8 @@ public class PiecewiseYieldCurve<
         if (jumps.length > 0) {
             /*@DiscountFactor*/ double jumpEffect = 1.0;
             for (int i=0; i<jumps.length && jumpTimes[i]<t; ++i) {
-                QL.require(jumps[i].currentLink().isValid(), "invalid jump quote");
-                /*@DiscountFactor*/ final double thisJump = jumps[i].currentLink().value();
+                QL.require(jumps[i].isValid(), "invalid jump quote");
+                /*@DiscountFactor*/ final double thisJump = jumps[i].value();
                 QL.require(thisJump > 0.0 && thisJump <= 1.0, "invalid  jump value");
                 jumpEffect *= thisJump;
             }

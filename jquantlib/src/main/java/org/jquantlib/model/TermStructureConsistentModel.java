@@ -39,21 +39,21 @@ When applicable, the original copyright notice follows this notice.
 
 package org.jquantlib.model;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.util.Observable;
 
 public abstract class TermStructureConsistentModel implements Observable {
-    private final Handle<YieldTermStructure> termStructure_;
+    private final YieldTermStructure termStructure_;
 
-    public TermStructureConsistentModel(final Handle<YieldTermStructure> termStructure){
+    public TermStructureConsistentModel(final YieldTermStructure termStructure){
         this.termStructure_ = termStructure;
 
         if (System.getProperty("EXPERIMENTAL") == null)
             throw new UnsupportedOperationException("Work in progress");
     }
 
-    public Handle<YieldTermStructure> termStructure(){
+    public YieldTermStructure termStructure(){
         return termStructure_;
     }
 }

@@ -74,7 +74,7 @@ public class FDShoutCondition
     @Override
     protected void initializeStepCondition() {
         final double residualTime = getResidualTime();
-        final InterestRate riskFreeRate = process.riskFreeRate().currentLink().zeroRate(
+        final InterestRate riskFreeRate = process.riskFreeRate().zeroRate(
                 residualTime, Compounding.Continuous, Frequency.Annual, false);
 
         stepCondition = new ShoutCondition(intrinsicValues.values(), residualTime, riskFreeRate.rate());

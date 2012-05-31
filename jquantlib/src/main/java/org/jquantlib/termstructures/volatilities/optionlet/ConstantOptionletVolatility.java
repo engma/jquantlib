@@ -41,7 +41,7 @@ package org.jquantlib.termstructures.volatilities.optionlet;
 
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.math.Constants;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.volatilities.FlatSmileSection;
@@ -57,14 +57,14 @@ import org.jquantlib.time.Date;
  */
 public class ConstantOptionletVolatility extends OptionletVolatilityStructure {
 
-	private final Handle<Quote> volatility_;
+	private final Quote volatility_;
 
 	/**
 	 * floating reference date, floating market data
 	 */
 	public ConstantOptionletVolatility(final int settlementDays,
 			final Calendar cal, final BusinessDayConvention bdc,
-			final Handle<Quote> vol, final DayCounter dc) {
+			final Quote vol, final DayCounter dc) {
 		super(settlementDays, cal, bdc, dc);
 		this.volatility_ = vol;
 		volatility_.addObserver(this);
@@ -75,7 +75,7 @@ public class ConstantOptionletVolatility extends OptionletVolatilityStructure {
 	 */
 	public ConstantOptionletVolatility(final Date referenceDate,
 			final Calendar cal, final BusinessDayConvention bdc,
-			final Handle<Quote> vol, final DayCounter dc) {
+			final Quote vol, final DayCounter dc) {
 		super(referenceDate, cal, bdc, dc);
 		this.volatility_ = vol;
 		volatility_.addObserver(this);
@@ -88,7 +88,7 @@ public class ConstantOptionletVolatility extends OptionletVolatilityStructure {
 			final Calendar cal, final BusinessDayConvention bdc,
 			final double vol, final DayCounter dc) {
 		super(settlementDays, cal, bdc, dc);
-		this.volatility_ = new Handle<Quote>(new SimpleQuote(vol));
+		this.volatility_ = new SimpleQuote(vol);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ConstantOptionletVolatility extends OptionletVolatilityStructure {
 			final Calendar cal, final BusinessDayConvention bdc, final double vol,
 			final DayCounter dc) {
 		super(referenceDate, cal, bdc, dc);
-		volatility_ = new Handle<Quote>(new SimpleQuote(vol));
+		volatility_ = new SimpleQuote(vol);
 	}
 
 
@@ -134,18 +134,18 @@ public class ConstantOptionletVolatility extends OptionletVolatilityStructure {
     @Override
     protected SmileSection smileSectionImpl(final Date d) {
 
-        final double /* Volatility */atmVol = volatility_.currentLink().value();
+        final double /* Volatility */atmVol = volatility_.value();
         return new FlatSmileSection(d, atmVol, dayCounter(), referenceDate());
     }
 
     @Override
     protected SmileSection smileSectionImpl(final double optionTime) {
-        final double /* Volatility */atmVol = volatility_.currentLink().value();
+        final double /* Volatility */atmVol = volatility_.value();
         return new FlatSmileSection(optionTime, atmVol, dayCounter());
     }
 
 	@Override
     protected double /* Volatility */volatilityImpl(final double time, final double rate) {
-		return volatility_.currentLink().value();
+		return volatility_.value();
 	}
 }

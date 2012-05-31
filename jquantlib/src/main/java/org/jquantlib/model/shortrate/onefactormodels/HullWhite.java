@@ -36,7 +36,7 @@ import org.jquantlib.model.NullParameter;
 import org.jquantlib.model.Parameter;
 import org.jquantlib.model.TermStructureFittingParameter;
 import org.jquantlib.processes.OrnsteinUhlenbeckProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Frequency;
@@ -68,22 +68,22 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
     // public constructors
     //
 
-    public HullWhite(final Handle<YieldTermStructure> termStructure) {
+    public HullWhite(final YieldTermStructure termStructure) {
         this(termStructure, 0.1, 0.01);
     }
 
     public HullWhite(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double a) {
         this(termStructure, a, 0.01);
     }
 
     public HullWhite(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double a,
             final double sigma) {
 
-        super(termStructure.currentLink().forwardRate(0.0, 0.0, Compounding.Continuous, Frequency.NoFrequency).rate(),
+        super(termStructure.forwardRate(0.0, 0.0, Compounding.Continuous, Frequency.NoFrequency).rate(),
                 a, 0.0, sigma, 0.0);
 
         if (System.getProperty("EXPERIMENTAL") == null)
@@ -123,8 +123,8 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
             v = sigma() * B(maturity, bondMaturity) * Math.sqrt(maturity);
         else
             v = sigma() * B(maturity, bondMaturity) * Math.sqrt(0.5 * (1.0 - Math.exp(-2.0 * _a * maturity)) / _a);
-        final double /* @Real */f = termStructureConsistentModelClass.termStructure().currentLink().discount(bondMaturity);
-        final double /* @Real */k = termStructureConsistentModelClass.termStructure().currentLink().discount(maturity) * strike;
+        final double /* @Real */f = termStructureConsistentModelClass.termStructure().discount(bondMaturity);
+        final double /* @Real */k = termStructureConsistentModelClass.termStructure().discount(maturity) * strike;
 
         return blackFormula(type, k, f, v);
     }
@@ -185,7 +185,7 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
         final TermStructureFittingParameter.NumericalImpl impl = (TermStructureFittingParameter.NumericalImpl) phi.implementation();
         impl.reset();
         for (int /* @Size */i = 0; i < (grid.size() - 1); i++) {
-            final double /* @Real */discountBond = termStructureConsistentModelClass.termStructure().currentLink().discount(grid.at(i + 1));
+            final double /* @Real */discountBond = termStructureConsistentModelClass.termStructure().discount(grid.at(i + 1));
             final Array statePrices = numericTree.statePrices(i);
             final int /* @Size */size = numericTree.size(i);
             final double /* @Time */dt = numericTree.timeGrid().dt(i);
@@ -210,9 +210,9 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
 
     @Override
     protected double A(/* @Time */ final double t, /* @Time */ final double T) /* @ReadOnly */ {
-        final double /* @DiscountFactor */discount1 = termStructureConsistentModelClass.termStructure().currentLink().discount(t);
-        final double /* @DiscountFactor */discount2 = termStructureConsistentModelClass.termStructure().currentLink().discount(T);
-        final double /* @Rate */forward = termStructureConsistentModelClass.termStructure().currentLink().forwardRate(t, t,
+        final double /* @DiscountFactor */discount1 = termStructureConsistentModelClass.termStructure().discount(t);
+        final double /* @DiscountFactor */discount2 = termStructureConsistentModelClass.termStructure().discount(T);
+        final double /* @Rate */forward = termStructureConsistentModelClass.termStructure().forwardRate(t, t,
                 Compounding.Continuous, Frequency.NoFrequency).rate();
         final double /* @Real */temp = sigma() * B(t, T);
         final double /* @Real */value = B(t, T) * forward - 0.25 * temp * temp * B(0.0, 2.0 * t);
@@ -230,7 +230,7 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
     //
 
     @Override
-    public Handle<YieldTermStructure> termStructure() {
+    public YieldTermStructure termStructure() {
         return termStructureConsistentModelClass.termStructure();
     }
 
@@ -250,7 +250,7 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
      */
     static private class FittingParameter extends TermStructureFittingParameter {
 
-        public FittingParameter(final Handle<YieldTermStructure> termStructure, final double a, final double sigma) {
+        public FittingParameter(final YieldTermStructure termStructure, final double a, final double sigma) {
             super(new Impl(termStructure, a, sigma));
         }
 
@@ -261,12 +261,12 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
 
         static private class Impl implements Parameter.Impl {
 
-            private final Handle<YieldTermStructure> termStructure;
+            private final YieldTermStructure termStructure;
             private final double a;
             private final double sigma;
 
             public Impl(
-                    final Handle<YieldTermStructure> termStructure,
+                    final YieldTermStructure termStructure,
                     final double a,
                     final double sigma) {
                 this.termStructure = termStructure;
@@ -276,7 +276,7 @@ public class HullWhite extends Vasicek implements TermStructureConsistentModel {
 
             @Override
             public double value(final Array params, final double t) {
-                final double forwardRate = termStructure.currentLink().forwardRate(
+                final double forwardRate = termStructure.forwardRate(
                         t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
                 final double temp = sigma*(1.0 - Math.exp(-a*t))/a;
                 return (forwardRate + 0.5*temp*temp);

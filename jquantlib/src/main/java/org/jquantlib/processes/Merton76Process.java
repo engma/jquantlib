@@ -42,7 +42,7 @@
 package org.jquantlib.processes;
 
 import org.jquantlib.lang.exceptions.LibraryException;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -61,7 +61,7 @@ public class Merton76Process extends StochasticProcess1D {
     //
 
     private final GeneralizedBlackScholesProcess blackProcess;
-    private final Handle<? extends Quote> jumpIntensity, logMeanJump, logJumpVolatility;
+    private final Quote jumpIntensity, logMeanJump, logJumpVolatility;
 
 
     //
@@ -69,13 +69,13 @@ public class Merton76Process extends StochasticProcess1D {
     //
 
     public Merton76Process(
-            final Handle< ? extends Quote > stateVariable,
-            final Handle<YieldTermStructure> dividendTS,
-            final Handle<YieldTermStructure> riskFreeTS,
-            final Handle<BlackVolTermStructure> blackVolTS,
-            final Handle<? extends Quote> jumpInt,
-            final Handle<? extends Quote> logJMean,
-            final Handle<? extends Quote> logJVol) {
+            final Quote stateVariable,
+            final YieldTermStructure dividendTS,
+            final YieldTermStructure riskFreeTS,
+            final BlackVolTermStructure blackVolTS,
+            final Quote jumpInt,
+            final Quote logJMean,
+            final Quote logJVol) {
 
         this.blackProcess = new BlackScholesMertonProcess(stateVariable, dividendTS, riskFreeTS, blackVolTS, new EulerDiscretization());
         this.jumpIntensity = jumpInt;
@@ -93,31 +93,31 @@ public class Merton76Process extends StochasticProcess1D {
     // public methods
     //
 
-    public Handle<? extends Quote> stateVariable() {
+    public Quote stateVariable() {
         return blackProcess.stateVariable();
     }
 
-    public Handle<YieldTermStructure> dividendYield() {
+    public YieldTermStructure dividendYield() {
         return blackProcess.dividendYield();
     }
 
-    public Handle<YieldTermStructure> riskFreeRate() {
+    public YieldTermStructure riskFreeRate() {
         return blackProcess.riskFreeRate();
     }
 
-    public Handle<BlackVolTermStructure> blackVolatility() {
+    public BlackVolTermStructure blackVolatility() {
         return blackProcess.blackVolatility();
     }
 
-    public Handle<? extends Quote> jumpIntensity() {
+    public Quote jumpIntensity() {
         return this.jumpIntensity;
     }
 
-    public Handle<? extends Quote> logMeanJump() {
+    public Quote logMeanJump() {
         return this.logMeanJump;
     }
 
-    public Handle<? extends Quote> logJumpVolatility() {
+    public Quote logJumpVolatility() {
         return this.logJumpVolatility;
     }
 

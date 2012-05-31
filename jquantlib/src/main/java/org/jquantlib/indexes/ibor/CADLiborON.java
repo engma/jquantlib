@@ -41,7 +41,7 @@ package org.jquantlib.indexes.ibor;
 
 import org.jquantlib.currencies.America.CADCurrency;
 import org.jquantlib.daycounters.Actual360;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -57,7 +57,7 @@ import org.jquantlib.time.calendars.Canada;
 public class CADLiborON extends DailyTenorLibor {
 
 	public CADLiborON(final Period tenor) {
-		this(tenor, new Handle<YieldTermStructure>(
+		this(tenor, 
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -68,11 +68,11 @@ public class CADLiborON extends DailyTenorLibor {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public CADLiborON(final Period tenor,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("CADLibor", 0,
 				new CADCurrency(),
 				new Canada(),

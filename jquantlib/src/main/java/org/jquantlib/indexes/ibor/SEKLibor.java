@@ -41,7 +41,7 @@ package org.jquantlib.indexes.ibor;
 
 import org.jquantlib.currencies.Europe.SEKCurrency;
 import org.jquantlib.daycounters.Actual360;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -56,7 +56,7 @@ import org.jquantlib.time.calendars.Sweden;
 public class SEKLibor extends Libor {
 
 	public SEKLibor(final Period tenor) {
-		this(tenor, new Handle<YieldTermStructure>(
+		this(tenor, 
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -67,11 +67,11 @@ public class SEKLibor extends Libor {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public SEKLibor(final Period tenor,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("SEKLibor", tenor, 2,
 				new SEKCurrency(),
 				new Sweden(),

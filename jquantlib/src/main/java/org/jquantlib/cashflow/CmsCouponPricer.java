@@ -23,7 +23,7 @@
 package org.jquantlib.cashflow;
 
 import org.jquantlib.QL;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.SwaptionVolatilityStructure;
 
 /**
@@ -34,27 +34,27 @@ import org.jquantlib.termstructures.SwaptionVolatilityStructure;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public abstract class CmsCouponPricer extends FloatingRateCouponPricer {
 
-    private Handle<SwaptionVolatilityStructure> swaptionVol_;
+    private SwaptionVolatilityStructure swaptionVol_;
     private static final String no_adequate_swaptionVol_given = "no adequate swaptionVol given";
 
-    public CmsCouponPricer(final Handle<SwaptionVolatilityStructure> swaptionVol) {
+    public CmsCouponPricer(final SwaptionVolatilityStructure swaptionVol) {
         this.swaptionVol_ = swaptionVol;
         this.swaptionVol_.addObserver(this);
         //XXX:registerWith
         //registerWith(this.swaptionVol_);
     }
 
-    public Handle<SwaptionVolatilityStructure> swaptionVolatility() {
+    public SwaptionVolatilityStructure swaptionVolatility() {
         return swaptionVol_;
     }
 
-    public void setSwaptionVolatility(final Handle<SwaptionVolatilityStructure> swaptionVol) {
-        swaptionVol.currentLink().deleteObserver(this);
+    public void setSwaptionVolatility(final SwaptionVolatilityStructure swaptionVol) {
+        swaptionVol.deleteObserver(this);
         //XXX:registerWith
         //unregisterWith(swaptionVol);
 
         this.swaptionVol_ = swaptionVol;
-        QL.require(swaptionVol_!=null && swaptionVol_.currentLink() != null , no_adequate_swaptionVol_given); // TODO: message
+        QL.require(swaptionVol_!=null && swaptionVol_ != null , no_adequate_swaptionVol_given); // TODO: message
 
         this.swaptionVol_.addObserver(this);
         //registerWith(swaptionVol_);

@@ -41,7 +41,7 @@ package org.jquantlib.indexes.ibor;
 
 import org.jquantlib.currencies.Europe.GBPCurrency;
 import org.jquantlib.daycounters.Actual365Fixed;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -57,7 +57,7 @@ import org.jquantlib.time.calendars.UnitedKingdom;
 public class DailyTenorGBPLibor extends DailyTenorLibor {
 
 	public DailyTenorGBPLibor(final int settlementDays) {
-		this(settlementDays, new Handle<YieldTermStructure>(
+		this(settlementDays, 
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -68,11 +68,11 @@ public class DailyTenorGBPLibor extends DailyTenorLibor {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public DailyTenorGBPLibor(final int settlementDays,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("GBPLibor", settlementDays,
 				new GBPCurrency(),
 				new UnitedKingdom(UnitedKingdom.Market.Exchange),

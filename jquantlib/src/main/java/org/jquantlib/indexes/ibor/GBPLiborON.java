@@ -39,7 +39,7 @@
 
 package org.jquantlib.indexes.ibor;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -54,7 +54,7 @@ import org.jquantlib.time.Date;
 public class GBPLiborON extends DailyTenorGBPLibor {
 
 	public GBPLiborON() {
-		this(new Handle<YieldTermStructure>(
+		this(
 				new AbstractYieldTermStructure() {
 					@Override
 					protected double discountImpl(final double t) {
@@ -65,10 +65,10 @@ public class GBPLiborON extends DailyTenorGBPLibor {
 						throw new UnsupportedOperationException();
 					}
 				}
-		));
+		);
 	}
 
-	public GBPLiborON(final Handle<YieldTermStructure> h) {
+	public GBPLiborON(final YieldTermStructure h) {
 		super(0, h);
 	}
 

@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.testsuite.util.Flag;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.DateParser;
@@ -350,7 +349,7 @@ public class DatesTest {
         QL.info("Testing notification of date handles...");
 
         final Date me1 = Date.todaysDate();
-        final RelinkableHandle<Date> h = new RelinkableHandle<Date>(me1);
+        final Date h = me1;
 
         final Flag f = new Flag();
         h.addObserver(f);
@@ -358,12 +357,12 @@ public class DatesTest {
         final Date weekAgo = Date.todaysDate().sub(7);
         final Date me2 = weekAgo;
 
-        h.linkTo(me2);
+        h = me2;
         if (!f.isUp()) {
             fail("Observer was not notified of date change");
         }
 
-        if (h.currentLink() != weekAgo) {
+        if (h != weekAgo) {
             fail("Failed to hard link to another object");
         }
 
@@ -375,7 +374,7 @@ public class DatesTest {
         QL.info("Testing notification of date handles using operation Date#subAssign().");
 
         final Date me1 = Date.todaysDate();
-        final RelinkableHandle<Date> h = new RelinkableHandle<Date>(me1);
+        final Date h = me1;
 
         final Flag f = new Flag();
         h.addObserver(f);
@@ -392,7 +391,7 @@ public class DatesTest {
         QL.info("Testing ntification of date handles using operation Date#sub().");
 
         final Date me1 = Date.todaysDate();
-        final RelinkableHandle<Date> h = new RelinkableHandle<Date>(me1);
+        final Date h = me1;
 
         final Flag f = new Flag();
         h.addObserver(f);

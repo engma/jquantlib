@@ -66,9 +66,8 @@ import org.jquantlib.math.distributions.PoissonDistribution;
 import org.jquantlib.pricingengines.AnalyticEuropeanEngine;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
 import org.jquantlib.processes.Merton76Process;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.termstructures.BlackVolTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.termstructures.volatilities.BlackConstantVol;
@@ -132,31 +131,29 @@ public class JumpDiffusionEngine extends VanillaOption.EngineImpl {
     @Override
     public void calculate() {
         final double /* @Real */jumpSquareVol =
-            process.logJumpVolatility().currentLink().value() * process.logJumpVolatility().currentLink().value();
-        final double /* @Real */muPlusHalfSquareVol = process.logMeanJump().currentLink().value() + 0.5 * jumpSquareVol;
+            process.logJumpVolatility().value() * process.logJumpVolatility().value();
+        final double /* @Real */muPlusHalfSquareVol = process.logMeanJump().value() + 0.5 * jumpSquareVol;
 
         // mean jump size
         final double /* @Real */k = Math.exp(muPlusHalfSquareVol) - 1.0;
-        final double /* @Real */lambda = (k + 1.0) * process.jumpIntensity().currentLink().value();
+        final double /* @Real */lambda = (k + 1.0) * process.jumpIntensity().value();
 
         // dummy strike
-        final double /* @Real */variance = process.blackVolatility().currentLink().blackVariance(A.exercise.lastDate(), 1.0);
+        final double /* @Real */variance = process.blackVolatility().blackVariance(A.exercise.lastDate(), 1.0);
 
-        final DayCounter voldc = process.blackVolatility().currentLink().dayCounter();
-        final Calendar volcal = process.blackVolatility().currentLink().calendar();
-        final Date volRefDate = process.blackVolatility().currentLink().referenceDate();
+        final DayCounter voldc = process.blackVolatility().dayCounter();
+        final Calendar volcal = process.blackVolatility().calendar();
+        final Date volRefDate = process.blackVolatility().referenceDate();
         final double /* @Time */t = voldc.yearFraction(volRefDate, A.exercise.lastDate());
-        final double /* @Rate */riskFreeRate = -Math.log(process.riskFreeRate().currentLink().discount(A.exercise.lastDate())) / t;
-        final Date rateRefDate = process.riskFreeRate().currentLink().referenceDate();
+        final double /* @Rate */riskFreeRate = -Math.log(process.riskFreeRate().discount(A.exercise.lastDate())) / t;
+        final Date rateRefDate = process.riskFreeRate().referenceDate();
 
         final PoissonDistribution p = new PoissonDistribution(lambda * t);
 
-        final Handle<? extends Quote> stateVariable = process.stateVariable();
-        final Handle<YieldTermStructure> dividendTS = process.dividendYield();
-        final RelinkableHandle<YieldTermStructure> riskFreeTS =
-            new RelinkableHandle<YieldTermStructure>(process.riskFreeRate().currentLink());
-        final RelinkableHandle<BlackVolTermStructure> volTS =
-            new RelinkableHandle<BlackVolTermStructure>(process.blackVolatility().currentLink());
+        final Quote stateVariable = process.stateVariable();
+        final YieldTermStructure dividendTS = process.dividendYield();
+        YieldTermStructure riskFreeTS = process.riskFreeRate();
+        BlackVolTermStructure volTS = process.blackVolatility();
 
         final GeneralizedBlackScholesProcess bsProcess =
             new GeneralizedBlackScholesProcess(stateVariable, dividendTS, riskFreeTS, volTS);
@@ -189,9 +186,9 @@ public class JumpDiffusionEngine extends VanillaOption.EngineImpl {
 
             // constant vol/rate assumption. It should be relaxed
             v = Math.sqrt((variance + i * jumpSquareVol) / t);
-            r = riskFreeRate - process.jumpIntensity().currentLink().value() * k + i * muPlusHalfSquareVol / t;
-            riskFreeTS.linkTo(new FlatForward(rateRefDate, r, voldc));
-            volTS.linkTo(new BlackConstantVol(rateRefDate, volcal, v, voldc));
+            r = riskFreeRate - process.jumpIntensity().value() * k + i * muPlusHalfSquareVol / t;
+            riskFreeTS = new FlatForward(rateRefDate, r, voldc);
+            volTS = new BlackConstantVol(rateRefDate, volcal, v, voldc);
 
             baseArguments.validate();
             baseEngine.calculate();

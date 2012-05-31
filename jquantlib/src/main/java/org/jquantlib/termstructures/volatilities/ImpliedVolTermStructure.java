@@ -40,7 +40,7 @@
 package org.jquantlib.termstructures.volatilities;
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.BlackVarianceTermStructure;
 import org.jquantlib.termstructures.BlackVolTermStructure;
 import org.jquantlib.termstructures.TermStructure;
@@ -63,9 +63,9 @@ import org.jquantlib.util.Visitor;
  */
 public class ImpliedVolTermStructure extends BlackVarianceTermStructure {
 
-    private final Handle<BlackVolTermStructure> originalTS;
+    private final BlackVolTermStructure originalTS;
 
-    public ImpliedVolTermStructure(final Handle<BlackVolTermStructure> originalTS, final Date referenceDate) {
+    public ImpliedVolTermStructure(final BlackVolTermStructure originalTS, final Date referenceDate) {
         super(referenceDate);
         this.originalTS = originalTS;
 
@@ -81,13 +81,13 @@ public class ImpliedVolTermStructure extends BlackVarianceTermStructure {
 
     @Override
     public Date maxDate() {
-        return originalTS.currentLink().maxDate();
+        return originalTS.maxDate();
     }
 
 
     @Override
     public DayCounter dayCounter() /* @ReadOnly */ {
-        return originalTS.currentLink().dayCounter();
+        return originalTS.dayCounter();
     }
 
 
@@ -99,21 +99,21 @@ public class ImpliedVolTermStructure extends BlackVarianceTermStructure {
     protected double blackVarianceImpl(/* @Time */final double t, /* @Real */final double strike) /* @ReadOnly */{
         // timeShift (and/or variance) variance at evaluation date cannot be cached since the original curve could change between
         // invocations of this method
-        /* @Time */ final double timeShift = dayCounter().yearFraction(originalTS.currentLink().referenceDate(), referenceDate());
+        /* @Time */ final double timeShift = dayCounter().yearFraction(originalTS.referenceDate(), referenceDate());
 
         // t is relative to the current reference date and needs to be converted to the time relative to the reference date of the
         // original curve
-        return originalTS.currentLink().blackForwardVariance(timeShift, timeShift + t, strike, true);
+        return originalTS.blackForwardVariance(timeShift, timeShift + t, strike, true);
     }
 
     @Override
     public /*@Real*/ double maxStrike() /* @ReadOnly */ {
-        return originalTS.currentLink().maxStrike();
+        return originalTS.maxStrike();
     }
 
     @Override
     public /*@Real*/ double minStrike() /* @ReadOnly */ {
-        return originalTS.currentLink().minStrike();
+        return originalTS.minStrike();
     }
 
 

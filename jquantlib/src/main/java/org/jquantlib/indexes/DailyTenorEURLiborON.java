@@ -22,7 +22,7 @@
 package org.jquantlib.indexes;
 
 
-import org.jquantlib.quotes.Handle;
+;
 import org.jquantlib.termstructures.YieldTermStructure;
 
 /**
@@ -35,10 +35,10 @@ import org.jquantlib.termstructures.YieldTermStructure;
 public class DailyTenorEURLiborON extends DailyTenorEURLibor {
     
     public DailyTenorEURLiborON() {
-    	this(new Handle<YieldTermStructure>());
+    	this(null);
     }
 	
-    public DailyTenorEURLiborON(final Handle<YieldTermStructure> h) {
+    public DailyTenorEURLiborON(final YieldTermStructure h) {
         super(0, h);
     }
 }

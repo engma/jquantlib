@@ -43,7 +43,7 @@ import org.jquantlib.model.TermStructureFittingParameter;
 import org.jquantlib.model.shortrate.onefactormodels.TermStructureConsistentModel;
 import org.jquantlib.model.shortrate.onefactormodels.TermStructureConsistentModelClass;
 import org.jquantlib.processes.OrnsteinUhlenbeckProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Frequency;
@@ -78,25 +78,25 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
     private final Parameter rho_;
     private Parameter phi_;
 
-    public G2(final Handle<YieldTermStructure> termStructure) {
+    public G2(final YieldTermStructure termStructure) {
         this(termStructure, 0.1, 0.01, 0.1, 0.01, -0.75);
     }
 
     public G2(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double /* @Real */ a) {
         this(termStructure, a, 0.01, 0.1, 0.01, -0.75);
     }
 
     public G2(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double /* @Real */ a,
             final double /* @Real */ sigma) {
         this(termStructure, a, sigma, 0.1, 0.01, -0.75);
     }
 
     public G2(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double /* @Real */ a,
             final double /* @Real */ sigma,
             final double /* @Real */ b) {
@@ -104,7 +104,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
     }
 
     public G2(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double /* @Real */ a,
             final double /* @Real */ sigma,
             final double /* @Real */ b,
@@ -113,7 +113,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
     }
 
     public G2(
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final double /* @Real */ a,
             final double /* @Real */ sigma,
             final double /* @Real */ b,
@@ -152,8 +152,8 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
             final double /* @Time */bondMaturity) {
 
         final double /* @Real */v = sigmaP(maturity, bondMaturity);
-        final double /* @Real */f = termStructureConsistentModelClass.termStructure().currentLink().discount(bondMaturity);
-        final double /* @Real */k = termStructureConsistentModelClass.termStructure().currentLink().discount(maturity) * strike;
+        final double /* @Real */f = termStructureConsistentModelClass.termStructure().discount(bondMaturity);
+        final double /* @Real */k = termStructureConsistentModelClass.termStructure().discount(maturity) * strike;
 
         return blackFormula(type, k, f, v);
     }
@@ -180,7 +180,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
 
     @Override
     public double discount(/* @Time */final double t) {
-        return termStructure().currentLink().discount(t);
+        return termStructure().discount(t);
     }
 
     @Override
@@ -189,8 +189,8 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
     }
 
     protected double /* @Real */A(final double /* @Time */t, final double /* @Time */T) {
-        return termStructureConsistentModelClass.termStructure().currentLink().discount(T)
-        / termStructureConsistentModelClass.termStructure().currentLink().discount(t)
+        return termStructureConsistentModelClass.termStructure().discount(T)
+        / termStructureConsistentModelClass.termStructure().discount(t)
         * Math.exp(0.5 * (V(T - t) - V(T) + V(t)));
     }
 
@@ -246,7 +246,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
 
 
     @Override
-    public Handle<YieldTermStructure> termStructure() {
+    public YieldTermStructure termStructure() {
         return termStructureConsistentModelClass.termStructure();
     }
 
@@ -413,7 +413,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
     static class FittingParameter extends TermStructureFittingParameter {
 
         public FittingParameter(
-                final Handle<YieldTermStructure> termStructure,
+                final YieldTermStructure termStructure,
                 final double /* @Real */a,
                 final double /* @Real */sigma,
                 final double /* @Real */b,
@@ -429,7 +429,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
 
         static private class Impl implements Parameter.Impl {
 
-            private final Handle<YieldTermStructure> termStructure_;
+            private final YieldTermStructure termStructure_;
             double /* @Real */ a_;
             double /* @Real */ sigma_;
             double /* @Real */ b_;
@@ -437,7 +437,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
             double /* @Real */ rho_;
 
             public Impl(
-                    final Handle<YieldTermStructure> termStructure,
+                    final YieldTermStructure termStructure,
                     final double /* @Real */ a,
                     final double /* @Real */ sigma,
                     final double /* @Real */ b,
@@ -454,7 +454,7 @@ public class G2 extends TwoFactorModel implements AffineModel, TermStructureCons
             @Override
             public double /* @Real */value(final Array a, final double /* @Time */t) {
                 final double /* @Rate */forward =
-                    termStructure_.currentLink().forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
+                    termStructure_.forwardRate(t, t, Compounding.Continuous, Frequency.NoFrequency).rate();
 
                 final double /* @Real */temp1 = sigma_ * (1.0 - Math.exp(-a_ * t)) / a_;
                 final double /* @Real */temp2 = eta_ * (1.0 - Math.exp(-b_ * t)) / b_;

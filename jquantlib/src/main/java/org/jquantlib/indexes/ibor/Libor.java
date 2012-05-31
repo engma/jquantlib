@@ -44,7 +44,7 @@ import org.jquantlib.currencies.Currency;
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
@@ -85,7 +85,7 @@ public class Libor extends IborIndex {
 			final Currency currency,
 			final Calendar financialCenterCalendar,
 			final DayCounter dayCounter,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		// http://www.bba.org.uk/bba/jsp/polopoly.jsp?d=225&a=1412 :
 		// UnitedKingdom::Exchange is the fixing calendar for
 		// a) all currencies but EUR
@@ -122,7 +122,7 @@ public class Libor extends IborIndex {
 	        		currency,
 	        		financialCenterCalendar,
 	        		dayCounter,	
-	        		new Handle<YieldTermStructure>());
+	        		null);
 	        }
 
 	/**
@@ -161,16 +161,16 @@ public class Libor extends IborIndex {
 				endOfMonth());
 	}
 
-	@Override
-    public Handle<IborIndex> clone(final Handle<YieldTermStructure> h) {
-		return new Handle<IborIndex>(
-		        new Libor(familyName(),
-				tenor(),
-				fixingDays(),
-				currency(),
-				financialCenterCalendar,
-				dayCounter(),
-				h));
+//	@Override
+//    public IborIndex clone(final YieldTermStructure h) {
+//		return new IborIndex(
+//		        new Libor(familyName(),
+//				tenor(),
+//				fixingDays(),
+//				currency(),
+//				financialCenterCalendar,
+//				dayCounter(),
+//				h));
 
-	}
+//	}
 }

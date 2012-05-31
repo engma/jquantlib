@@ -4,7 +4,7 @@ import org.jquantlib.currencies.Currency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.instruments.MakeVanillaSwap;
 import org.jquantlib.instruments.VanillaSwap;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
@@ -101,7 +101,7 @@ public class SwapIndex extends InterestRateIndex {
 
 
     @Override
-    public Handle<YieldTermStructure> termStructure() /* @ReadOnly */ {
+    public YieldTermStructure termStructure() /* @ReadOnly */ {
         return iborIndex.termStructure();
     }
 

@@ -26,7 +26,7 @@ import org.jquantlib.Settings;
 import org.jquantlib.indexes.InterestRateIndex;
 import org.jquantlib.instruments.Option;
 import org.jquantlib.pricingengines.BlackFormula;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.termstructures.volatilities.optionlet.OptionletVolatilityStructure;
 import org.jquantlib.time.Date;
@@ -40,7 +40,7 @@ public class BlackIborCouponPricer extends IborCouponPricer {
 
     private final static String missing_caplet_volatility = "missing caplet volatility";
 
-    public BlackIborCouponPricer(final Handle<OptionletVolatilityStructure> capletVol) {
+    public BlackIborCouponPricer(final OptionletVolatilityStructure capletVol) {
         super(capletVol);
     }
 
@@ -58,12 +58,12 @@ public class BlackIborCouponPricer extends IborCouponPricer {
         spread_ = coupon_.spread();
         final Date paymentDate = coupon_.date();
         final InterestRateIndex index = coupon_.index();
-        final Handle<YieldTermStructure> rateCurve = index.termStructure();
+        final YieldTermStructure rateCurve = index.termStructure();
 
         final Date today = new Settings().evaluationDate();
 
         if(paymentDate.gt(today))
-            discount_ = rateCurve.currentLink().discount(paymentDate);
+            discount_ = rateCurve.discount(paymentDate);
         else
             discount_ = 1.0;
         spreadLegValue_ = spread_ * coupon_.accrualPeriod()* discount_;
@@ -125,7 +125,7 @@ public class BlackIborCouponPricer extends IborCouponPricer {
                         optionType,
                         effStrike,
                         adjustedFixing(),
-                        Math.sqrt(capletVolatility().currentLink().blackVariance(fixingDate,
+                        Math.sqrt(capletVolatility().blackVariance(fixingDate,
                                 effStrike)));
             return fixing * coupon_.accrualPeriod()*discount_;
         }
@@ -143,13 +143,13 @@ public class BlackIborCouponPricer extends IborCouponPricer {
             // see Hull, 4th ed., page 550
             QL.require(capletVolatility() != null , missing_caplet_volatility); // TODO: message
             final Date d1 = coupon_.fixingDate();
-            final Date referenceDate = capletVolatility().currentLink().referenceDate();
+            final Date referenceDate = capletVolatility().referenceDate();
             if (d1.le(referenceDate))
                 adjustement = 0.0;
             else {
                 final Date d2 = coupon_.index().maturityDate(d1);
                 final double tau = coupon_.index().dayCounter().yearFraction(d1, d2);
-                final double variance = capletVolatility().currentLink().blackVariance(d1, fixing);
+                final double variance = capletVolatility().blackVariance(d1, fixing);
                 adjustement = fixing*fixing*variance*tau/(1.0+fixing*tau);
             }
         }

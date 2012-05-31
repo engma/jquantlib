@@ -98,17 +98,17 @@ public class IntegralEngine extends OneAssetOption.EngineImpl {
         QL.require(a.payoff instanceof StrikedTypePayoff , NON_STRIKED_PAYOFF_GIVEN); // TODO: message
         final StrikedTypePayoff payoff = (StrikedTypePayoff) a.payoff;
 
-        final double variance = process.blackVolatility().currentLink().blackVariance(a.exercise.lastDate(), payoff.strike());
-        final double /* @DiscountFactor */dividendDiscount = process.dividendYield().currentLink().discount(a.exercise.lastDate());
-        final double /* @DiscountFactor */riskFreeDiscount = process.riskFreeRate().currentLink().discount(a.exercise.lastDate());
+        final double variance = process.blackVolatility().blackVariance(a.exercise.lastDate(), payoff.strike());
+        final double /* @DiscountFactor */dividendDiscount = process.dividendYield().discount(a.exercise.lastDate());
+        final double /* @DiscountFactor */riskFreeDiscount = process.riskFreeRate().discount(a.exercise.lastDate());
         final double /* @Rate */drift = Math.log(dividendDiscount / riskFreeDiscount) - 0.5 * variance;
 
-        final Integrand f = new Integrand(a.payoff, process.stateVariable().currentLink().value(), drift, variance);
+        final Integrand f = new Integrand(a.payoff, process.stateVariable().value(), drift, variance);
         final SegmentIntegral integrator = new SegmentIntegral(5000);
 
         final double infinity = 10.0*Math.sqrt(variance);
         r.value =
-            process.riskFreeRate().currentLink().discount(a.exercise.lastDate()) /
+            process.riskFreeRate().discount(a.exercise.lastDate()) /
             Math.sqrt(2.0*Math.PI*variance) * integrator.op(f, drift-infinity, drift+infinity);
     }
 

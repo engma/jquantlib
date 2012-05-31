@@ -53,9 +53,7 @@ import org.jquantlib.daycounters.ActualActual.Convention;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.Euribor365_3M;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.RateHelper;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -83,14 +81,14 @@ public class FRA implements Runnable {
          ***  MARKET DATA  ***
          *********************/
 
-        final RelinkableHandle<YieldTermStructure> euriborTermStructure = new RelinkableHandle<YieldTermStructure>();
-        final Handle<IborIndex> euribor3m = new Handle<IborIndex>(new Euribor365_3M(euriborTermStructure));
+        final YieldTermStructure euriborTermStructure = null;
+        final IborIndex euribor3m = new Euribor365_3M(euriborTermStructure);
 
         final Date todaysDate = new Date(23, Month.May, 2006);
         new Settings().setEvaluationDate(todaysDate);
 
-        final Calendar calendar = euribor3m.currentLink().fixingCalendar();
-        final int fixingDays = euribor3m.currentLink().fixingDays();
+        final Calendar calendar = euribor3m.fixingCalendar();
+        final int fixingDays = euribor3m.fixingDays();
         final Date settlementDate = calendar.advance(todaysDate, fixingDays, TimeUnit.Months );
 
         System.out.println("Today: "+ todaysDate.weekday() + "," + todaysDate);
@@ -113,17 +111,17 @@ public class FRA implements Runnable {
         // other Quote subclasses could read the value from a database
         // or some kind of data feed.
 
-        final Handle<SimpleQuote> fra1x4Rate = new Handle<SimpleQuote>(new SimpleQuote(threeMonthFraQuote[1]));
-        final Handle<SimpleQuote> fra2x5Rate = new Handle<SimpleQuote>(new SimpleQuote(threeMonthFraQuote[2]));
-        final Handle<SimpleQuote> fra3x6Rate = new Handle<SimpleQuote>(new SimpleQuote(threeMonthFraQuote[3]));
-        final Handle<SimpleQuote> fra6x9Rate = new Handle<SimpleQuote>(new SimpleQuote(threeMonthFraQuote[6]));
-        final Handle<SimpleQuote> fra9x12Rate = new Handle<SimpleQuote>(new SimpleQuote(threeMonthFraQuote[9]));
+        final SimpleQuote fra1x4Rate = new SimpleQuote(threeMonthFraQuote[1]);
+        final SimpleQuote fra2x5Rate = new SimpleQuote(threeMonthFraQuote[2]);
+        final SimpleQuote fra3x6Rate = new SimpleQuote(threeMonthFraQuote[3]);
+        final SimpleQuote fra6x9Rate = new SimpleQuote(threeMonthFraQuote[6]);
+        final SimpleQuote fra9x12Rate = new SimpleQuote(threeMonthFraQuote[9]);
 
-        final RelinkableHandle<Quote> h1x4 = null ;       h1x4.linkTo(fra1x4Rate.currentLink());
-        final RelinkableHandle<Quote> h2x5 = null;        h2x5.linkTo(fra2x5Rate.currentLink());
-        final RelinkableHandle<Quote> h3x6 = null;        h3x6.linkTo(fra3x6Rate.currentLink());
-        final RelinkableHandle<Quote> h6x9 = null;        h6x9.linkTo(fra6x9Rate.currentLink());
-        final RelinkableHandle<Quote> h9x12 = null;       h9x12.linkTo(fra9x12Rate.currentLink());
+        final Quote h1x4 = fra1x4Rate;
+        final Quote h2x5 = fra2x5Rate;
+        final Quote h3x6 = fra3x6Rate;
+        final Quote h6x9 = fra6x9Rate;
+        final Quote h9x12 = fra9x12Rate;
 
         /*********************
          ***  RATE HELPERS ***
@@ -134,9 +132,9 @@ public class FRA implements Runnable {
         // relinkable handles which could be relinked to some other
         // data source later.
 
-        final DayCounter fraDayCounter = euribor3m.currentLink().dayCounter();
-        final BusinessDayConvention convention = euribor3m.currentLink().businessDayConvention();
-        final boolean endOfMonth = euribor3m.currentLink().endOfMonth();
+        final DayCounter fraDayCounter = euribor3m.dayCounter();
+        final BusinessDayConvention convention = euribor3m.businessDayConvention();
+        final boolean endOfMonth = euribor3m.endOfMonth();
 
         final RateHelper fra1x4  = new FraRateHelper(h1x4,  1,  4, fixingDays, calendar, convention, endOfMonth, fraDayCounter);
         final RateHelper fra2x5  = new FraRateHelper(h2x5,  2,  5, fixingDays, calendar, convention, endOfMonth, fraDayCounter);

@@ -34,7 +34,7 @@ import org.jquantlib.methods.lattices.TsiveriotisFernandesLattice;
 import org.jquantlib.pricingengines.hybrid.DiscretizedConvertible;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
 import org.jquantlib.processes.StochasticProcess1D;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -91,41 +91,41 @@ public class BinomialConvertibleEngine<T extends BinomialTree> extends Convertib
     @Override
     public void calculate() {
 
-        final DayCounter rfdc  = process_.riskFreeRate().currentLink().dayCounter();
-        final DayCounter divdc = process_.dividendYield().currentLink().dayCounter();
-        final DayCounter voldc = process_.blackVolatility().currentLink().dayCounter();
-        final Calendar volcal = process_.blackVolatility().currentLink().calendar();
+        final DayCounter rfdc  = process_.riskFreeRate().dayCounter();
+        final DayCounter divdc = process_.dividendYield().dayCounter();
+        final DayCounter voldc = process_.blackVolatility().dayCounter();
+        final Calendar volcal = process_.blackVolatility().calendar();
 
         Double s0 = process_.x0();
         QL.require(s0 > 0.0, "negative or null underlying");
-        final double /*Volatility*/ v = process_.blackVolatility().currentLink().blackVol(
+        final double /*Volatility*/ v = process_.blackVolatility().blackVol(
                                          this.a.exercise.lastDate(), s0);
         final Date maturityDate = this.a.exercise.lastDate();
-        final double /*Rate*/ riskFreeRate = process_.riskFreeRate().currentLink().zeroRate(
+        final double /*Rate*/ riskFreeRate = process_.riskFreeRate().zeroRate(
                                  maturityDate, rfdc, Compounding.Continuous, Frequency.NoFrequency).rate();
-        final double q = process_.dividendYield().currentLink().zeroRate(
+        final double q = process_.dividendYield().zeroRate(
                                 maturityDate, divdc, Compounding.Continuous, Frequency.NoFrequency).rate();
-        final Date referenceDate = process_.riskFreeRate().currentLink().referenceDate();
+        final Date referenceDate = process_.riskFreeRate().referenceDate();
 
         // subtract dividends
         int i;
         for (i=0; i<this.a.dividends.size(); i++) {
             if (this.a.dividends.get(i).date().gt(referenceDate))
                 s0 -= this.a.dividends.get(i).amount() *
-                      process_.riskFreeRate().currentLink().discount(
+                      process_.riskFreeRate().discount(
                                              this.a.dividends.get(i).date());
         }
         QL.require(s0 > 0.0,
                    "negative value after subtracting dividends");
 
         // binomial trees with constant coefficient
-        final Handle<Quote> underlying = new Handle<Quote>(new SimpleQuote(s0));
-        final Handle<YieldTermStructure> flatRiskFree = 
-        			new Handle<YieldTermStructure>(new FlatForward(referenceDate, riskFreeRate, rfdc));
-        final Handle<YieldTermStructure> flatDividends =
-        			new Handle<YieldTermStructure>(new FlatForward(referenceDate, q, divdc));
-        final Handle<BlackVolTermStructure> flatVol = 
-        			new Handle<BlackVolTermStructure>(new BlackConstantVol(referenceDate, volcal, v, voldc));
+        Quote underlying = new SimpleQuote(s0);
+        YieldTermStructure flatRiskFree = 
+        			new FlatForward(referenceDate, riskFreeRate, rfdc);
+        YieldTermStructure flatDividends =
+        			new FlatForward(referenceDate, q, divdc);
+        BlackVolTermStructure flatVol = 
+        			new BlackConstantVol(referenceDate, volcal, v, voldc);
 
         final PlainVanillaPayoff payoff = (PlainVanillaPayoff)(this.a.payoff);
         QL.require(payoff != null, "non-plain payoff given");
@@ -143,7 +143,7 @@ public class BinomialConvertibleEngine<T extends BinomialTree> extends Convertib
             throw new LibraryException(e); // QA:[RG]::verified
         }
 
-        final double creditSpread = this.a.creditSpread.currentLink().value();
+        final double creditSpread = this.a.creditSpread.value();
 
         final Lattice lattice = new TsiveriotisFernandesLattice<T>(tree,riskFreeRate,maturity,
                                                  timeSteps_,creditSpread,v,q);

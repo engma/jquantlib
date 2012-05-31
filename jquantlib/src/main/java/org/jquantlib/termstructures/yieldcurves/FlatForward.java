@@ -41,7 +41,7 @@
 package org.jquantlib.termstructures.yieldcurves;
 
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
@@ -63,7 +63,7 @@ import org.jquantlib.util.Observer;
  */
 public class FlatForward extends AbstractYieldTermStructure {
 
-    private final Handle<? extends Quote> forward;
+    private final Quote forward;
     private final Compounding compounding;
     private final Frequency frequency;
     private InterestRate rate;
@@ -75,7 +75,7 @@ public class FlatForward extends AbstractYieldTermStructure {
 
     public FlatForward(
             final Date referenceDate,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter,
             final Compounding compounding,
             final Frequency frequency) {
@@ -89,7 +89,7 @@ public class FlatForward extends AbstractYieldTermStructure {
 
     public FlatForward(
             final Date referenceDate,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter,
             final Compounding compounding) {
         this(referenceDate, forward, dayCounter, compounding, Frequency.Annual);
@@ -97,7 +97,7 @@ public class FlatForward extends AbstractYieldTermStructure {
 
     public FlatForward(
             final Date referenceDate,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter) {
         this(referenceDate, forward, dayCounter, Compounding.Continuous);
     }
@@ -111,7 +111,7 @@ public class FlatForward extends AbstractYieldTermStructure {
             final Compounding compounding,
             final Frequency frequency) {
         super(referenceDate, new NullCalendar(), dayCounter);
-        this.forward = new Handle<SimpleQuote>(new SimpleQuote(forward));
+        this.forward = new SimpleQuote(new SimpleQuote(forward));
         this.compounding = compounding;
         this.frequency = frequency;
         updateRate();
@@ -137,7 +137,7 @@ public class FlatForward extends AbstractYieldTermStructure {
     public FlatForward(
             final int settlementDays,
             final Calendar calendar,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter,
             final Compounding compounding,
             final Frequency frequency) {
@@ -152,7 +152,7 @@ public class FlatForward extends AbstractYieldTermStructure {
     public FlatForward(
             final int settlementDays,
             final Calendar calendar,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter) {
         this(settlementDays, calendar, forward, dayCounter, Compounding.Continuous);
     }
@@ -160,7 +160,7 @@ public class FlatForward extends AbstractYieldTermStructure {
     public FlatForward(
             final int settlementDays,
             final Calendar calendar,
-            final Handle<? extends Quote> forward,
+            final Quote forward,
             final DayCounter dayCounter,
             final Compounding compounding) {
         this(settlementDays, calendar, forward, dayCounter, compounding, Frequency.Annual);
@@ -176,7 +176,7 @@ public class FlatForward extends AbstractYieldTermStructure {
             final Compounding compounding,
             final Frequency frequency) {
         super(settlementDays, calendar, dayCounter);
-        this.forward = new Handle<Quote>(new SimpleQuote(forward));
+        this.forward = new SimpleQuote(forward);
         this.compounding = compounding;
         this.frequency = frequency;
         updateRate();
@@ -218,7 +218,7 @@ public class FlatForward extends AbstractYieldTermStructure {
     //
 
     private void updateRate() {
-        rate = new InterestRate(forward.currentLink().value(), this.dayCounter(), this.compounding, this.frequency);
+        rate = new InterestRate(forward.value(), this.dayCounter(), this.compounding, this.frequency);
     }
 
 

@@ -42,7 +42,7 @@ package org.jquantlib.indexes.ibor;
 import org.jquantlib.currencies.Africa.ZARCurrency;
 import org.jquantlib.daycounters.Actual365Fixed;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -58,7 +58,7 @@ import org.jquantlib.time.calendars.SouthAfrica;
 public class Jibar extends IborIndex {
 
 	public Jibar(final Period tenor) {
-		this(tenor, new Handle<YieldTermStructure>(
+		this(tenor, 
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -69,11 +69,11 @@ public class Jibar extends IborIndex {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public Jibar(final Period tenor,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("Jibar", tenor, 0,
 				new ZARCurrency(),
 				new SouthAfrica(),

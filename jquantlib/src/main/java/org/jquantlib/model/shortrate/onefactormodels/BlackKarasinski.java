@@ -34,7 +34,7 @@ import org.jquantlib.model.ConstantParameter;
 import org.jquantlib.model.Parameter;
 import org.jquantlib.model.TermStructureFittingParameter;
 import org.jquantlib.processes.OrnsteinUhlenbeckProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.TimeGrid;
 
@@ -59,11 +59,11 @@ public class BlackKarasinski extends OneFactorModel implements TermStructureCons
 
     private static final String no_defined_process_for_bk = "no defined process for Black-Karasinski";
 
-    public BlackKarasinski(final Handle<YieldTermStructure> termStructure){
+    public BlackKarasinski(final YieldTermStructure termStructure){
         this(termStructure, 0.1,0.1);
     }
 
-    public BlackKarasinski(final Handle<YieldTermStructure> termStructure, final double a, final double sigma){
+    public BlackKarasinski(final YieldTermStructure termStructure, final double a, final double sigma){
         super(2);
 
         if (System.getProperty("EXPERIMENTAL") == null)
@@ -149,7 +149,7 @@ public class BlackKarasinski extends OneFactorModel implements TermStructureCons
         final double /* @Real */vMin = -50.0;
         final double /* @Real */vMax = 50.0;
         for (int /* @Size */i = 0; i < (grid.size() - 1); i++) {
-            final double /* @Real */discountBond = termstructureConsistentModel.termStructure().currentLink().discount(grid.at(i + 1));
+            final double /* @Real */discountBond = termstructureConsistentModel.termStructure().discount(grid.at(i + 1));
             final double /* @Real */xMin = trinomial.underlying(i, 0);
             final double /* @Real */dx = trinomial.dx(i);
 
@@ -192,7 +192,7 @@ public class BlackKarasinski extends OneFactorModel implements TermStructureCons
     }
 
     @Override
-    public Handle<YieldTermStructure> termStructure() {
+    public YieldTermStructure termStructure() {
         return termstructureConsistentModel.termStructure();
     }
 }

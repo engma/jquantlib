@@ -31,7 +31,7 @@ import org.jquantlib.lang.annotation.QualityAssurance.Quality;
 import org.jquantlib.lang.annotation.QualityAssurance.Version;
 import org.jquantlib.math.matrixutilities.Array;
 import org.jquantlib.math.optimization.NoConstraint;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 
 /**
@@ -50,7 +50,7 @@ public class TermStructureFittingParameter extends Parameter {
         super(0, impl, new NoConstraint());
     }
 
-    public TermStructureFittingParameter(final Handle <YieldTermStructure> term) {
+    public TermStructureFittingParameter(final YieldTermStructure term) {
         super(0, new NumericalImpl(term), new NoConstraint());
     }
 
@@ -67,14 +67,14 @@ public class TermStructureFittingParameter extends Parameter {
 
         private final List<Double> times;
         private final List<Double> values;
-        private final Handle<YieldTermStructure> termStructure;
+        private final YieldTermStructure termStructure;
 
 
         //
         // public methods
         //
 
-        public NumericalImpl(final Handle<YieldTermStructure> termStructure) {
+        public NumericalImpl(final YieldTermStructure termStructure) {
             this.times  = new ArrayList<Double>();
             this.values = new ArrayList<Double>();
             this.termStructure = termStructure;
@@ -102,7 +102,7 @@ public class TermStructureFittingParameter extends Parameter {
             return values.get(index);
         }
 
-        public final Handle<YieldTermStructure> termStructure() /* @ReadOnly */ {
+        public final YieldTermStructure termStructure() /* @ReadOnly */ {
             return termStructure;
         }
     }

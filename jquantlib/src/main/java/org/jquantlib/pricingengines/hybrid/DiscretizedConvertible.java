@@ -101,17 +101,17 @@ public class DiscretizedConvertible extends DiscretizedAsset {
 
        dividendValues = new Array(this.arguments.dividends.size()).fill(0.0);
 
-       final Date settlementDate = this.process.riskFreeRate().currentLink().referenceDate();
+       final Date settlementDate = this.process.riskFreeRate().referenceDate();
        for (int i=0; i<this.arguments.dividends.size(); i++) {
            if (this.arguments.dividends.get(i).date().ge(settlementDate)) {
                final double value =  this.arguments.dividends.get(i).amount() *
-                                this.process.riskFreeRate().currentLink().discount(
+                                this.process.riskFreeRate().discount(
                                             this.arguments.dividends.get(i).date());
                dividendValues.set(i, value);
            }
        }
 
-       final DayCounter dayCounter = this.process.riskFreeRate().currentLink().dayCounter();
+       final DayCounter dayCounter = this.process.riskFreeRate().dayCounter();
        final Date bondSettlement = this.arguments.settlementDate;
 
        stoppingTimes = new ArrayList<Double>(this.arguments.exercise.dates().size());
@@ -275,17 +275,17 @@ public class DiscretizedConvertible extends DiscretizedAsset {
             conversionProbability = new Array(size).fill(0.0);
             spreadAdjustedRate = new Array(size).fill(0.0);
 
-            final DayCounter rfdc  = this.process.riskFreeRate().currentLink().dayCounter();
+            final DayCounter rfdc  = this.process.riskFreeRate().dayCounter();
 
             // this takes care of convertibility and conversion probabilities
             adjustValues();
 
-            final double creditSpread = this.arguments.creditSpread.currentLink().value();
+            final double creditSpread = this.arguments.creditSpread.value();
 
             final Date exercise = this.arguments.exercise.lastDate();
 
             final double riskFreeRate =
-                this.process.riskFreeRate().currentLink().zeroRate(exercise, rfdc,
+                this.process.riskFreeRate().zeroRate(exercise, rfdc,
                                                    Compounding.Continuous, Frequency.NoFrequency).rate();
 
             // Calculate blended discount rate to be used on roll back.

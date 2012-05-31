@@ -21,7 +21,7 @@ When applicable, the original copyright notice follows this notice.
  */
 package org.jquantlib.model.shortrate.onefactormodels;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.util.Observable;
 
@@ -36,5 +36,5 @@ import org.jquantlib.util.Observable;
  */
 public interface TermStructureConsistentModel extends Observable {
 
-    public Handle<YieldTermStructure> termStructure();
+    public YieldTermStructure termStructure();
 }

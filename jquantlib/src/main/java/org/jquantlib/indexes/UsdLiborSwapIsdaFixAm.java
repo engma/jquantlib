@@ -24,7 +24,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.currencies.America.USDCurrency;
 import org.jquantlib.daycounters.Thirty360;
 import org.jquantlib.indexes.ibor.USDLibor;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Period;
@@ -46,10 +46,10 @@ import org.jquantlib.time.calendars.Target;
 public class UsdLiborSwapIsdaFixAm extends SwapIndex {
 
     public UsdLiborSwapIsdaFixAm(final Period tenor) {
-    	this(tenor, new Handle<YieldTermStructure>());
+    	this(tenor, null);
     }
 	
-    public UsdLiborSwapIsdaFixAm(final Period tenor, final Handle<YieldTermStructure> h) {
+    public UsdLiborSwapIsdaFixAm(final Period tenor, YieldTermStructure h) {
         super( "UsdLiborSwapIsdaFixAm",
                 tenor,
                 2, // settlement days

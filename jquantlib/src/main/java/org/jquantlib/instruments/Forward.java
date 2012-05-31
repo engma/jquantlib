@@ -42,7 +42,7 @@ package org.jquantlib.instruments;
 import org.jquantlib.QL;
 import org.jquantlib.Settings;
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -95,8 +95,8 @@ public abstract class Forward extends Instrument {
     protected Calendar calendar;
     protected DayCounter dayCounter;
     protected BusinessDayConvention businessDayConvention;
-    protected Handle <YieldTermStructure> discountCurve;
-    protected Handle <YieldTermStructure> incomeDiscountCurve;
+    protected YieldTermStructure discountCurve;
+    protected YieldTermStructure incomeDiscountCurve;
     protected ForwardTypePayoff payoff;
     protected double underlyingSpotValue;
     protected double underlyingIncome;
@@ -114,7 +114,7 @@ public abstract class Forward extends Instrument {
             final Payoff payoff,
             final Date valueDate,
             final Date maturityDate) {
-        this (dc, cal, bdc, settlementDays, payoff, valueDate, maturityDate, new Handle <YieldTermStructure>());
+        this (dc, cal, bdc, settlementDays, payoff, valueDate, maturityDate, null);
     }
 
     protected Forward(
@@ -125,7 +125,7 @@ public abstract class Forward extends Instrument {
             final Payoff payoff,
             final Date valueDate,
             final Date maturityDate,
-            final Handle <YieldTermStructure> discountCurve) {
+            final YieldTermStructure discountCurve) {
         this.dayCounter = dc;
         this.calendar = cal;
         this.businessDayConvention = bdc;
@@ -150,7 +150,7 @@ public abstract class Forward extends Instrument {
 
     public abstract double spotValue ();
 
-    public abstract double spotIncome (Handle <YieldTermStructure> incomeDiscountCurve);
+    public abstract double spotIncome (YieldTermStructure incomeDiscountCurve);
 
 
     //
@@ -161,7 +161,7 @@ public abstract class Forward extends Instrument {
         calculate ();
 
         return (underlyingSpotValue - underlyingIncome)
-                / (discountCurve.currentLink ().discount (maturityDate));
+                / (discountCurve.discount(maturityDate));
     }
 
     /**
@@ -209,11 +209,11 @@ public abstract class Forward extends Instrument {
         return this.dayCounter;
     }
 
-    public Handle <YieldTermStructure> discountCurve() {
+    public YieldTermStructure discountCurve() {
         return this.discountCurve;
     }
 
-    public Handle <YieldTermStructure> incomeDiscountCurve() {
+    public YieldTermStructure incomeDiscountCurve() {
         return this.incomeDiscountCurve;
     }
 
@@ -225,7 +225,7 @@ public abstract class Forward extends Instrument {
     @Override
     public void performCalculations () {
         QL.require (discountCurve != null, " Discount Curve must be set for Forward");
-        NPV = payoff.get (forwardValue ()) * discountCurve.currentLink ().discount (maturityDate);
+        NPV = payoff.get (forwardValue ()) * discountCurve.discount (maturityDate);
     }
 
     @Override

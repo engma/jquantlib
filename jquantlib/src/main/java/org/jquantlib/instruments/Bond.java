@@ -64,7 +64,7 @@ import org.jquantlib.math.solvers1D.Brent;
 import org.jquantlib.pricingengines.GenericEngine;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.Compounding;
@@ -1050,12 +1050,11 @@ public class Bond extends Instrument {
             final Compounding comp,
             final Frequency freq, 
             final Date settlement,
-            final Handle<YieldTermStructure> discountCurve) {
+            YieldTermStructure discountCurve) {
 
         assert(freq!=Frequency.NoFrequency && freq != Frequency.Once):"invalid frequency:" + freq.toString();
 
-        final Handle<Quote> zSpreadQuoteHandle = new Handle<Quote>(new SimpleQuote(
-                zSpread));
+        Quote zSpreadQuoteHandle = new SimpleQuote(zSpread);
 
         final ZeroSpreadedTermStructure spreadedCurve = new ZeroSpreadedTermStructure(
                 discountCurve, zSpreadQuoteHandle, comp, freq, dc);

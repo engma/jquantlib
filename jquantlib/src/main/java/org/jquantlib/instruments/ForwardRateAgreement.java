@@ -41,7 +41,7 @@ package org.jquantlib.instruments;
 
 import org.jquantlib.Settings;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -112,7 +112,7 @@ public class ForwardRateAgreement extends Forward {
             final double strikeForwardRate,
             final double notionalAmount,
             final IborIndex index) {
-        this (valueDate, maturityDate, type, strikeForwardRate, notionalAmount, index, new Handle<YieldTermStructure>());
+        this (valueDate, maturityDate, type, strikeForwardRate, notionalAmount, index, null);
     }
 
 
@@ -123,9 +123,9 @@ public class ForwardRateAgreement extends Forward {
             final double strikeForwardRate,
             final double notionalAmount,
             final IborIndex index,
-            final Handle<YieldTermStructure> discountCurve) {
+            final YieldTermStructure curveHandle) {
         super(index.dayCounter(), index.fixingCalendar(), index.businessDayConvention(), index.fixingDays(),
-                null, valueDate, maturityDate, discountCurve);
+                null, valueDate, maturityDate, curveHandle);
         this.fraType = type;
         this.notional = notionalAmount;
         this.index = index;
@@ -140,7 +140,7 @@ public class ForwardRateAgreement extends Forward {
         payoff = new ForwardTypePayoff(fraType, strike);
 
         // income discount curve is irrelevant to a FRA
-        incomeDiscountCurve = discountCurve;
+        incomeDiscountCurve = curveHandle;
         underlyingIncome = 0.0;
 
         index.addObserver (this);
@@ -160,7 +160,7 @@ public class ForwardRateAgreement extends Forward {
     }
 
     @Override
-    public double spotIncome(final Handle<YieldTermStructure> incomeDiscountCurve) {
+    public double spotIncome(final YieldTermStructure incomeDiscountCurve) {
         // irrelevant for FRA
         return 0;
     }
@@ -176,7 +176,7 @@ public class ForwardRateAgreement extends Forward {
     public double spotValue() {
         calculate();
         final double compoundFactor = forwardRate.compoundFactor(valueDate, maturityDate);
-        final double discount = discountCurve.currentLink().discount(maturityDate);
+        final double discount = discountCurve.discount(maturityDate);
         return notional * compoundFactor * discount;
     }
 

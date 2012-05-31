@@ -15,7 +15,6 @@ import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.vanilla.finitedifferences.FDEngineAdapter;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -42,9 +41,9 @@ public abstract class FDDividendOptionHelper<T extends FDEngineAdapter> extends 
     final private BlackScholesMertonProcess stochProcess;
     final private Calendar      cal;
     final private DayCounter    dc;
-    final private Handle<SimpleQuote> rRate;
-    final private Handle<SimpleQuote> qRate;
-    final private Handle<SimpleQuote> vol;
+    final private SimpleQuote rRate;
+    final private SimpleQuote qRate;
+    final private SimpleQuote vol;
 
 
     /**
@@ -150,16 +149,16 @@ public abstract class FDDividendOptionHelper<T extends FDEngineAdapter> extends 
         this.dc = dc;
 
         final SimpleQuote spot = new SimpleQuote(0.0);
-        this.rRate = new Handle<SimpleQuote>(new SimpleQuote(r));
-        this.qRate = new Handle<SimpleQuote>(new SimpleQuote(q));
-        this.vol   = new Handle<SimpleQuote>(new SimpleQuote(v));
+        this.rRate = new SimpleQuote(new SimpleQuote(r));
+        this.qRate = new SimpleQuote(new SimpleQuote(q));
+        this.vol   = new SimpleQuote(new SimpleQuote(v));
 
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(flatRate(referenceDate, rRate, dc));
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(flatRate(referenceDate, qRate, dc));
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(flatVol(referenceDate, vol, cal, dc));
+        final YieldTermStructure rTS = flatRate(referenceDate, rRate, dc);
+        final YieldTermStructure qTS = flatRate(referenceDate, qRate, dc);
+        final BlackVolTermStructure volTS = flatVol(referenceDate, vol, cal, dc);
 
         // obtain stochastic process
-        this.stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+        this.stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
 
         // obtain a pricing engine and assign to this option :: 3 intervals a day
         final int timeSteps = (int) (exercise.lastDate().sub(referenceDate) * 3);
@@ -202,32 +201,32 @@ public abstract class FDDividendOptionHelper<T extends FDEngineAdapter> extends 
     @Override
     public double vega() {
         // perturb volatility and get vega
-        final double v = vol.currentLink().value();
+        final double v = vol.value();
         final double dv = v*1.0e-4;
-        vol.currentLink().setValue(v+dv);
+        vol.setValue(v+dv);
         final double value_p = super.NPV();
-        vol.currentLink().setValue(v-dv);
+        vol.setValue(v-dv);
         final double value_m = super.NPV();
         // System.out.println(String.format("vega  = %f", (value_p - value_m)/(2*dv)));
         // final double vega = super.vega();
         final double vega = (value_p - value_m)/(2*dv);
-        vol.currentLink().setValue(v);
+        vol.setValue(v);
         return vega;
     }
 
     @Override
     public double rho() {
         // perturb rates and get rho and dividend rho
-        final double r = rRate.currentLink().value();
+        final double r = rRate.value();
         final double dr = r*1.0e-4;
-        rRate.currentLink().setValue(r+dr);
+        rRate.setValue(r+dr);
         final double value_p = super.NPV();
-        rRate.currentLink().setValue(r-dr);
+        rRate.setValue(r-dr);
         final double value_m = super.NPV();
         // System.out.println(String.format("rho  = %f", (value_p - value_m)/(2*dr)));
         // final double rho = super.dividendRho();
         final double rho = (value_p - value_m)/(2*dr);
-        rRate.currentLink().setValue(r);
+        rRate.setValue(r);
         return rho;
     }
 
@@ -240,12 +239,12 @@ public abstract class FDDividendOptionHelper<T extends FDEngineAdapter> extends 
     // private methods
     //
 
-    private YieldTermStructure flatRate(final Date referenceDate, final Handle<SimpleQuote> rate, final DayCounter dc) {
+    private YieldTermStructure flatRate(final Date referenceDate, final SimpleQuote rate, final DayCounter dc) {
         return new FlatForward(referenceDate, rate, dc);
     }
 
 
-    private BlackVolTermStructure flatVol(final Date referenceDate, final Handle<SimpleQuote> vol, final Calendar cal, final DayCounter dc) {
+    private BlackVolTermStructure flatVol(final Date referenceDate, final SimpleQuote vol, final Calendar cal, final DayCounter dc) {
         return new BlackConstantVol(referenceDate, cal, vol, dc);
     }
 

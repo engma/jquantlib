@@ -24,7 +24,7 @@ package org.jquantlib.indexes.inflation;
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.indexes.EURegion;
 import org.jquantlib.indexes.ZeroInflationIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.ZeroInflationTermStructure;
 import org.jquantlib.time.Frequency;
 import org.jquantlib.time.Period;
@@ -43,14 +43,14 @@ public class EUHICP extends ZeroInflationIndex {
 	public EUHICP(final Frequency frequency,
          	      final boolean revised,
          	      final boolean interpolated) {
-		this(frequency, revised, interpolated, new Handle<ZeroInflationTermStructure>());
+		this(frequency, revised, interpolated, null);
 		   
 	   }
 	
     public EUHICP(final Frequency frequency,
             	  final boolean revised,
             	  final boolean interpolated,
-            	  final Handle<ZeroInflationTermStructure> termStructure) {
+            	  final ZeroInflationTermStructure termStructure) {
     	
     	super("HICP",
               new EURegion(),

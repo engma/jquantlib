@@ -40,7 +40,7 @@ import org.jquantlib.methods.finitedifferences.DPlusMinus;
 import org.jquantlib.methods.finitedifferences.DZero;
 import org.jquantlib.methods.finitedifferences.TridiagonalOperator;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -200,10 +200,7 @@ public class OperatorTest {
         final BlackVolTermStructure volTS = Utilities.flatVol(today, sigma, dc);
 
         final GeneralizedBlackScholesProcess stochProcess = new GeneralizedBlackScholesProcess(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS));
+        		spot, qTS, rTS, volTS);
 
         final BSMOperator op1 = new BSMOperator(grid, stochProcess, residualTime);
         QL.info("BSMOperator diagonals: \n");

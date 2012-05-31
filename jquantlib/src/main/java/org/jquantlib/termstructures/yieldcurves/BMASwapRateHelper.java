@@ -30,9 +30,8 @@ import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.instruments.BMASwap;
 import org.jquantlib.lang.annotation.Natural;
 import org.jquantlib.pricingengines.swap.DiscountingSwapEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
@@ -62,14 +61,14 @@ public class BMASwapRateHelper extends RelativeDateRateHelper {
     protected final BMAIndex bmaIndex;
     protected final IborIndex iborIndex;
     protected BMASwap swap;
-    protected RelinkableHandle<YieldTermStructure> termStructureHandle = new RelinkableHandle <YieldTermStructure> (null);
+    protected YieldTermStructure termStructureHandle = null;
  
     //
     // public constructors
     //
 
     public BMASwapRateHelper(
-            final Handle<Quote> liborFraction,
+            final Quote liborFraction,
             final Period tenor,
             final @Natural int settlementDays,
             final Calendar calendar,
@@ -166,7 +165,7 @@ public class BMASwapRateHelper extends RelativeDateRateHelper {
      */
     @Override
     public void setTermStructure(final YieldTermStructure t) {
-        this.termStructureHandle.linkTo(t, false);
+        this.termStructureHandle = t;
         super.setTermStructure(t);
     }
 

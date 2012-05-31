@@ -41,7 +41,7 @@ package org.jquantlib.indexes.ibor;
 
 import org.jquantlib.currencies.America.USDCurrency;
 import org.jquantlib.daycounters.Actual360;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -58,7 +58,7 @@ import org.jquantlib.time.calendars.UnitedStates;
 public class USDLibor extends Libor {
 
 	public USDLibor(final Period tenor) {
-		this(tenor, new Handle<YieldTermStructure>(
+		this(tenor,
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -69,11 +69,11 @@ public class USDLibor extends Libor {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public USDLibor(final Period tenor,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("USDLibor", tenor, 2,
 				new USDCurrency(),
 				new UnitedStates(UnitedStates.Market.SETTLEMENT),

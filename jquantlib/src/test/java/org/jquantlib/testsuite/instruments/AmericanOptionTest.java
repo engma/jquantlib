@@ -78,7 +78,7 @@ import org.jquantlib.pricingengines.vanilla.finitedifferences.FDAmericanEngine;
 import org.jquantlib.pricingengines.vanilla.finitedifferences.FDShoutEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -135,10 +135,10 @@ public class AmericanOptionTest {
             vol.setValue(value.v);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+                    spot,
+                    qTS,
+                    rTS,
+                    volTS);
             final PricingEngine engine = new BjerksundStenslandApproximationEngine(stochProcess);
 
             final VanillaOption option = new VanillaOption(payoff, exercise);
@@ -231,10 +231,10 @@ public class AmericanOptionTest {
             vol.setValue(value.v);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+                    spot,
+                    qTS,
+                    rTS,
+                    volTS);
 
             final PricingEngine engine = new BaroneAdesiWhaleyApproximationEngine(stochProcess);
 
@@ -356,10 +356,7 @@ public class AmericanOptionTest {
             vol.setValue(juValue.v);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+                    spot, qTS, rTS, volTS);
 
             final PricingEngine engine = new JuQuadraticApproximationEngine(stochProcess);
 
@@ -479,10 +476,7 @@ public class AmericanOptionTest {
             vol.setValue(juValue.v);
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+            		spot, qTS, rTS, volTS)
 
             final PricingEngine engine = new FDAmericanEngine(stochProcess, 100, 100);
             final VanillaOption option = new VanillaOption(payoff, exercise);
@@ -550,10 +544,7 @@ public class AmericanOptionTest {
                     final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
 
                     final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                            new Handle<Quote>(spot),
-                            new Handle<YieldTermStructure>(qTS),
-                            new Handle<YieldTermStructure>(rTS),
-                            new Handle<BlackVolTermStructure>(volTS));
+                    		spot, qTS, rTS, volTS);
 
                     PricingEngine engine = null;
                     try {

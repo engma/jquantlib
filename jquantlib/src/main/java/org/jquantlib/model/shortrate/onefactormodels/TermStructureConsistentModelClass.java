@@ -25,7 +25,7 @@ package org.jquantlib.model.shortrate.onefactormodels;
 
 import java.util.List;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.util.DefaultObservable;
 import org.jquantlib.util.Observable;
@@ -45,15 +45,15 @@ public class TermStructureConsistentModelClass implements Observable {
     
     private DefaultObservable delegatedObservable = new DefaultObservable(this);
 
-    public TermStructureConsistentModelClass(final Handle<YieldTermStructure> termStructure) {
+    public TermStructureConsistentModelClass(final YieldTermStructure termStructure) {
         termStructure_ = (termStructure);
     }
 
-    public final Handle<YieldTermStructure> termStructure() {
+    public final YieldTermStructure termStructure() {
         return termStructure_;
     }
 
-    private Handle<YieldTermStructure> termStructure_;
+    private YieldTermStructure termStructure_;
 
     @Override
     public void addObserver(Observer observer) {

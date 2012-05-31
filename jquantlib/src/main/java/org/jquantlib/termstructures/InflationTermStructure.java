@@ -44,7 +44,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.annotation.Natural;
 import org.jquantlib.lang.annotation.Rate;
 import org.jquantlib.lang.exceptions.LibraryException;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Frequency;
@@ -63,7 +63,7 @@ import org.jquantlib.util.Pair;
 
 public abstract class InflationTermStructure extends AbstractTermStructure {
 	
-    protected Handle<YieldTermStructure> nominalTermStructure;
+    protected YieldTermStructure nominalTermStructure;
 
     // connection with base index:
     //  lag to base date
@@ -77,7 +77,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
     public InflationTermStructure(final Period lag,
     							  final Frequency frequency,
     							  final @Rate double baseRate,
-    							  final Handle<YieldTermStructure> yTS) {
+    							  final YieldTermStructure yTS) {
 
     	this(lag, frequency, baseRate, yTS, new Actual365Fixed());
  	
@@ -86,7 +86,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
     public InflationTermStructure(final Period lag,
 			  final Frequency frequency,
 			  final @Rate double baseRate,
-			  final Handle<YieldTermStructure> yTS,
+			  final YieldTermStructure yTS,
 			  final DayCounter dayCounter) {
     	
     	super(dayCounter);
@@ -102,7 +102,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
     		  final Period lag,
 			  final Frequency frequency,
 			  final @Rate double baseRate,
-			  final Handle<YieldTermStructure> yTS) {
+			  final YieldTermStructure yTS) {
 
     	this(referenceDate, lag, frequency, baseRate, yTS, new NullCalendar() ,new Actual365Fixed());
     }
@@ -111,7 +111,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
   		  	  final Period lag,
 			  final Frequency frequency,
 			  final @Rate double baseRate,
-			  final Handle<YieldTermStructure> yTS,
+			  final YieldTermStructure yTS,
 			  final Calendar calendar,
 			  final DayCounter dayCounter) {
 
@@ -129,7 +129,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
 			  final Period lag,
 			  final Frequency frequency,
 			  final @Rate double baseRate,
-			  final Handle<YieldTermStructure> yTS) {
+			  final YieldTermStructure yTS) {
 
     	this(settlementDays, calendar, lag, frequency, baseRate, yTS, new Actual365Fixed());
 
@@ -141,7 +141,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
     							   final Period lag,
     							   final Frequency frequency,
     							   final @Rate double baseRate,
-    							   final Handle<YieldTermStructure> yTS,
+    							   final YieldTermStructure yTS,
     							   final DayCounter dayCounter) {
 
     	super(settlementDays, calendar, dayCounter);
@@ -161,7 +161,7 @@ public abstract class InflationTermStructure extends AbstractTermStructure {
     	return frequency;
     }
 
-    public Handle<YieldTermStructure> nominalTermStructure() {
+    public YieldTermStructure nominalTermStructure() {
     	return nominalTermStructure;
     }
 

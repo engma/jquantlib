@@ -22,7 +22,7 @@
 
 package org.jquantlib.termstructures;
 
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 
 /**
@@ -38,7 +38,7 @@ import org.jquantlib.quotes.Quote;
  */
 public abstract class RateHelper extends BootstrapHelper <YieldTermStructure> {
 
-    public RateHelper (final Handle <Quote> quote) {
+    public RateHelper (final Quote quote) {
         super (quote);
     }
 

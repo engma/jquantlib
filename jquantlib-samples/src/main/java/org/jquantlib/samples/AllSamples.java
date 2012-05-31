@@ -27,19 +27,19 @@ public class AllSamples {
     };
 
     
-    private static final Class<?> pending[] = {
-        Bonds.class, 
-        YieldCurveTermStructures.class, 
-        BermudanSwaption.class, 
-        FRA.class, 
-        Processes.class, 
-        Replication.class, 
-        Repo.class, 
-        Swap.class, 
-        DiscreteHedging.class, 
-        CoxRossWithHullWhite.class, 
-        SobolChartSample.class
-    };
+//    private static final Class<?> pending[] = {
+//        Bonds.class, 
+//        YieldCurveTermStructures.class, 
+//        BermudanSwaption.class, 
+//        FRA.class, 
+//        Processes.class, 
+//        Replication.class, 
+//        Repo.class, 
+//        Swap.class, 
+//        DiscreteHedging.class, 
+//        CoxRossWithHullWhite.class, 
+//        SobolChartSample.class
+//    };
     
 
     public void runCompleteSamples() {

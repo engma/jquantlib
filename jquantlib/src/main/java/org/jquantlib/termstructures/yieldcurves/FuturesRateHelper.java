@@ -26,7 +26,7 @@ package org.jquantlib.termstructures.yieldcurves;
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.RateHelper;
@@ -56,13 +56,13 @@ public class FuturesRateHelper extends RateHelper {
     // private fields
     // 
     private final double yearFraction;
-    private Handle<Quote> convAdj;
+    private Quote convAdj;
 
 	//
 	// public constructors
 	//
 	/**
-	 * @param Handle<Quote>
+	 * @param Quote
 	 *             price
 	 * @param Date
 	 *            immDate
@@ -75,7 +75,7 @@ public class FuturesRateHelper extends RateHelper {
 	 * @param DayCounter
 	 *            dayCounter
 	 */
-	public FuturesRateHelper(final Handle<Quote> price, 
+	public FuturesRateHelper(final Quote price, 
 			                  final Date immDate,
 			                  final/* Natural */int lengthInMonths, 
 			                  final Calendar calendar,
@@ -83,7 +83,7 @@ public class FuturesRateHelper extends RateHelper {
 			                  final boolean endOfMonth,
 			                  final DayCounter dayCounter) {
 		this(price, immDate, lengthInMonths, calendar, convention, endOfMonth,
-				dayCounter, new Handle<Quote>());
+				dayCounter, null);
 	}
     
 	/**
@@ -102,14 +102,14 @@ public class FuturesRateHelper extends RateHelper {
 	 * @param Handle
 	 *            <Quote> convAdj
 	 */
-	public FuturesRateHelper(final Handle<Quote> price, 
+	public FuturesRateHelper(final Quote price, 
 			                  final Date immDate,
 			                  final/* Natural */int lengthInMonths, 
 			                  final Calendar calendar,
 			                  final BusinessDayConvention convention, 
 			                  final boolean endOfMonth,
 			                  final DayCounter dayCounter, 
-			                  final Handle<Quote> convAdj) {
+			                  final Quote convAdj) {
 		super(price);
 		this.convAdj = convAdj;
 
@@ -172,7 +172,7 @@ public class FuturesRateHelper extends RateHelper {
 			                  final DayCounter dayCounter, 
 			                  final/* Rate */double convAdj) {
 		super(price);
-		this.convAdj = new Handle<Quote>(new SimpleQuote(convAdj));
+		this.convAdj = new SimpleQuote(convAdj);
 
 		QL.require(new IMM().isIMMdate(immDate, false), NOT_A_VALID_IMM_DATE);
 
@@ -190,10 +190,10 @@ public class FuturesRateHelper extends RateHelper {
 	 * @param IborIndex
 	 *            index
 	 */
-	public FuturesRateHelper(final Handle<Quote> price, 
+	public FuturesRateHelper(final Quote price, 
 			                  final Date immDate,
 			                  final IborIndex i) {
-		this(price, immDate, i, new Handle<Quote>());
+		this(price, immDate, i, null);
 	}
 
 	/**
@@ -206,10 +206,10 @@ public class FuturesRateHelper extends RateHelper {
 	 * @param Handle
 	 *            <Quote> convAdj
 	 */
-	public FuturesRateHelper(final Handle<Quote> price, 
+	public FuturesRateHelper(final Quote price, 
 			                  final Date immDate,
 		                      final IborIndex i, 
-		                      final Handle<Quote> convAdj) {
+		                      final Quote convAdj) {
 
 		super(price);
 		this.convAdj = convAdj;
@@ -253,7 +253,7 @@ public class FuturesRateHelper extends RateHelper {
                               final IborIndex i,
                               final /* Rate */ double convAdj) {
         super(price);   
-        this.convAdj = new Handle<Quote>(new SimpleQuote(convAdj));
+        this.convAdj = new SimpleQuote(convAdj);
         
         QL.require(new IMM().isIMMdate(immDate, false) , NOT_A_VALID_IMM_DATE); 
         
@@ -276,8 +276,8 @@ public class FuturesRateHelper extends RateHelper {
 		QL.require(termStructure != null, TERMSTRUCT_NOT_SET);
 		final/* Rate */double forwardRate = termStructure.discount(earliestDate)
 				/ (termStructure.discount(latestDate) - 1.0) / yearFraction;
-		final/* Rate */double convA = this.convAdj.empty() ? 0.0 : this.convAdj
-				.currentLink().value();
+		final/* Rate */double convA = this.convAdj == null ? 0.0 : this.convAdj
+				.value();
 		QL.ensure(convA >= 0.0, "Negative (" + convAdj
 				+ ") futures convexity adjustment");
 		final/* Rate */double futureRate = forwardRate + convA;
@@ -291,7 +291,7 @@ public class FuturesRateHelper extends RateHelper {
 	 * @return double value of the adjusted convexity
 	 */
     public /* Real */ double getConvexityAdjustment() {
-        return convAdj.empty() ? 0.0 : convAdj.currentLink().value();
+        return convAdj == null ? 0.0 : convAdj.value();
     }
 
 }

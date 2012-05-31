@@ -7,7 +7,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.lang.annotation.Time;
 import org.jquantlib.model.CalibrationHelper;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -25,25 +25,25 @@ import org.jquantlib.util.Observer;
 public class CapHelper extends CalibrationHelper {
 
     public CapHelper(final Period length,
-            final Handle<Quote> volatility,
+            final Quote volatility,
             final IborIndex index,
             // data for ATM swap-rate calculation
             final Frequency fixedLegFrequency,
             final DayCounter fixedLegDayCounter,
             final boolean includeFirstSwaplet,
-            final Handle<YieldTermStructure> termStructure){
+            final YieldTermStructure termStructure){
         this(length, volatility, index, fixedLegFrequency, fixedLegDayCounter,
                 includeFirstSwaplet,termStructure, false);
     }
 
     public CapHelper(final Period length,
-            final Handle<Quote> volatility,
+            final Quote volatility,
             final IborIndex index,
             // data for ATM swap-rate calculation
             final Frequency fixedLegFrequency,
             final DayCounter fixedLegDayCounter,
             final boolean includeFirstSwaplet,
-            final Handle<YieldTermStructure> termStructure,
+            final YieldTermStructure termStructure,
             final boolean calibrateVolatility){
         super(volatility, termStructure, calibrateVolatility);
 
@@ -51,12 +51,12 @@ public class CapHelper extends CalibrationHelper {
         final double fixedRate = 0.04; //dummy value
         Date startDate, maturity;
         if(includeFirstSwaplet){
-            startDate = termStructure.currentLink().referenceDate();
-            maturity = termStructure.currentLink().referenceDate().add(length);
+            startDate = termStructure.referenceDate();
+            maturity = termStructure.referenceDate().add(length);
         }
         else{
-            startDate = termStructure.currentLink().referenceDate().add(indexTenor);
-            maturity = termStructure.currentLink().referenceDate().add(length);
+            startDate = termStructure.referenceDate().add(indexTenor);
+            maturity = termStructure.referenceDate().add(length);
         }
 
         final IborIndex dummyIndex = new IborIndex("dummy",
@@ -66,7 +66,7 @@ public class CapHelper extends CalibrationHelper {
                 index.fixingCalendar(),
                 index.businessDayConvention(),
                 index.endOfMonth(),
-                termStructure.currentLink().dayCounter(),
+                termStructure.dayCounter(),
                 termStructure);
 
         final double [] nominals = {1,1.0};

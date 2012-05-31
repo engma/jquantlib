@@ -76,7 +76,7 @@ import org.jquantlib.pricingengines.vanilla.IntegralEngine;
 import org.jquantlib.pricingengines.vanilla.finitedifferences.FDEuropeanEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -165,10 +165,7 @@ public class EuropeanOptionTest {
             final YieldTermStructure r,
             final BlackVolTermStructure vol) {
         return new BlackScholesMertonProcess(
-                new Handle<Quote>(u),
-                new Handle<YieldTermStructure>(q),
-                new Handle<YieldTermStructure>(r),
-                new Handle<BlackVolTermStructure>(vol));
+        		u, q, r, vol);
     }
 
 
@@ -362,10 +359,7 @@ public class EuropeanOptionTest {
 
 
             final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                    new Handle<Quote>(spot),
-                    new Handle<YieldTermStructure>(qTS),
-                    new Handle<YieldTermStructure>(rTS),
-                    new Handle<BlackVolTermStructure>(volTS));
+            		spot, qTS, rTS, volTS);
 
             final PricingEngine engine = new AnalyticEuropeanEngine(stochProcess);
 
@@ -468,10 +462,7 @@ public class EuropeanOptionTest {
         vol.setValue(values[i].v);
 
         final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS));
+        		spot, qTS, rTS, volTS);
         final PricingEngine engine = new AnalyticEuropeanEngine(stochProcess);
 
         VanillaOption option = new EuropeanOption(payoff, exercise);
@@ -746,10 +737,7 @@ public class EuropeanOptionTest {
                         }
 
                         final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                                new Handle<Quote>(spot),
-                                new Handle<YieldTermStructure>(qTS),
-                                new Handle<YieldTermStructure>(rTS),
-                                new Handle<BlackVolTermStructure>(volTS));
+                        		spot, qTS, rTS, volTS);
                         final PricingEngine engine = new AnalyticEuropeanEngine(stochProcess);
 
                         if (payoff==null)
@@ -986,10 +974,7 @@ public class EuropeanOptionTest {
         final StrikedTypePayoff payoff = new PlainVanillaPayoff(Option.Type.Call, 100);
 
         final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(
-                new Handle<Quote>(u),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS));
+        		u, qTS, rTS, volTS);
         final PricingEngine engine = new AnalyticEuropeanEngine(stochProcess);
 
         final EuropeanOption option1 = new EuropeanOption(payoff, exercise);

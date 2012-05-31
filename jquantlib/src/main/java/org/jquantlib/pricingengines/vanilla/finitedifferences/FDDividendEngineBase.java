@@ -122,8 +122,8 @@ public abstract class FDDividendEngineBase extends FDMultiPeriodEngine {
     protected double getDiscountedDividend(final int i) /* @ReadOnly */ {
         final double dividend = getDividendAmount(i);
         final Date date = events.get(i).date();
-        final double discount = process.riskFreeRate().currentLink().discount(date)
-                              / process.dividendYield().currentLink().discount(date);
+        final double discount = process.riskFreeRate().discount(date)
+                              / process.dividendYield().discount(date);
         return dividend * discount;
     }
 

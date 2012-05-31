@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jquantlib.lang.annotation.Time;
 import org.jquantlib.model.CalibrationHelper;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.YieldTermStructure;
 
@@ -12,7 +12,7 @@ import org.jquantlib.termstructures.YieldTermStructure;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public class SwaptionHelper extends CalibrationHelper {
 
-    public SwaptionHelper(final Handle<Quote> volatility, final Handle<YieldTermStructure> termStructure, final boolean calibrateVolatility) {
+    public SwaptionHelper(Quote volatility, YieldTermStructure termStructure, final boolean calibrateVolatility) {
         super(volatility, termStructure, calibrateVolatility);
 
         if (System.getProperty("EXPERIMENTAL") == null)

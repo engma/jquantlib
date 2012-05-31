@@ -29,7 +29,6 @@ import org.jquantlib.model.CalibratedModel;
 import org.jquantlib.model.ConstantParameter;
 import org.jquantlib.processes.HestonProcess;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 
 
@@ -52,7 +51,7 @@ import org.jquantlib.quotes.SimpleQuote;
 // TODO: code review :: license, class comments, comments for access modifiers, comments for @Override
 public class HestonModel extends CalibratedModel {
 
-    protected RelinkableHandle<Quote> v0_, kappa_, theta_, sigma_, rho_;;
+    protected Quote v0_, kappa_, theta_, sigma_, rho_;;
 
     public HestonModel(final HestonProcess process) {
         super(5);
@@ -61,11 +60,11 @@ public class HestonModel extends CalibratedModel {
         this.theta_ = process.theta();
         this.sigma_ = process.sigma();
         this.rho_ = process.rho();
-        arguments_.set(0, new ConstantParameter(process.theta().currentLink().value(), new PositiveConstraint()));
-        arguments_.set(1, new ConstantParameter(process.kappa().currentLink().value(), new PositiveConstraint()));
-        arguments_.set(2, new ConstantParameter(process.sigma().currentLink().value(), new PositiveConstraint()));
-        arguments_.set(3, new ConstantParameter(process.rho().currentLink().value(), new PositiveConstraint()));
-        arguments_.set(4, new ConstantParameter(process.v0().currentLink().value(), new PositiveConstraint()));
+        arguments_.set(0, new ConstantParameter(process.theta().value(), new PositiveConstraint()));
+        arguments_.set(1, new ConstantParameter(process.kappa().value(), new PositiveConstraint()));
+        arguments_.set(2, new ConstantParameter(process.sigma().value(), new PositiveConstraint()));
+        arguments_.set(3, new ConstantParameter(process.rho().value(), new PositiveConstraint()));
+        arguments_.set(4, new ConstantParameter(process.v0().value(), new PositiveConstraint()));
 
         if (System.getProperty("EXPERIMENTAL") == null) {
             throw new UnsupportedOperationException("Work in progress");
@@ -74,11 +73,11 @@ public class HestonModel extends CalibratedModel {
 
     @Override
     public void generateArguments() {
-        v0_.linkTo(new SimpleQuote((SimpleQuote) v0_.currentLink()));
-        kappa_.linkTo(new SimpleQuote((SimpleQuote) kappa_.currentLink()));
-        theta_.linkTo(new SimpleQuote((SimpleQuote) theta_.currentLink()));
-        sigma_.linkTo(new SimpleQuote((SimpleQuote) sigma_.currentLink()));
-        rho_.linkTo(new SimpleQuote((SimpleQuote) rho_.currentLink()));
+        v0_ = new SimpleQuote((SimpleQuote) v0_);
+        kappa_ = new SimpleQuote((SimpleQuote) kappa_);
+        theta_ = new SimpleQuote((SimpleQuote) theta_);
+        sigma_ = new SimpleQuote((SimpleQuote) sigma_);
+        rho_ = new SimpleQuote((SimpleQuote) rho_);
     }
 
     // variance mean version level

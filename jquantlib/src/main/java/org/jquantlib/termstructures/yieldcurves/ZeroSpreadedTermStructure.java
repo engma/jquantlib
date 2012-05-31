@@ -3,7 +3,7 @@ package org.jquantlib.termstructures.yieldcurves;
 
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
@@ -18,8 +18,8 @@ public class ZeroSpreadedTermStructure extends ZeroYieldStructure  {
     // private fields
     //
 
-    private final Handle<YieldTermStructure> originalCurve;
-    private final Handle<Quote> spread;
+    private final YieldTermStructure originalCurve;
+    private final Quote spread;
     private final Compounding comp;
     private final Frequency freq;
 
@@ -29,8 +29,8 @@ public class ZeroSpreadedTermStructure extends ZeroYieldStructure  {
     //
 
     public ZeroSpreadedTermStructure(
-            final Handle<YieldTermStructure> h,
-            final Handle<Quote> spread, final Compounding comp , final Frequency freq,
+            final YieldTermStructure h,
+            final Quote spread, final Compounding comp , final Frequency freq,
             final DayCounter dc){
         QL.validateExperimentalMode();
 
@@ -49,9 +49,9 @@ public class ZeroSpreadedTermStructure extends ZeroYieldStructure  {
     //
 
     public double forwardImpl(final double t){
-        return originalCurve.currentLink().
+        return originalCurve.
         forwardRate(t, t, comp, freq, true).rate()
-        + spread.currentLink().value();
+        + spread.value();
     }
 
 
@@ -62,10 +62,10 @@ public class ZeroSpreadedTermStructure extends ZeroYieldStructure  {
     @Override
     protected double zeroYieldImpl(final double t) {
         //org.comment: to be fixed: user-defined daycounter should be used
-        final InterestRate zeroRate = originalCurve.currentLink().
+        final InterestRate zeroRate = originalCurve.
         zeroRate(t, comp, freq, true);
         final InterestRate spreadedRate =
-            new InterestRate(zeroRate.rate() + spread.currentLink().value(),
+            new InterestRate(zeroRate.rate() + spread.value(),
                     zeroRate.dayCounter(),
                     zeroRate.compounding(),
                     zeroRate.frequency());
@@ -79,22 +79,22 @@ public class ZeroSpreadedTermStructure extends ZeroYieldStructure  {
 
     @Override
     public Calendar calendar() {
-        return originalCurve.currentLink().calendar();
+        return originalCurve.calendar();
     }
 
     @Override
     public Date referenceDate() {
-        return originalCurve.currentLink().referenceDate();
+        return originalCurve.referenceDate();
     }
 
     @Override
     public Date maxDate() {
-        return originalCurve.currentLink().maxDate();
+        return originalCurve.maxDate();
     }
 
     @Override
     public/* @Time */double maxTime() {
-        return originalCurve.currentLink().maxTime();
+        return originalCurve.maxTime();
     }
 
 }

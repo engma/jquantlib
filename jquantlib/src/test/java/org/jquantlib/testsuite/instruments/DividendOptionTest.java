@@ -70,7 +70,7 @@ import org.jquantlib.pricingengines.vanilla.finitedifferences.FDDividendEuropean
 import org.jquantlib.pricingengines.vanilla.finitedifferences.FDEngineAdapter;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -107,11 +107,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes)
@@ -129,7 +129,7 @@ public class DividendOptionTest {
                   }
 
                   final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
-                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                   final PricingEngine ref_engine = new AnalyticEuropeanEngine(stochProcess);
                   final PricingEngine engine = new AnalyticDividendEuropeanEngine(stochProcess);
 
@@ -178,11 +178,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         final Date exDate = today.add(new Period(6, TimeUnit.Months));
         final Exercise exercise = new EuropeanExercise(exDate);
@@ -195,7 +195,7 @@ public class DividendOptionTest {
         dividends.add(0.50);
 
         final StrikedTypePayoff payoff = new PlainVanillaPayoff(Option.Type.Call, 40.0);
-        final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+        final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
         final PricingEngine engine = new AnalyticDividendEuropeanEngine(stochProcess);
 
         final DividendVanillaOption option = new DividendVanillaOption(payoff, exercise, dividendDates, dividends);
@@ -242,11 +242,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes)
@@ -260,7 +260,7 @@ public class DividendOptionTest {
                   dividends.add(dividendValue);
 
                   final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
-                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                   final PricingEngine engine = new AnalyticDividendEuropeanEngine(stochProcess);
                   final PricingEngine ref_engine = new AnalyticEuropeanEngine(stochProcess);
 
@@ -314,11 +314,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes)
@@ -333,7 +333,7 @@ public class DividendOptionTest {
 
                   final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
                   final StrikedTypePayoff refPayoff = new PlainVanillaPayoff(type, strike + dividendValue);
-                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                   final PricingEngine engine = new AnalyticDividendEuropeanEngine(stochProcess);
                   final PricingEngine ref_engine = new AnalyticEuropeanEngine(stochProcess);
 
@@ -393,11 +393,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes)
@@ -415,7 +415,7 @@ public class DividendOptionTest {
                   }
 
                   final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
-                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                   final PricingEngine engine = new AnalyticDividendEuropeanEngine(stochProcess);
 
                   final DividendVanillaOption option = new DividendVanillaOption(payoff, exercise, dividendDates, dividends);
@@ -519,11 +519,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes)
@@ -541,7 +541,7 @@ public class DividendOptionTest {
                   }
 
                   final StrikedTypePayoff payoff = new PlainVanillaPayoff(type, strike);
-                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                  final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                   final PricingEngine engine = new FDDividendEuropeanEngine(stochProcess, timeSteps, gridPoints);
                   final PricingEngine ref_engine = new AnalyticDividendEuropeanEngine(stochProcess);
 
@@ -652,11 +652,11 @@ public class DividendOptionTest {
 
         final SimpleQuote spot = new SimpleQuote(0.0);
         final SimpleQuote qRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(qRate, dc));
+        YieldTermStructure qTS = Utilities.flatRate(qRate, dc);
         final SimpleQuote rRate = new SimpleQuote(0.0);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(rRate, dc));
+        YieldTermStructure rTS = Utilities.flatRate(rRate, dc);
         final SimpleQuote vol = new SimpleQuote(0.0);
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(vol, dc));
+        BlackVolTermStructure volTS = Utilities.flatVol(vol, dc);
 
         for (final Type type : types)
             for (final double strike : strikes) {
@@ -670,7 +670,7 @@ public class DividendOptionTest {
                     dividends.add(5.0);
                 }
 
-                final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+                final BlackScholesMertonProcess stochProcess = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
                 final PricingEngine engine;
                 try {
                     final Constructor<T> baseConstructor = engineClass.getConstructor(GeneralizedBlackScholesProcess.class);
@@ -742,10 +742,10 @@ public class DividendOptionTest {
     private <T extends FDEngineAdapter> void testFdDegenerate(final Class<T> engineClass, final Date today, final Exercise exercise) {
         final DayCounter dc = new Actual360();
         final SimpleQuote spot = new SimpleQuote(54.625);
-        final Handle<YieldTermStructure> rTS = new Handle<YieldTermStructure>(Utilities.flatRate(0.052706, dc));
-        final Handle<YieldTermStructure> qTS = new Handle<YieldTermStructure>(Utilities.flatRate(0.0, dc));
-        final Handle<BlackVolTermStructure> volTS = new Handle<BlackVolTermStructure>(Utilities.flatVol(0.282922, dc));
-        final BlackScholesMertonProcess process = new BlackScholesMertonProcess(new Handle<Quote>(spot), qTS, rTS, volTS);
+        YieldTermStructure rTS = Utilities.flatRate(0.052706, dc);
+        YieldTermStructure qTS = Utilities.flatRate(0.0, dc);
+        BlackVolTermStructure volTS = Utilities.flatVol(0.282922, dc);
+        final BlackScholesMertonProcess process = new BlackScholesMertonProcess(spot, qTS, rTS, volTS);
 
         final /* @Size */ int timeSteps = 40;
         final /* @Size */ int gridPoints = 300;

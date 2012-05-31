@@ -40,7 +40,6 @@ import org.jquantlib.methods.montecarlo.SingleVariate;
 import org.jquantlib.pricingengines.BlackCalculator;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.StochasticProcess1D;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -97,12 +96,12 @@ public class ReplicationError {
         final Calendar calendar = new Target();
         final Date today = Date.todaysDate();
         final DayCounter dayCount = new Actual365Fixed();
-        final Handle<Quote> stateVariable = new Handle(new SimpleQuote(s0_.doubleValue()));
-        final Handle<YieldTermStructure> riskFreeRate = new Handle(new FlatForward(today, r_.doubleValue(), dayCount));
+        final Quote stateVariable = new SimpleQuote(s0_.doubleValue());
+        final YieldTermStructure riskFreeRate = new FlatForward(today, r_.doubleValue(), dayCount);
 
-        final Handle<YieldTermStructure> dividendYield = new Handle(new FlatForward(today, 0.0, dayCount));
+        final YieldTermStructure dividendYield = new FlatForward(today, 0.0, dayCount);
 
-        final Handle<BlackVolTermStructure> volatility = new Handle(new BlackConstantVol(today, calendar, sigma_.doubleValue(),dayCount));
+        final BlackVolTermStructure volatility = new BlackConstantVol(today, calendar, sigma_.doubleValue(),dayCount);
 
         final StochasticProcess1D diffusion = new BlackScholesMertonProcess(
                 stateVariable, dividendYield, riskFreeRate, volatility);

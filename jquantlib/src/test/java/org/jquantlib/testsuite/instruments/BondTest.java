@@ -78,7 +78,7 @@ import org.jquantlib.instruments.bonds.ZeroCouponBond;
 import org.jquantlib.math.matrixutilities.Array;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
@@ -241,7 +241,7 @@ public class BondTest {
 					final Date maturity = calendar.advance(issue, length, TimeUnit.Years);
 
 					final SimpleQuote rate = new SimpleQuote(0.0);
-					final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(Utilities.flatRate(today, rate, bondDayCount));
+					YieldTermStructure discountCurve = Utilities.flatRate(today, rate, bondDayCount);
 
 					final Schedule sch = new Schedule(
 					        dated, maturity,
@@ -318,7 +318,7 @@ public class BondTest {
 	    final DayCounter bondDayCount = new ActualActual(ActualActual.Convention.ISMA);
 	    final int settlementDays = 1;
 
-		final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(Utilities.flatRate(today, 0.03, new Actual360()));
+		YieldTermStructure discountCurve = Utilities.flatRate(today, 0.03, new Actual360());
 
 	    // actual market values from the evaluation date
 
@@ -516,7 +516,7 @@ public class BondTest {
 
 	    final int settlementDays = 1;
 
-		final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(Utilities.flatRate(today, 0.03, new Actual360()));
+		YieldTermStructure discountCurve = Utilities.flatRate(today, 0.03, new Actual360());
 
 	    final double tolerance = 1.0e-6;
 
@@ -597,7 +597,7 @@ public class BondTest {
 
 	    final int settlementDays = 1;
 
-		final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(Utilities.flatRate(today, 0.03, new Actual360()));
+		YieldTermStructure discountCurve = Utilities.flatRate(today, 0.03, new Actual360());
 
 	    final double tolerance = 1.0e-6;
 
@@ -690,15 +690,15 @@ public class BondTest {
 
 	    final int settlementDays = 1;
 
-		final Handle<YieldTermStructure> riskFreeRate = new Handle<YieldTermStructure>(Utilities.flatRate(today, 0.025, new Actual360()));
-		final Handle<YieldTermStructure> discountCurve = new Handle<YieldTermStructure>(Utilities.flatRate(today, 0.03, new Actual360()));
+		YieldTermStructure riskFreeRate = Utilities.flatRate(today, 0.025, new Actual360());
+		YieldTermStructure discountCurve = Utilities.flatRate(today, 0.03, new Actual360());
 
 		final IborIndex index = new USDLibor(new Period(6,TimeUnit.Months), riskFreeRate);
 	    final int fixingDays = 1;
 
 	    final double tolerance = 1.0e-6;
 
-	    final IborCouponPricer pricer = new BlackIborCouponPricer(new Handle<OptionletVolatilityStructure>());
+	    final IborCouponPricer pricer = new BlackIborCouponPricer(null);
 
 	    // plain
 

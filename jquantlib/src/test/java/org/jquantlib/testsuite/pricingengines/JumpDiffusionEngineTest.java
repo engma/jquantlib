@@ -21,7 +21,7 @@ import org.jquantlib.instruments.Option.Type;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.vanilla.JumpDiffusionEngine;
 import org.jquantlib.processes.Merton76Process;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -222,13 +222,7 @@ public class JumpDiffusionEngineTest {
         final SimpleQuote jumpVol       = new SimpleQuote(0.0);
 
         final Merton76Process stochProcess = new Merton76Process(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS),
-                new Handle<Quote>(jumpIntensity),
-                new Handle<Quote>(meanLogJump),
-                new Handle<Quote>(jumpVol));
+        		spot, qTS, rTS, volTS, jumpIntensity, meanLogJump, jumpVol);
         final PricingEngine engine = new JumpDiffusionEngine(stochProcess);
 
         for (final HaugMertonData value : values) {
@@ -336,13 +330,7 @@ public class JumpDiffusionEngineTest {
         final SimpleQuote jumpVol       = new SimpleQuote(0.0);
 
         final Merton76Process stochProcess = new Merton76Process(
-                new Handle<Quote>(spot),
-                new Handle<YieldTermStructure>(qTS),
-                new Handle<YieldTermStructure>(rTS),
-                new Handle<BlackVolTermStructure>(volTS),
-                new Handle<Quote>(jumpIntensity),
-                new Handle<Quote>(meanLogJump),
-                new Handle<Quote>(jumpVol));
+        		spot, qTS, rTS, volTS, jumpIntensity, meanLogJump, jumpVol);
 
         // The jumpdiffusionengine greeks are very sensitive to the convergence level.
         // A tolerance of 1.0e-08 is usually sufficient to get reasonable results

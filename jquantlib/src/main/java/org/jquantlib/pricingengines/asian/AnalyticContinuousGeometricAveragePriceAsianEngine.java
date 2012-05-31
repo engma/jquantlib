@@ -103,28 +103,28 @@ public class AnalyticContinuousGeometricAveragePriceAsianEngine extends Continuo
         QL.require(a.payoff instanceof PlainVanillaPayoff , "non-plain payoff given"); // TODO: message
         final PlainVanillaPayoff payoff = (PlainVanillaPayoff)arguments_.payoff;
 
-        /*@Volatility*/ final double volatility = process.blackVolatility().currentLink().blackVol(exercise, payoff.strike());
-        /*@Real*/ final double variance = process.blackVolatility().currentLink().blackVariance(exercise, payoff.strike());
-        /*@DiscountFactor*/ final double  riskFreeDiscount = process.riskFreeRate().currentLink().discount(exercise);
-        final DayCounter rfdc  = process.riskFreeRate().currentLink().dayCounter();
-        final DayCounter divdc = process.dividendYield().currentLink().dayCounter();
-        final DayCounter voldc = process.blackVolatility().currentLink().dayCounter();
+        /*@Volatility*/ final double volatility = process.blackVolatility().blackVol(exercise, payoff.strike());
+        /*@Real*/ final double variance = process.blackVolatility().blackVariance(exercise, payoff.strike());
+        /*@DiscountFactor*/ final double  riskFreeDiscount = process.riskFreeRate().discount(exercise);
+        final DayCounter rfdc  = process.riskFreeRate().dayCounter();
+        final DayCounter divdc = process.dividendYield().dayCounter();
+        final DayCounter voldc = process.blackVolatility().dayCounter();
 
         /*@Spread*/ final double dividendYield = 0.5 * (
-                process.riskFreeRate().currentLink().zeroRate(
+                process.riskFreeRate().zeroRate(
                         exercise,
                         rfdc,
                         Compounding.Continuous,
-                        Frequency.NoFrequency).rate() + process.dividendYield().currentLink().zeroRate(
+                        Frequency.NoFrequency).rate() + process.dividendYield().zeroRate(
                                 exercise,
                                 divdc,
                                 Compounding.Continuous,
                                 Frequency.NoFrequency).rate() + volatility*volatility/6.0);
 
         /*@Time*/ final double t_q = divdc.yearFraction(
-                process.dividendYield().currentLink().referenceDate(), exercise);
+                process.dividendYield().referenceDate(), exercise);
         /*@DiscountFactor*/ final double dividendDiscount = Math.exp(-dividendYield*t_q);
-        /*@Real*/ final double spot = process.stateVariable().currentLink().value();
+        /*@Real*/ final double spot = process.stateVariable().value();
         QL.require(spot > 0.0, "negative or null underlying given"); // TODO: message
         /*@Real*/ final double forward = spot * dividendDiscount / riskFreeDiscount;
 
@@ -134,12 +134,12 @@ public class AnalyticContinuousGeometricAveragePriceAsianEngine extends Continuo
         greeks.gamma = black.gamma(spot);
         greeks.dividendRho = black.dividendRho(t_q)/2.0;
 
-        /*@Time*/ final double t_r = rfdc.yearFraction(process.riskFreeRate().currentLink().referenceDate(),
+        /*@Time*/ final double t_r = rfdc.yearFraction(process.riskFreeRate().referenceDate(),
                 a.exercise.lastDate());
         greeks.rho = black.rho(t_r) + 0.5 * black.dividendRho(t_q);
 
         /*@Time*/ final double t_v = voldc.yearFraction(
-                process.blackVolatility().currentLink().referenceDate(),
+                process.blackVolatility().referenceDate(),
                 a.exercise.lastDate());
         greeks.vega = black.vega(t_v)/Math.sqrt(3.0) +
         black.dividendRho(t_q)*volatility/6.0;

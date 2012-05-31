@@ -41,7 +41,7 @@ package org.jquantlib.termstructures.volatilities;
 
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -66,20 +66,20 @@ import org.jquantlib.util.Visitor;
 // TODO: this class is untested, probably unreliable.
 public class LocalVolSurface extends LocalVolTermStructure {
 
-    private final Handle<BlackVolTermStructure> blackTS_;
-    private final Handle<YieldTermStructure> riskFreeTS_;
-    private final Handle<YieldTermStructure> dividendTS_;
-    private final Handle<? extends Quote> underlying_;
+    private final BlackVolTermStructure blackTS_;
+    private final YieldTermStructure riskFreeTS_;
+    private final YieldTermStructure dividendTS_;
+    private final Quote underlying_;
 
     public LocalVolSurface(
-            final Handle<BlackVolTermStructure> blackTS,
-            final Handle<YieldTermStructure> riskFreeTS,
-            final Handle<YieldTermStructure> dividendTS,
-            final Handle<? extends Quote> underlying) {
+            final BlackVolTermStructure blackTS,
+            final YieldTermStructure riskFreeTS,
+            final YieldTermStructure dividendTS,
+            final Quote underlying) {
 
-        super(blackTS.currentLink().calendar(),
-              blackTS.currentLink().businessDayConvention(),
-              blackTS.currentLink().dayCounter());
+        super(blackTS.calendar(),
+              blackTS.businessDayConvention(),
+              blackTS.dayCounter());
 
         this.blackTS_ = blackTS;
         this.riskFreeTS_ = riskFreeTS;
@@ -93,19 +93,19 @@ public class LocalVolSurface extends LocalVolTermStructure {
     }
 
     public LocalVolSurface(
-            final Handle<BlackVolTermStructure> blackTS,
-            final Handle<YieldTermStructure> riskFreeTS,
-            final Handle<YieldTermStructure> dividendTS,
+            final BlackVolTermStructure blackTS,
+            final YieldTermStructure riskFreeTS,
+            final YieldTermStructure dividendTS,
             final /*@Real*/ double underlying) {
 
-        super(blackTS.currentLink().calendar(),
-              blackTS.currentLink().businessDayConvention(),
-              blackTS.currentLink().dayCounter());
+        super(blackTS.calendar(),
+              blackTS.businessDayConvention(),
+              blackTS.dayCounter());
 
         this.blackTS_ = blackTS;
         this.riskFreeTS_ = riskFreeTS;
         this.dividendTS_ = dividendTS;
-        this.underlying_ = new Handle<Quote>(new SimpleQuote(underlying));
+        this.underlying_ = new SimpleQuote(underlying);
 
         this.blackTS_.addObserver(this);
         this.riskFreeTS_.addObserver(this);
@@ -119,27 +119,27 @@ public class LocalVolSurface extends LocalVolTermStructure {
 
     @Override
     public final Date referenceDate() {
-        return this.blackTS_.currentLink().referenceDate();
+        return this.blackTS_.referenceDate();
     }
 
     @Override
     public final DayCounter dayCounter() {
-        return this.blackTS_.currentLink().dayCounter();
+        return this.blackTS_.dayCounter();
     }
 
     @Override
     public final Date maxDate() {
-        return blackTS_.currentLink().maxDate();
+        return blackTS_.maxDate();
     }
 
     @Override
     public final /*@Real*/ double minStrike() {
-        return blackTS_.currentLink().minStrike();
+        return blackTS_.minStrike();
     }
 
     @Override
     public final /*@Real*/ double maxStrike() {
-        return blackTS_.currentLink().maxStrike();
+        return blackTS_.maxStrike();
     }
 
     @Override
@@ -148,10 +148,10 @@ public class LocalVolSurface extends LocalVolTermStructure {
             final /*@Real*/ double underlyingLevel) {
 
         // obtain local copies of objects
-        final Quote u = underlying_.currentLink();
-        final YieldTermStructure dTS = dividendTS_.currentLink();
-        final YieldTermStructure rTS = riskFreeTS_.currentLink();
-        final BlackVolTermStructure bTS = blackTS_.currentLink();
+        final Quote u = underlying_;
+        final YieldTermStructure dTS = dividendTS_;
+        final YieldTermStructure rTS = riskFreeTS_;
+        final BlackVolTermStructure bTS = blackTS_;
 
         final double forwardValue = u.value() * ( dTS.discount(time, true) / rTS.discount(time, true) );
 

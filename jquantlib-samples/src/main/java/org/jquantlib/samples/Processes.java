@@ -31,7 +31,6 @@ import org.jquantlib.processes.EulerDiscretization;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
 import org.jquantlib.processes.StochasticProcess1D;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
 import org.jquantlib.termstructures.BlackVarianceTermStructure;
@@ -81,7 +80,7 @@ public class Processes implements Runnable {
 
         //Creating stock quote handle
         final SimpleQuote stockQuote = new SimpleQuote(5.6);
-        final RelinkableHandle<Quote>  handleToStockQuote = new RelinkableHandle<Quote>(stockQuote);
+        final Quote handleToStockQuote = stockQuote;
 
         //Creating black volatility term structure
 
@@ -97,36 +96,36 @@ public class Processes implements Runnable {
 
         //Dividend termstructure
         final SimpleQuote dividendQuote = new SimpleQuote(0.3);
-        final RelinkableHandle<Quote>  handleToInterestRateQuote = new RelinkableHandle<Quote>(dividendQuote);
+        final Quote  handleToInterestRateQuote = dividendQuote;
         final YieldTermStructure dividendTermStructure = new FlatForward(2,new UnitedStates(Market.NYSE),handleToInterestRateQuote, new Actual365Fixed(), Compounding.Continuous,Frequency.Daily);
 
         //Risk free term structure
         final SimpleQuote riskFreeRateQuote = new SimpleQuote(0.3);
-        final RelinkableHandle<Quote>  handleToRiskFreeRateQuote = new RelinkableHandle<Quote>(riskFreeRateQuote);
+        final Quote  handleToRiskFreeRateQuote = riskFreeRateQuote;
         final YieldTermStructure riskFreeTermStructure = new FlatForward(2,new UnitedStates(Market.NYSE),handleToRiskFreeRateQuote, new Actual365Fixed(), Compounding.Continuous,Frequency.Daily);
 
         //Creating the process
-        final StochasticProcess1D process = new GeneralizedBlackScholesProcess(handleToStockQuote,new RelinkableHandle<YieldTermStructure>(dividendTermStructure),new RelinkableHandle<YieldTermStructure>(riskFreeTermStructure),new RelinkableHandle<BlackVolTermStructure>(varianceCurve),new EulerDiscretization());
+        final StochasticProcess1D process = new GeneralizedBlackScholesProcess(handleToStockQuote,dividendTermStructure,riskFreeTermStructure,varianceCurve,new EulerDiscretization());
 
         //Calculating the drift of the stochastic process after time = 18th day from today with value of the stock as specified from the quote
         //The drift = (riskFreeForwardRate - dividendForwardRate) - (Variance/2)
-        System.out.println("The drift of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.drift(process.time(date18.clone()), handleToStockQuote.currentLink().value()));
+        System.out.println("The drift of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.drift(process.time(date18.clone()), handleToStockQuote.value()));
 
         //Calculating the diffusion of the process after time = 18th day from today with value of the stock as specified from the quote
         //The diffusion = volatiltiy of the stochastic process
-        System.out.println("The diffusion of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.diffusion(process.time(date18.clone()), handleToStockQuote.currentLink().value()));
+        System.out.println("The diffusion of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.diffusion(process.time(date18.clone()), handleToStockQuote.value()));
 
         //Calulating the standard deviation of the process after time = 18th day from today with value of the stock as specified from the quote
         //The standard deviation = volatility*sqrt(dt)
-        System.out.println("The stdDeviation of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.stdDeviation(process.time(date18.clone()), handleToStockQuote.currentLink().value(), 0.01));
+        System.out.println("The stdDeviation of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.stdDeviation(process.time(date18.clone()), handleToStockQuote.value(), 0.01));
 
         //Calulating the variance of the process after time = 18th day from today with value of the stock as specified from the quote
         //The variance = volatility*volatility*dt
-        System.out.println("The variance of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.variance(process.time(date18.clone()), handleToStockQuote.currentLink().value(), 0.01));
+        System.out.println("The variance of the process after time = 18th day from today with value of the stock as specified from the quote = "+process.variance(process.time(date18.clone()), handleToStockQuote.value(), 0.01));
 
         //Calulating the expected value of the stock quote after time = 18th day from today with the current value of the stock as specified from the quote
         //The expectedValue = intialValue*exp(drift*dt)-----can be obtained by integrating----->dx/x= drift*dt
-        System.out.println("Expected value = "+process.expectation(process.time(date18.clone()), handleToStockQuote.currentLink().value(), 0.01));
+        System.out.println("Expected value = "+process.expectation(process.time(date18.clone()), handleToStockQuote.value(), 0.01));
 
         //Calulating the exact value of the stock quote after time = 18th day from today with the current value of the stock as specified from the quote
         //The exact value = intialValue*exp(drift*dt)*exp(volatility*sqrt(dt))-----can be obtained by integrating----->dx/x= drift*dt+volatility*sqrt(dt)

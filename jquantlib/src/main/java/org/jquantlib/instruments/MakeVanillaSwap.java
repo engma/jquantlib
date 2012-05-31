@@ -47,7 +47,7 @@ import org.jquantlib.daycounters.Thirty360;
 import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.swap.DiscountingSwapEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
@@ -180,7 +180,7 @@ public class MakeVanillaSwap {
         double usedFixedRate = fixedRate;
 
         if (Double.isNaN (fixedRate)) {
-            QL.require(!iborIndex.termStructure().empty(), "no forecasting term structure set to " + iborIndex.name()); // TODO: message
+            QL.require(iborIndex.termStructure() != null, "no forecasting term structure set to " + iborIndex.name()); // TODO: message
 
             final VanillaSwap temp = new VanillaSwap(
                     type,
@@ -247,7 +247,7 @@ public class MakeVanillaSwap {
         return this;
     }
 
-    public MakeVanillaSwap withDiscountingTermStructure(final Handle<YieldTermStructure> discountingTermStructure) {
+    public MakeVanillaSwap withDiscountingTermStructure(YieldTermStructure discountingTermStructure) {
     	this.engine = (new DiscountingSwapEngine(discountingTermStructure));
         return this;
     }

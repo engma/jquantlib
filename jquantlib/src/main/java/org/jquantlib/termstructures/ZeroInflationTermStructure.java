@@ -42,7 +42,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.annotation.Natural;
 import org.jquantlib.lang.annotation.Rate;
 import org.jquantlib.lang.annotation.Time;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Frequency;
@@ -66,7 +66,7 @@ public abstract class ZeroInflationTermStructure extends InflationTermStructure 
 						    		  final Period lag,
 						    		  final Frequency frequency,
 						    		  final @Rate double baseZeroRate,
-						    		  final Handle<YieldTermStructure> yTS) {
+						    		  YieldTermStructure yTS) {
     	super(lag, frequency, baseZeroRate, yTS, dayCounter);
     	
     }
@@ -78,7 +78,7 @@ public abstract class ZeroInflationTermStructure extends InflationTermStructure 
 						  		  	  final Period lag,
 									  final Frequency frequency,
 									  final @Rate double baseZeroRate,
-									  final Handle<YieldTermStructure> yTS) {
+									  YieldTermStructure yTS) {
 
     	super(referenceDate, lag, frequency, baseZeroRate, yTS, calendar, dayCounter);
     }
@@ -90,7 +90,7 @@ public abstract class ZeroInflationTermStructure extends InflationTermStructure 
 	    							  final Period lag,
 	    							  final Frequency frequency,
 	    							  final @Rate double baseZeroRate,
-	    							  final Handle<YieldTermStructure> yTS) {
+	    							  YieldTermStructure yTS) {
     	
     	super(settlementDays, calendar, lag, frequency,baseZeroRate, yTS, dayCounter);
     }  

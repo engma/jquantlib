@@ -93,7 +93,6 @@ import org.jquantlib.instruments.PlainVanillaPayoff;
 import org.jquantlib.instruments.VanillaOption;
 import org.jquantlib.processes.HullWhiteProcess;
 import org.jquantlib.processes.StochasticProcess;
-import org.jquantlib.quotes.Handle;
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.samples.util.StopClock;
@@ -169,10 +168,10 @@ public class CoxRossWithHullWhite implements Runnable {
         final Exercise americanExercise = new AmericanExercise(settlementDate, maturity);
 
         // bootstrap the yield/dividend/volatility curves
-        final Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(underlying));
-        final Handle<YieldTermStructure> flatDividendTS = new Handle<YieldTermStructure>(new FlatForward(settlementDate, dividendYield, dayCounter));
-        final Handle<YieldTermStructure> flatTermStructure = new Handle<YieldTermStructure>(new FlatForward(settlementDate, riskFreeRate, dayCounter));
-        final Handle<BlackVolTermStructure> flatVolTS = new Handle<BlackVolTermStructure>(new BlackConstantVol(settlementDate, calendar, volatility, dayCounter));
+        final Quote underlyingH = new SimpleQuote(underlying);
+        final YieldTermStructure flatDividendTS = new FlatForward(settlementDate, dividendYield, dayCounter);
+        final YieldTermStructure flatTermStructure = new FlatForward(settlementDate, riskFreeRate, dayCounter);
+        final BlackVolTermStructure flatVolTS = new BlackConstantVol(settlementDate, calendar, volatility, dayCounter);
         final Payoff payoff = new PlainVanillaPayoff(type, strike);
 
         // European Options

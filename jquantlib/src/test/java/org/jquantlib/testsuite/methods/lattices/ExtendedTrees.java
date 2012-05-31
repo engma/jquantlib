@@ -67,7 +67,7 @@ import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.vanilla.BinomialVanillaEngine;
 import org.jquantlib.processes.BlackScholesMertonProcess;
 import org.jquantlib.processes.GeneralizedBlackScholesProcess;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.termstructures.BlackVolTermStructure;
@@ -280,8 +280,7 @@ public class ExtendedTrees {
 
     private GeneralizedBlackScholesProcess makeProcess(final Quote u, final YieldTermStructure q, final YieldTermStructure r,
             final BlackVolTermStructure vol) {
-        return new BlackScholesMertonProcess(new Handle<Quote>(u), new Handle<YieldTermStructure>(q),
-                new Handle<YieldTermStructure>(r), new Handle<BlackVolTermStructure>(vol));
+        return new BlackScholesMertonProcess(u, q, r, vol);
     }
 
     private VanillaOption makeOption(

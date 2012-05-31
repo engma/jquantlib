@@ -30,7 +30,7 @@ import org.jquantlib.exercise.Exercise;
 import org.jquantlib.instruments.Bond;
 import org.jquantlib.instruments.Option;
 import org.jquantlib.math.Constants;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Schedule;
@@ -45,7 +45,7 @@ public class ConvertibleBond extends Bond {
     protected double conversionRatio;
     protected List<Dividend> dividends;
     protected List<Callability> callability;
-    protected Handle<Quote> creditSpread;
+    protected Quote creditSpread;
     protected Option option;
 
     
@@ -54,7 +54,7 @@ public class ConvertibleBond extends Bond {
             final double conversionRatio,
             final List<Dividend> dividends,
             final List<Callability> callability,
-            final Handle<Quote> creditSpread,
+            final Quote creditSpread,
             final Date issueDate,
             final int settlementDays,
             final DayCounter dayCounter,
@@ -82,7 +82,7 @@ public class ConvertibleBond extends Bond {
         return callability;
     }
 
-    public Handle<Quote> creditSpread() /* @ReadOnly */ {
+    public Quote creditSpread() /* @ReadOnly */ {
         return creditSpread;
     }
 

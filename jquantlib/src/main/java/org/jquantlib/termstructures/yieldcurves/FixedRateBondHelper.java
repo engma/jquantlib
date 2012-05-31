@@ -28,9 +28,8 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.instruments.bonds.FixedRateBond;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.termstructures.RateHelper;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -56,7 +55,7 @@ public class FixedRateBondHelper extends RateHelper {
 	// private fields
 	//
      private FixedRateBond bond;
-     private final RelinkableHandle<YieldTermStructure> termStructureHandle = new RelinkableHandle<YieldTermStructure>(null);
+     private YieldTermStructure termStructureHandle = null;
     
 	/**
 	 * 
@@ -70,7 +69,7 @@ public class FixedRateBondHelper extends RateHelper {
 	 * @param redemption: default value = 100 
 	 * @param issueDate: default: new Date()
 	 */
-	public FixedRateBondHelper(final Handle<Quote> cleanPrice,
+	public FixedRateBondHelper(final Quote cleanPrice,
                                 final /* Natural */ int settlementDays,
                                 final /* Real */ double faceAmount,
                                 final Schedule schedule,
@@ -92,7 +91,7 @@ public class FixedRateBondHelper extends RateHelper {
 	 * @param redemption
 	 * @param issueDate
 	 */
-	public FixedRateBondHelper(final Handle<Quote> cleanPrice,
+	public FixedRateBondHelper(final Quote cleanPrice,
                                 final /* Natural */ int settlementDays,
                                 final /* Real */ double faceAmount,
                                 final Schedule schedule,
@@ -125,10 +124,10 @@ public class FixedRateBondHelper extends RateHelper {
 	 * @param cleanPrice
 	 * @param bond
 	 */
-	public FixedRateBondHelper(final Handle<Quote> cleanPrice,
+	public FixedRateBondHelper(final Quote cleanPrice,
 			                    final FixedRateBond bond) {
 		super(cleanPrice);
-//  		QL.validateExperimentalMode();   
+  		QL.validateExperimentalMode();   
 		
 		this.latestDate = bond.maturityDate();
 		new Settings().evaluationDate().addObserver(this);
@@ -156,7 +155,7 @@ public class FixedRateBondHelper extends RateHelper {
 	public void setTermStructure(final YieldTermStructure t) {
 		// do not set the relinkable handle as an observer -
         // force recalculation when needed
-		this.termStructureHandle.linkTo(t,false);
+		this.termStructureHandle = t;
 		super.setTermStructure(t);
     }
     

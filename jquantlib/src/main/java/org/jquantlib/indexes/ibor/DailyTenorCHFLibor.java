@@ -41,7 +41,7 @@ package org.jquantlib.indexes.ibor;
 
 import org.jquantlib.currencies.Europe.CHFCurrency;
 import org.jquantlib.daycounters.Actual360;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.AbstractYieldTermStructure;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Date;
@@ -57,7 +57,7 @@ import org.jquantlib.time.calendars.Switzerland;
 public class DailyTenorCHFLibor extends DailyTenorLibor {
 
 	public DailyTenorCHFLibor(final int settlementDays) {
-		this(settlementDays, new Handle<YieldTermStructure>(
+		this(settlementDays, 
 						new AbstractYieldTermStructure() {
 							@Override
 							protected double discountImpl(final double t) {
@@ -68,11 +68,11 @@ public class DailyTenorCHFLibor extends DailyTenorLibor {
 								throw new UnsupportedOperationException();
 							}
 						}
-				));
+				);
 	}
 
 	public DailyTenorCHFLibor(final int settlementDays,
-			final Handle<YieldTermStructure> h) {
+			final YieldTermStructure h) {
 		super("CHFLibor", settlementDays,
 				new CHFCurrency(),
 				new Switzerland(),

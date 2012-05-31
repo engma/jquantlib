@@ -30,7 +30,7 @@ import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.math.Constants;
 import org.jquantlib.math.Ops;
 import org.jquantlib.math.solvers1D.Brent;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
 import org.jquantlib.termstructures.YieldTermStructure;
@@ -132,7 +132,7 @@ public class CashFlows {
 
     public double npv(
             final Leg cashflows,
-            final Handle<YieldTermStructure> discountCurve,
+            final YieldTermStructure discountCurve,
             final Date settlementDate,
             final Date npvDate) {
         return npv(cashflows, discountCurve, settlementDate, npvDate, 0);
@@ -153,32 +153,32 @@ public class CashFlows {
      */
     public double npv(
             final Leg cashflows,
-            final Handle<YieldTermStructure> discountCurve,
+            final YieldTermStructure discountCurve,
             final Date settlementDate,
             final Date npvDate,
             final int exDividendDays) {
 
         Date date = settlementDate;
         if (date.isNull()) {
-            date = discountCurve.currentLink().referenceDate();
+            date = discountCurve.referenceDate();
         }
 
         double totalNPV = 0.0;
         for (int i = 0; i < cashflows.size(); ++i) {
             if (!cashflows.get(i).hasOccurred(date.add(exDividendDays))) {
-                totalNPV += cashflows.get(i).amount() * discountCurve.currentLink().discount(cashflows.get(i).date());
+                totalNPV += cashflows.get(i).amount() * discountCurve.discount(cashflows.get(i).date());
             }
         }
 
         if (npvDate.isNull())
             return totalNPV;
         else
-            return totalNPV / discountCurve.currentLink().discount(npvDate);
+            return totalNPV / discountCurve.discount(npvDate);
     }
 
     public double npv(
             final Leg leg,
-            final Handle<YieldTermStructure> discountCurve) {
+            final YieldTermStructure discountCurve) {
         return npv(leg, discountCurve, new Date(), new Date(), 0);
     }
 
@@ -197,7 +197,7 @@ public class CashFlows {
         }
 
         final YieldTermStructure flatRate = new FlatForward(date, irr.rate(), irr.dayCounter(), irr.compounding(), irr.frequency());
-        return npv(cashflows, new Handle<YieldTermStructure>(flatRate), date, date, 0);
+        return npv(cashflows, flatRate, date, date, 0);
     }
 
     public double npv(final Leg leg, final InterestRate interestRate) {
@@ -211,20 +211,20 @@ public class CashFlows {
      * we use function chaining to effectively assign a single default at each level.
      */
 
-    public double bps (final Leg cashflows, final Handle <YieldTermStructure> discountCurve)
+    public double bps (final Leg cashflows, final YieldTermStructure discountCurve)
     {
         // default variable of settlement date
         return bps (cashflows, discountCurve, new Settings().evaluationDate());
     }
 
-    public double bps (final Leg cashflows, final Handle <YieldTermStructure> discountCurve,
+    public double bps (final Leg cashflows, final YieldTermStructure discountCurve,
                        final Date settlementDate)
     {
         // default variable of npv date
         return bps (cashflows, discountCurve, settlementDate, settlementDate);
     }
 
-    public double bps (final Leg cashflows, final Handle <YieldTermStructure> discountCurve,
+    public double bps (final Leg cashflows, final YieldTermStructure discountCurve,
                        final Date settlementDate, final Date npvDate)
     {
         // default variable of ex-dividend days
@@ -243,12 +243,12 @@ public class CashFlows {
      * the rate paid by the cash flows. The change for each coupon is discounted
      * according to the given term structure.
      */
-    public double bps(final Leg cashflows, final Handle<YieldTermStructure> discountCurve,
+    public double bps(final Leg cashflows, final YieldTermStructure discountCurve,
                       final Date settlementDate, final Date npvDate, final int exDividendDays) {
 
         Date date = settlementDate;
         if (date.isNull()) {
-            date = discountCurve.currentLink().referenceDate();
+            date = discountCurve.referenceDate();
         }
 
         final BPSCalculator calc = new BPSCalculator(discountCurve, npvDate);
@@ -274,7 +274,7 @@ public class CashFlows {
         }
         final YieldTermStructure flatRate = new FlatForward(settlementDate, irr.rate(),
                     irr.dayCounter(), irr.compounding(), irr.frequency());
-        return bps(cashflows, new Handle<YieldTermStructure>(flatRate), settlementDate, settlementDate);
+        return bps(cashflows, flatRate, settlementDate, settlementDate);
      }
 
     /**
@@ -285,7 +285,7 @@ public class CashFlows {
      * given term structure. If the required NPV is not given, the input cash
      * flow vector's NPV is used instead.
      */
-    public double atmRate(final Leg leg, final Handle<YieldTermStructure> discountCurve, final Date settlementDate,
+    public double atmRate(final Leg leg, final YieldTermStructure discountCurve, final Date settlementDate,
             final Date npvDate, final int exDividendDays, double npv) {
         final double bps = bps(leg, discountCurve, settlementDate, npvDate, exDividendDays);
         if (npv == 0) {
@@ -294,7 +294,7 @@ public class CashFlows {
         return basisPoint_ * npv / bps;
     }
 
-    public double atmRate(final Leg leg, final Handle<YieldTermStructure> discountCurve) {
+    public double atmRate(final Leg leg, final YieldTermStructure discountCurve) {
         return atmRate(leg, discountCurve, new Date(), new Date(), 0, 0);
     }
 
@@ -755,12 +755,12 @@ public class CashFlows {
 
         private static final String UNKNOWN_VISITABLE = "unknow visitable object";
 
-        private final Handle<YieldTermStructure> termStructure;
+        private final YieldTermStructure termStructure;
         private final Date npvDate;
 
         private double result;
 
-        public BPSCalculator(final Handle<YieldTermStructure> termStructure, final Date npvDate) {
+        public BPSCalculator(final YieldTermStructure termStructure, final Date npvDate) {
             this.termStructure = termStructure;
             this.npvDate = npvDate;
             this.result = 0.0;
@@ -770,7 +770,7 @@ public class CashFlows {
             if (npvDate.isNull())
                 return result;
             else
-                return result / termStructure.currentLink().discount(npvDate);
+                return result / termStructure.discount(npvDate);
         }
 
         //
@@ -788,7 +788,7 @@ public class CashFlows {
             @Override
             public void visit(final CashFlow o) {
                 final Coupon c = (Coupon) o;
-                result += c.accrualPeriod() * c.nominal() * termStructure.currentLink().discount(c.date());
+                result += c.accrualPeriod() * c.nominal() * termStructure.discount(c.date());
             }
         }
 

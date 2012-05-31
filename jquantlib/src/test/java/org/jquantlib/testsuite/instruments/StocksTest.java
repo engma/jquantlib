@@ -6,7 +6,6 @@ import org.jquantlib.QL;
 import org.jquantlib.instruments.Instrument;
 import org.jquantlib.instruments.Stock;
 import org.jquantlib.quotes.Quote;
-import org.jquantlib.quotes.RelinkableHandle;
 import org.jquantlib.quotes.SimpleQuote;
 import org.jquantlib.testsuite.util.Flag;
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class StocksTest {
         final double newPrice = iniPrice*1.0214; // changed +2.14%
 
         // define Stock
-        final RelinkableHandle<Quote> h = new RelinkableHandle<Quote>(new SimpleQuote(iniPrice));
+        final Quote h = null;
         final Instrument s = new Stock(h);
 
         // attach an Observer to Stock
@@ -38,7 +37,7 @@ public class StocksTest {
         }
 
         // set a new price
-        h.linkTo(new SimpleQuote(newPrice));
+        h = new SimpleQuote(newPrice);
 
         // Observer must detect price change
         if (!priceChange.isUp()) {

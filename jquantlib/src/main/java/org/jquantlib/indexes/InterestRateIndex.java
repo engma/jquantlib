@@ -28,7 +28,7 @@ import org.jquantlib.currencies.Currency;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.math.Constants;
-import org.jquantlib.quotes.Handle;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
@@ -135,7 +135,7 @@ public abstract class InterestRateIndex extends Index implements Observer {
     // public abstract methods
     //
 
-    public abstract Handle<YieldTermStructure> termStructure();
+    public abstract YieldTermStructure termStructure();
     public abstract Date maturityDate(Date valueDate);
 
 
