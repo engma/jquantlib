@@ -89,7 +89,7 @@ namespace :spec do
       FileUtils.rm_rf "target"
     end
     scala_spec_classes.each do |clazz|
-      system "scala -classpath #{(java_archives + vendor_java_archives).join(':')}:#{bin_directory}:#{scala_spec_bin_directory} specs2.run #{clazz}"
+      system "scala -J-Xss200m -classpath #{(java_archives + vendor_java_archives).join(':')}:#{bin_directory}:#{scala_spec_bin_directory} specs2.run #{clazz}"
     end
   end
 end

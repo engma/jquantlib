@@ -2,7 +2,7 @@ import org.specs2.mutable._
 import org.jquantlib.currencies._
 
 class CurrenciesSpec extends Specification {
-  val currencies = List(
+  val subclasses = List(
     new Asia.BDTCurrency,
     new Asia.CNYCurrency,
     new Asia.HKDCurrency,
@@ -71,7 +71,7 @@ class CurrenciesSpec extends Specification {
     new Oceania.NZDCurrency
   )
 
-  currencies foreach { currency => currency.toString in { examples(currency) } }
+  subclasses foreach { klass => klass.toString in { examples(klass) } }
 
   def examples(currency:Currency) = {
     "#name" in {
@@ -116,7 +116,6 @@ class CurrenciesSpec extends Specification {
           failure
       }
     }
-
     "#format" in {
       "must not be empty" in {
         currency.format must not be empty
@@ -138,12 +137,12 @@ class CurrenciesSpec extends Specification {
         currency.eq(currency) must beTrue
       }
       "must be false" in {
-        currency.eq(new Currency) must beFalse
+        currency.eq((new Currency)) must beFalse
       }
     }
     "#ne" in {
       "must be true" in {
-        currency.ne(new Currency) must beTrue
+        currency.ne((new Currency)) must beTrue
       }
       "must be false" in {
         currency.ne(currency) must beFalse
