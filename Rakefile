@@ -67,10 +67,11 @@ namespace :spec do
     @scala_spec_bin_directory
   end
   def scala_spec_classes
-    @scala_spec_classes ||= Dir.glob(File.join(scala_spec_bin_directory, "**/*Spec.class")).map do |clazz|
-      clazz = File.basename(clazz)
-      clazz[0..clazz.index(".")-1]
-    end
+    @scala_spec_classes ||= scala_spec_sources.map do |scala|
+      File.read(scala).scan(/class [a-zA-Z_]+/).map do |clazz|
+        clazz.split(" ").last
+      end
+    end.flatten.uniq.sort
   end
   desc "Compile specs"
   task :compile do
@@ -88,7 +89,7 @@ namespace :spec do
       FileUtils.rm_rf "target"
     end
     scala_spec_classes.each do |clazz|
-      system "scala -classpath #{(java_archives + vendor_java_archives).join(':')}:#{scala_spec_bin_directory} specs2.run #{clazz}"
+      system "scala -classpath #{(java_archives + vendor_java_archives).join(':')}:#{bin_directory}:#{scala_spec_bin_directory} specs2.run #{clazz}"
     end
   end
 end
