@@ -74,38 +74,38 @@ class CurrenciesSpec extends Specification {
   subclasses foreach { klass => klass.toString in { examples(klass) } }
 
   def examples(currency:Currency) = {
-    "#name" in {
+    "#name" should {
       "must not be empty" in {
         currency.name must not be empty
       }
     }
-    "#code" in {
+    "#code" should {
       "must be matching /^[A-Z]{3}$/" in {
         currency.code must be matching "^[A-Z]{3}$".r
       }
     }
-    "#toString" in {
+    "#toString" should {
       "must be equal to #code" in {
         currency.code must be equalTo currency.toString
       }
     }
-    "#numericCode" in {
+    "#numericCode" should {
       "must be greater than 0 and less than 1000" in {
         currency.numericCode must beGreaterThan(0)
         currency.numericCode must beLessThan(1000)
       }
     }
-    "#symbol" in {
+    "#symbol" should {
       "must not be empty" in {
         currency.symbol must not be empty
       }
     }
-    "#fractionSymbol" in {
+    "#fractionSymbol" should {
       "must not be empty" in {
         currency.fractionSymbol must not be empty
       }
     }
-    "#fractionsPerUnit" in {
+    "#fractionsPerUnit" should {
       "must be greater than 0" in {
         currency.fractionsPerUnit must be greaterThan(0)
       }
@@ -116,7 +116,7 @@ class CurrenciesSpec extends Specification {
           failure
       }
     }
-    "#format" in {
+    "#format" should {
       "must not be empty" in {
         currency.format must not be empty
       }
@@ -124,15 +124,15 @@ class CurrenciesSpec extends Specification {
         currency.format must be matching "^(\\d|f|%|\\s|\\$|\\.)+$".r
       }
     }
-    "#empty" in {
+    "#empty" should {
       "must be false" in {
         currency.empty must beFalse
       }
     }
-    "#triangulationCurrency" in {
+    "#triangulationCurrency" should {
       todo
     }
-    "#eq" in {
+    "#eq" should {
       "must be true" in {
         currency.eq(currency) must beTrue
       }
@@ -140,7 +140,7 @@ class CurrenciesSpec extends Specification {
         currency.eq((new Currency)) must beFalse
       }
     }
-    "#ne" in {
+    "#ne" should {
       "must be true" in {
         currency.ne((new Currency)) must beTrue
       }
