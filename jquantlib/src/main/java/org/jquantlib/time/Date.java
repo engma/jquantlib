@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.GregorianCalendar;
 
 import org.jquantlib.QL;
 import org.jquantlib.Settings;
@@ -40,13 +41,15 @@ import org.jquantlib.util.Observer;
  * Date class to represent time in days.
  *
  * @author Richard Gomes
- */
+ * @author Masakatsu Wakayu
+ *  */
 public class Date implements Observable, Comparable<Date>, Serializable, Cloneable {
 
 	private static final long serialVersionUID = -7150540867519744332L;
 
-	private /* @NonNegative */ long serialNumber;
-
+	// Absolute date definition
+	protected /* @NonNegative */ long serialNumber;
+	
     private static final int monthLength[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     private static final int monthLeapLength[] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -262,14 +265,12 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     	this.serialNumber = fromDMY(d, m+1, y);
     }
     
-    
-    
     //
     // public methods :: inspectors
     //
 
     public Weekday weekday() /* @ReadOnly */ {
-        final int w = (int) (serialNumber % 7);
+        final int w = (int) (serialNumber() % 7);
         return Weekday.valueOf(w == 0L ? 7 : w);
     }
 
@@ -283,7 +284,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
      * @return
      */
     public int dayOfYear() /* @ReadOnly */ {
-        return (int) (serialNumber - yearOffset(year()));
+        return (int) (serialNumber() - yearOffset(year()));
     }
 
     public Month month() /* @ReadOnly */ {
@@ -300,8 +301,8 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     }
 
     public int year() /* @ReadOnly */ {
-        int y = (int) (serialNumber / 365) + 1900;
-        if (serialNumber <= yearOffset(y)) {
+        int y = (int) (serialNumber() / 365) + 1900;
+        if (serialNumber() <= yearOffset(y)) {
             --y;
         }
         return y;
@@ -310,7 +311,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     public long serialNumber() /* @ReadOnly */ {
         return this.serialNumber;
     }
-
+    
 
     //
     // public methods :: name date algebra
@@ -418,7 +419,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
      */
     //-- Date operator+(BigInteger days) const;
     public Date add(final int days) /* @ReadOnly */ {
-        return new Date(this.serialNumber + days);
+        return new Date(this.serialNumber() + days);
     }
 
 
@@ -439,7 +440,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
      */
     //-- Date operator-(BigInteger days) const;
     public Date sub(final int days) /* @ReadOnly */ {
-        return new Date(this.serialNumber - days);
+        return new Date(this.serialNumber() - days);
     }
 
     /**
@@ -456,9 +457,8 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
      * Difference in days between dates
      */
     public long sub(final Date another) {
-        return serialNumber - another.serialNumber;
+        return serialNumber() - another.serialNumber();
     }
-
 
     //
     // public methods :: relates Date
@@ -466,32 +466,32 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
 
     //-- bool operator==(const Date&, const Date&);
     public boolean eq(final Date another) {
-        return serialNumber == another.serialNumber;
+        return serialNumber() == another.serialNumber();
     }
 
     //-- bool operator!=(const Date&, const Date&);
     public boolean ne(final Date another) {
-        return serialNumber != another.serialNumber;
+        return serialNumber() != another.serialNumber();
     }
 
     //-- bool operator<(const Date&, const Date&);
     public boolean lt(final Date another) {
-        return serialNumber < another.serialNumber;
+        return serialNumber() < another.serialNumber();
     }
 
     //-- bool operator<=(const Date&, const Date&);
     public boolean le(final Date another) {
-        return serialNumber <= another.serialNumber;
+        return serialNumber() <= another.serialNumber();
     }
 
     //-- bool operator>(const Date&, const Date&);
     public boolean gt(final Date another) {
-        return serialNumber > another.serialNumber;
+        return serialNumber() > another.serialNumber();
     }
 
     //-- bool operator>=(const Date&, const Date&);
     public boolean ge(final Date another) {
-        return serialNumber >= another.serialNumber;
+        return serialNumber() >= another.serialNumber();
     }
 
 
@@ -503,7 +503,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
      * @return true if this Date is <i>null or non-valid date</i>
      */
     public boolean isNull() {
-        return this.serialNumber<=0;
+        return this.serialNumber()<=0;
     }
 
     public final boolean isToday() {
@@ -511,7 +511,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
         final int d = cal.get(java.util.Calendar.DAY_OF_MONTH);
         final int m = cal.get(java.util.Calendar.MONTH);
         final int y = cal.get(java.util.Calendar.YEAR);
-        return serialNumber == fromDMY(d, m+1, y);
+        return serialNumber() == fromDMY(d, m+1, y);
     }
 
 
@@ -574,7 +574,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     /**
      * Implements multiple inheritance via delegate pattern to an inner class
      */
-    private final Observable delegatedObservable = new DefaultObservable(this);
+    protected final Observable delegatedObservable = new DefaultObservable(this);
 
     @Override
 	public final void addObserver(final Observer observer) {
@@ -618,7 +618,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
 
     @Override
     public int hashCode() {
-        return (int) this.serialNumber;
+        return (int) this.serialNumber();
     }
 
     @Override
@@ -705,7 +705,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     //
 
     private void checkSerialNumber() {
-        QL.ensure((serialNumber >= minimumSerialNumber()) && (serialNumber <= maximumSerialNumber()),
+        QL.ensure((serialNumber() >= minimumSerialNumber()) && (serialNumber() <= maximumSerialNumber()),
         "Date's serial number is outside allowed range"); // TODO: message
     }
 
@@ -713,9 +713,9 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     private long advance(final Date date, final int n, final TimeUnit units) {
         switch (units) {
         case Days:
-            return (n + date.serialNumber);
+            return (n + date.serialNumber());
         case Weeks:
-            return (7 * n + date.serialNumber);
+            return (7 * n + date.serialNumber());
         case Months: {
             int d = date.dayOfMonth();
             int m = date.month().value() + n;
@@ -833,7 +833,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     public static final Date nextWeekday(final Date d, final Weekday w) {
         final int wd = d.weekday().value();
         final int dow = w.value();
-        return new Date(d.serialNumber + (wd > dow ? 7 : 0) - wd + dow);
+        return new Date(d.serialNumber() + (wd > dow ? 7 : 0) - wd + dow);
     }
 
     /**
@@ -1039,6 +1039,46 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
         }
         return from;
 	}
+	
+	/**
+	 * Creates new period class representing the difference from this class to target date.
+	 * It's always positive.
+	 * @param target dates
+	 * @return new Period object
+	 */
+	public Period ToPeriod(Date valuedate){
+		return (valuedate.serialNumber() > serialNumber) ? Date.DatesToPeriod(this, valuedate) : Date.DatesToPeriod(valuedate, this);
+	}
+	
+	/**
+	 * Creates new period class as the difference between two dates
+	 * @param target dates
+	 * @return new Period object
+	 */
+    public static Period DatesToPeriod(Date from, Date to)
+    {
+    	int to_nbDaysInMonth = (new GregorianCalendar(to.year(), to.month().value(), to.dayOfMonth())).getActualMaximum(Calendar.DAY_OF_MONTH);
+    	
+        if (from.year() == to.year() && from.month() == to.month() && from.dayOfMonth() == to.dayOfMonth())
+        {
+            return new Period(0, TimeUnit.Days);
+        }
+        if (from.year() != to.year() && ((from.month() == to.month() && from.dayOfMonth() == to.dayOfMonth()) ||
+            (from.month() == Month.February && from.dayOfMonth() == 29 && to.month() == Month.February && to.dayOfMonth() == 28 && to.dayOfMonth() == to_nbDaysInMonth)))
+        {
+            return new Period(to.year() - from.year(), TimeUnit.Years);
+        }
+        else if (from.month() != to.month() &&
+            (from.dayOfMonth() == to.dayOfMonth() || (to.dayOfMonth() == to_nbDaysInMonth && from.dayOfMonth() > to.dayOfMonth())))
+        {
+            return new Period(12 * (to.year() - from.year()) + (to.month().value() - from.month().value()), TimeUnit.Months);
+        }
+        else
+        {
+            int timespan = (int)(to.serialNumber() - from.serialNumber());
+            return new Period(timespan, TimeUnit.Days);
+        }
+    }	
 
     //
     // public inner classes
@@ -1055,7 +1095,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
 		private static final long serialVersionUID = -8382775848256835100L;
 
 		private LongDate() {
-            super((serialNumber-25569)*86400000L);
+            super((serialNumber()-25569)*86400000L);
         }
 
         @Override
@@ -1083,7 +1123,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
 		private static final long serialVersionUID = -4372510060405020533L;
 
 		private ShortDate() {
-            super((serialNumber-25569)*86400000L);
+            super((serialNumber()-25569)*86400000L);
         }
 
         @Override
@@ -1110,7 +1150,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
 		private static final long serialVersionUID = 4824909887446169897L;
 
 		private ISODate() {
-            super((serialNumber-25569)*86400000L);
+            super((serialNumber()-25569)*86400000L);
         }
 
         @Override

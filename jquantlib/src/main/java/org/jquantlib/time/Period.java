@@ -56,7 +56,7 @@ import org.jquantlib.lang.exceptions.LibraryException;
  * @author Richard Gomes
  * @author Mufaddal Karachiwala
  */
-public class Period implements Cloneable {
+public class Period implements Cloneable, Comparable<Period> {
 
     private static final String UNKNOWN_FREQUENCY = "unknown frequency";
     private static final String UNKNOWN_TIME_UNIT = "unknown time unit";
@@ -437,6 +437,19 @@ public class Period implements Cloneable {
             throw new LibraryException(UNDECIDABLE_COMPARISON);
     }
 
+    //
+    // implements Comparable<Date>
+    //
+
+    @Override
+    public int compareTo(final Period p) {
+        if (this.equals(p))
+            return 0;
+        if (this.le(p))
+            return -1;
+        return 1;
+    }
+
 
    //
    // public methods
@@ -457,6 +470,7 @@ public class Period implements Cloneable {
    public final TimeUnit units() {
        return this.units;
    }
+   
 
    /**
     * To get at Frequency represented by the period
@@ -566,7 +580,14 @@ public class Period implements Cloneable {
     	}
     }
 
-
+    /**
+     * Converts to number of days from specific date
+     *
+     * @return number of days between value date to [value date + this period]
+     */
+    public final long days(final Date d) {
+        return (d.add(this).serialNumber() - d.serialNumber());
+    }
 
 
     @Override
