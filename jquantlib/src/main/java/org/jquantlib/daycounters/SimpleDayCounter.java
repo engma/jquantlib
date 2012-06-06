@@ -72,6 +72,15 @@ public class SimpleDayCounter extends DayCounter {
             return fallback.dayCount(dateStart, dateEnd);
         }
 
+        //
+        // annual daycount (est)
+        //
+        
+        public double annualDayCount()
+        {
+        	return 1.00;
+        }
+
         @Override
         protected /*@Time*/ final double yearFraction(
                 final Date dateStart, final Date dateEnd,

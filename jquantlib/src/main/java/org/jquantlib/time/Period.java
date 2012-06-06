@@ -516,7 +516,7 @@ public class Period implements Cloneable, Comparable<Period> {
 
 
 
-    public double years(final Period p) {
+    public static double years(final Period p) {
     	if(p.length() == 0) return 0.0;
 
     	switch (p.units()) {
@@ -531,6 +531,23 @@ public class Period implements Cloneable, Comparable<Period> {
 	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
     	}
     }
+    
+    public static double years(final Period p, final Date basedate) {
+    	if(p.length() == 0) return 0.0;
+
+    	switch (p.units()) {
+	    	case Days:
+	    	case Weeks:
+	    		return normalizedDayCounter(basedate, basedate.add(p)) / 360.0;
+	    	case Months:
+	    		return p.length()/12.0;
+	    	case Years:
+	    		return p.length();
+	    	default:
+	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
+    	}
+    }
+    
 
     public double months(final Period p) {
     	if(p.length() == 0) return 0.0;
@@ -547,8 +564,25 @@ public class Period implements Cloneable, Comparable<Period> {
 	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
     	}
     }
+    
+    public static double months(final Period p, final Date basedate) {
+    	if(p.length() == 0) return 0.0;
 
-    public double weeks(final Period p) {
+    	switch(p.units()) {
+	    	case Days:
+	    	case Weeks:
+	    		return normalizedDayCounter(basedate, basedate.add(p)) / 30.0;
+	    	case Months:
+	    		return p.length();
+	    	case Years:
+	    		return p.length()*12.0;
+	    	default:
+	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
+    	}
+    }
+    
+
+    public static double weeks(final Period p) {
     	if(p.length() == 0) return 0.0;
 
     	switch(p.units()) {
@@ -563,8 +597,24 @@ public class Period implements Cloneable, Comparable<Period> {
 	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
     	}
     }
+    
+    public static double weeks(final Period p, final Date basedate) {
+    	if(p.length() == 0) return 0.0;
 
-    public double days(final Period p) {
+    	switch(p.units()) {
+	    	case Days:
+	    		return p.length()/7.0;
+	    	case Weeks:
+	    		return p.length();
+	    	case Months:
+	    	case Years:
+	    		return (basedate.add(p).serialNumber() - basedate.serialNumber())/7.00;
+	    	default:
+	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
+    	}
+    }
+
+    public static double days(final Period p) {
     	if(p.length() == 0) return 0.0;
 
     	switch(p.units()) {
@@ -579,7 +629,48 @@ public class Period implements Cloneable, Comparable<Period> {
 	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
     	}
     }
+    
+    public static double days(final Period p, final Date basedate) {
+    	if(p.length() == 0) return 0.0;
 
+    	switch(p.units()) {
+	    	case Days:
+	    		return p.length();
+	    	case Weeks:
+	    		return p.length()*7.0;
+	    	case Months:
+	    	case Years:
+	    		return basedate.add(p).serialNumber() - basedate.serialNumber();
+	    	default:
+	    		throw new LibraryException(UNKNOWN_TIME_UNIT);
+    	}
+    }
+    
+
+    
+    /**
+     * Daycount calculation in accordance with 30/360 calculation, to be used for days/months/years calculation
+     *
+     * @return number of days between value date to [value date + this period]
+     */
+    public static long normalizedDayCounter(final Date d1, final Date d2) /* @ReadOnly */ {
+        int dd1 = d1.dayOfMonth();
+        int dd2 = d2.dayOfMonth();
+        final int mm1 = d1.month().value();
+        final int mm2 = d2.month().value();
+        final int yy1 = d1.year();
+        final int yy2 = d2.year();
+
+        if (mm1 == 2 && dd1 > 27) {
+            dd1 = 30;
+        }
+        if (mm2 == 2 && dd2 > 27) {
+            dd2 = 30;
+        }
+
+        return 360*(yy2-yy1) + 30*(mm2-mm1-1) + Math.max(0, 30-dd1) + Math.min(30, dd2);
+    }
+    
     /**
      * Converts to number of days from specific date
      *

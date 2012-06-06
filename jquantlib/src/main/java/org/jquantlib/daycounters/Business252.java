@@ -52,6 +52,14 @@ public class Business252 extends DayCounter {
         super.impl = new Impl(calendar);
     }
 
+    //
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	return 1.00;
+    }
 
     //
     // private inner classes

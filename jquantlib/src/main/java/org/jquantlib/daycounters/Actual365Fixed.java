@@ -66,7 +66,16 @@ public class Actual365Fixed extends DayCounter {
         super.impl = new Impl();
     }
 
-
+    
+    //
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	return 1.00;
+    }
+    
     //
     // private inner classes
     //

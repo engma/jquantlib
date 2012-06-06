@@ -209,6 +209,17 @@ public class DayCounter {
     	return false;  	
     }
     
+    // 
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	QL.error("Not implemented for Daycounter super class");
+    	return Double.NaN;
+    }
+    
+    
     //
     // protected inner classes
     //

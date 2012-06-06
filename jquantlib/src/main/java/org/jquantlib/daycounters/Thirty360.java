@@ -134,6 +134,15 @@ public class Thirty360 extends DayCounter {
 
     }
 
+    //
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	return 1.00;
+    }
+
     /**
      * Implementation of Thirty360 class abstraction according to European convention
      *

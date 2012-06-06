@@ -40,6 +40,7 @@
 
 package org.jquantlib.daycounters;
 
+import org.jquantlib.QL;
 import org.jquantlib.lang.annotation.QualityAssurance;
 import org.jquantlib.lang.annotation.QualityAssurance.Quality;
 import org.jquantlib.lang.annotation.QualityAssurance.Version;
@@ -61,6 +62,15 @@ public class Actual360 extends DayCounter {
 
     public Actual360() {
         super.impl = new Impl();
+    }
+    
+    //
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	return (365.0 / 360.0);
     }
 
 

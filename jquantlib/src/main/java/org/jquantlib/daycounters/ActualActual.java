@@ -57,6 +57,15 @@ public class ActualActual extends DayCounter {
         AFB, Euro
     }
 
+    //
+    // annual daycount (est)
+    //
+    
+    public double annualDayCount()
+    {
+    	return 1.00;
+    }
+    
 
     //
     // public constructors
