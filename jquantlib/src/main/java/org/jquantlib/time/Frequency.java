@@ -107,5 +107,9 @@ public enum Frequency {
     public int toInteger() {
         return this.enumValue;
     }
+    
+    public int tenor(){
+    	return 12 / this.toInteger();
+    }
 
 }

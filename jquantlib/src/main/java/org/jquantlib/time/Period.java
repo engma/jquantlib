@@ -126,8 +126,14 @@ public class Period implements Cloneable, Comparable<Period> {
      * @param units
      */
     public Period(final int length, final TimeUnit units) {
-        this.length = length;
-        this.units = units;
+        if (units == TimeUnit.Months && length % 12 == 0) {
+        	this.length = length / 12;
+        	this.units = TimeUnit.Years;
+        }
+        else {
+            this.length = length;
+            this.units = units;
+        }
     }
 
     /**
