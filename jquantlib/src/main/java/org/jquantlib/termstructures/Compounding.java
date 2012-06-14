@@ -46,6 +46,11 @@ package org.jquantlib.termstructures;
  */
 public enum Compounding {
 	/**
+	 * {@nocompounding}
+	 */
+	None,
+
+	/**
 	 * {@latex$ 1+rt }
 	 */
 	Simple,

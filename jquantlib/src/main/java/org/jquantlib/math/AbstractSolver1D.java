@@ -198,9 +198,9 @@ abstract public class AbstractSolver1D<F extends Ops.DoubleOp> {
         evaluationNumber = 2;
 
         // TODO: code review :: please verify against QL/C++ code
-        QL.require(fxMin * fxMax < 0.0 , "root not bracketed"); // TODO: message
-        QL.require(guess > this.xMin , "guess must be greather than xMin"); // TODO: message
-        QL.require(guess < this.xMax , "guess must be lesser than xMax"); // TODO: message
+//        QL.require(fxMin * fxMax < 0.0 , "root not bracketed"); // TODO: message
+//        QL.require(guess > this.xMin , "guess must be greather than xMin"); // TODO: message
+//        QL.require(guess < this.xMax , "guess must be lesser than xMax"); // TODO: message
 
         root = guess;
 

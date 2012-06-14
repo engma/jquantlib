@@ -60,7 +60,7 @@ import org.jquantlib.lang.reflect.ReflectConstants;
 import org.jquantlib.math.Closeness;
 import org.jquantlib.math.Constants;
 import org.jquantlib.math.Ops.DoubleOp;
-import org.jquantlib.math.solvers1D.Brent;
+import org.jquantlib.math.solvers1D.NewtonIncremental;
 import org.jquantlib.pricingengines.GenericEngine;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.pricingengines.bond.DiscountingBondEngine;
@@ -400,13 +400,13 @@ public class Bond extends Instrument {
     		                      final /* Real */double accuracy,
     		                      final /* Size */int maxEvaluations) {
     	
-        final Brent solver = new Brent();
+        final NewtonIncremental solver = new NewtonIncremental();
         solver.setMaxEvaluations(maxEvaluations);
         final YieldFinder objective = new YieldFinder(notional(settlementDate()), cashflows_,
                 dirtyPrice(),
                 dc, comp, freq,
                 settlementDate());
-        return solver.solve(objective, accuracy, 0.02, 0.0, 1.0);
+        return solver.solve(objective, accuracy, 0.02, -5.0, 5.0);
     }
 
     public/* @Rate */double yield(final DayCounter dc, 
@@ -509,13 +509,22 @@ public class Bond extends Instrument {
             settlementDate = settlementDate();
         }
 
-        final Brent solver = new Brent();
+        final NewtonIncremental solver = new NewtonIncremental();
         solver.setMaxEvaluations(maxEvaluations);
         final double dirtyPrice = cleanPrice + accruedAmount(settlementDate);
         final YieldFinder objective = new YieldFinder(notional(settlementDate),
                 							this.cashflows_,dirtyPrice,
                 							dc, comp, freq,	settlementDate);
-        return solver.solve(objective, accuracy, 0.02, 0.0, 1.0);
+        
+        double fullcashflow = 0;
+        java.util.Iterator<CashFlow> cfs = cashflows_.iterator();
+        while (cfs.hasNext())
+        {
+        	fullcashflow += cfs.next().amount();
+        }
+        
+        double simpleyield = (fullcashflow - dirtyPrice) / dc.yearFraction(settlementDate, maturityDate_) / cleanPrice; 
+        return (comp == Compounding.None) ? simpleyield : solver.solve(objective, accuracy, simpleyield, -5.0, 5.0);
     }
 
     /**
