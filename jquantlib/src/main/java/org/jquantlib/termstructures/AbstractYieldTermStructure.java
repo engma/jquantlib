@@ -144,57 +144,57 @@ abstract public class AbstractYieldTermStructure extends AbstractTermStructure i
     protected AbstractYieldTermStructure(final Date referenceDate) {
         super(referenceDate, new Target(), new Actual365Fixed());
     }
-
-    /**
-     * Calculate the reference date based on the global evaluation date
-     *
-     * @category constructors
-     *
-     * @note TermStructure#TermStructure() documentation for issues regarding
-     *      constructors.
-     */
-    protected AbstractYieldTermStructure(final int settlementDays, final Calendar cal, final DayCounter dc) {
-        super(settlementDays, cal, dc);
-    }
-
-    /**
-     * See the TermStructure documentation for issues regarding constructors.
-     *
-     * @category constructors
-     *
-     * @param settlementDays
-     * @param cal
-     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
-     */
-    protected AbstractYieldTermStructure(final int settlementDays, final Calendar cal) {
-        super(settlementDays, cal, new Actual365Fixed());
-    }
-
-    /**
-     * See the TermStructure documentation for issues regarding constructors.
-     *
-     * @category constructors
-     *
-     * @param settlementDays
-     * @param dc
-     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
-     */
-    protected AbstractYieldTermStructure(final int settlementDays, final DayCounter dc) {
-        super(settlementDays, new Target(), dc);
-    }
-
-    /**
-     * See the TermStructure documentation for issues regarding constructors.
-     *
-     * @category constructors
-     *
-     * @param settlementDays
-     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
-     */
-    protected AbstractYieldTermStructure(final int settlementDays) {
-        super(settlementDays, new Target(), new Actual365Fixed());
-    }
-
+//
+//    /**
+//     * Calculate the reference date based on the global evaluation date
+//     *
+//     * @category constructors
+//     *
+//     * @note TermStructure#TermStructure() documentation for issues regarding
+//     *      constructors.
+//     */
+//    protected AbstractYieldTermStructure(final int settlementDays, final Calendar cal, final DayCounter dc) {
+//        super(settlementDays, cal, dc);
+//    }
+//
+//    /**
+//     * See the TermStructure documentation for issues regarding constructors.
+//     *
+//     * @category constructors
+//     *
+//     * @param settlementDays
+//     * @param cal
+//     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
+//     */
+//    protected AbstractYieldTermStructure(final int settlementDays, final Calendar cal) {
+//        super(settlementDays, cal, new Actual365Fixed());
+//    }
+//
+//    /**
+//     * See the TermStructure documentation for issues regarding constructors.
+//     *
+//     * @category constructors
+//     *
+//     * @param settlementDays
+//     * @param dc
+//     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
+//     */
+//    protected AbstractYieldTermStructure(final int settlementDays, final DayCounter dc) {
+//        super(settlementDays, new Target(), dc);
+//    }
+//
+//    /**
+//     * See the TermStructure documentation for issues regarding constructors.
+//     *
+//     * @category constructors
+//     *
+//     * @param settlementDays
+//     * @see YieldTermStructure#YieldTermStructure(int, Calendar, DayCounter)
+//     */
+//    protected AbstractYieldTermStructure(final int settlementDays) {
+//        super(settlementDays, new Target(), new Actual365Fixed());
+//    }
+//
 
     //
     // abstract methods

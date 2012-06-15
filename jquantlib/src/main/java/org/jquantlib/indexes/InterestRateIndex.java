@@ -68,7 +68,7 @@ public abstract class InterestRateIndex extends Index implements Observer {
         
         this.tenor.normalize();
 
-        new Settings().evaluationDate().addObserver(this);
+//        new Settings().evaluationDate().addObserver(this);
         IndexManager.getInstance().notifier(name()).addObserver(this);
     }
     

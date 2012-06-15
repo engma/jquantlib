@@ -41,6 +41,7 @@ package org.jquantlib.instruments;
 
 import org.jquantlib.Settings;
 import org.jquantlib.indexes.IborIndex;
+import org.jquantlib.QL;
 
 import org.jquantlib.termstructures.Compounding;
 import org.jquantlib.termstructures.InterestRate;
@@ -148,7 +149,9 @@ public class ForwardRateAgreement extends Forward {
 
     @Override
     public Date settlementDate() {
-        return calendar.advance(new Settings().evaluationDate(), settlementDays, TimeUnit.Days);
+    	QL.require(super.valuedate != null, "usage of default value date is blocked");
+//        return calendar.advance(new Settings().evaluationDate(), settlementDays, TimeUnit.Days);
+        return calendar.advance(super.valuedate, settlementDays, TimeUnit.Days);
     }
 
     @Override

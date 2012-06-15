@@ -142,6 +142,7 @@ public class Settings {
      * @return the value of field evaluationDate
      */
     public Date evaluationDate() {
+    	QL.error("use of system date has been blocked");
         return ((DateProxy) attrs.get().get(EVALUATION_DATE)).value();
     }
 

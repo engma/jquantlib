@@ -139,7 +139,7 @@ public abstract class Forward extends Instrument {
         //registerWith(Settings::instance().evaluationDate());
         //registerWith(discountCurve_);
 
-        new Settings().evaluationDate().addObserver(this);
+//        new Settings().evaluationDate().addObserver(this);
         discountCurve.addObserver(this);
     }
 

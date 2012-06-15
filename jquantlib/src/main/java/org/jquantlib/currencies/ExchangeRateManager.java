@@ -211,9 +211,9 @@ public class ExchangeRateManager {
         if (source.eq(target))
             return new ExchangeRate(source, target, 1.0);
 
-        if (date.isToday()) {
-            date = new Settings().evaluationDate();
-        }
+//        if (date.isToday()) {
+//            date = new Settings().evaluationDate();
+//        }
 
         if (type == ExchangeRate.Type.Direct)
             return directLookup(source, target, date);

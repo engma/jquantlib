@@ -455,7 +455,9 @@ public class Schedule {
      }
 
     public int lowerBound(final Date refDate) /* @ReadOnly */{
-        final Date d = (refDate.isNull() ? new Settings().evaluationDate() : refDate);
+    	QL.require(!refDate.isNull(), "default ref date not allowed");
+//        final Date d = (refDate.isNull() ? new Settings().evaluationDate() : refDate);
+    	final Date d = refDate;
         return Date.lowerBound(dates_, d.clone());
     }
 

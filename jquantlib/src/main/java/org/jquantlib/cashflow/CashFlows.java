@@ -190,11 +190,12 @@ public class CashFlows {
      * interest-rate compounding and the relative frequency and day counter.
      */
     public double npv(final Leg cashflows, final InterestRate irr, final Date settlementDate) {
+    	QL.require(!settlementDate.isNull(), "default settlement date not allowed");
 
         Date date = settlementDate;
-        if (date.isNull()) {
-            date = new Settings().evaluationDate();
-        }
+//        if (date.isNull()) {
+//            date = new Settings().evaluationDate();
+//        }
 
         final YieldTermStructure flatRate = new FlatForward(date, irr.rate(), irr.dayCounter(), irr.compounding(), irr.frequency());
         return npv(cashflows, flatRate, date, date, 0);
@@ -213,8 +214,9 @@ public class CashFlows {
 
     public double bps (final Leg cashflows, final YieldTermStructure discountCurve)
     {
-        // default variable of settlement date
-        return bps (cashflows, discountCurve, new Settings().evaluationDate());
+    	// default variable of settlement date
+        return bps (cashflows, discountCurve, discountCurve.referenceDate());
+//        return bps (cashflows, discountCurve, new Settings().evaluationDate());
     }
 
     public double bps (final Leg cashflows, final YieldTermStructure discountCurve,
@@ -268,10 +270,11 @@ public class CashFlows {
      * according to the given term structure.
      */
     public double bps(final Leg cashflows, final InterestRate irr, Date settlementDate){
-        if (settlementDate.isNull())
-        {
-            settlementDate = new Settings().evaluationDate();
-        }
+    	QL.require(!settlementDate.isNull(), "default settlement date not allowed");
+//        if (settlementDate.isNull())
+//        {
+//            settlementDate = new Settings().evaluationDate();
+//        }
         final YieldTermStructure flatRate = new FlatForward(settlementDate, irr.rate(),
                     irr.dayCounter(), irr.compounding(), irr.frequency());
         return bps(cashflows, flatRate, settlementDate, settlementDate);
@@ -309,10 +312,11 @@ public class CashFlows {
             final Frequency frequency, final Date settlementDate, final double tolerance, final int maxIterations,
             final double guess) {
 
+    	QL.require(!settlementDate.isNull(), "default settlement date not allowed");
         Date date = settlementDate;
-        if (date.isNull()) {
-            date = new Settings().evaluationDate();
-        }
+//        if (date.isNull()) {
+//            date = new Settings().evaluationDate();
+//        }
 
         // depending on the sign of the market price, check that cash
         // flows of the opposite sign have been specified (otherwise
@@ -376,11 +380,12 @@ public class CashFlows {
      * {@latex$ y } is the IRR and {@latex$ N } is the number of cash flows per year.
      */
     public double duration(final Leg leg, final InterestRate y, final Duration duration, final Date settlementDate) {
+    	QL.require(!settlementDate.isNull(), "default settlement date not allowed");
 
         Date date = settlementDate;
-        if (date.isNull()) {
-            date = new Settings().evaluationDate();
-        }
+//        if (date.isNull()) {
+//            date = new Settings().evaluationDate();
+//        }
 
         switch (duration) {
         case Simple:
@@ -405,11 +410,12 @@ public class CashFlows {
      * {@latex$ P } is the present value of the cash flows according to the given IRR {@latex$ y }.
      */
     public double convexity(final Leg cashFlows, final InterestRate rate, final Date settlementDate) {
+    	QL.require(!settlementDate.isNull(), "default settlement date not allowed");
 
         Date date = settlementDate;
-        if (date.isNull()) {
-            date = new Settings().evaluationDate();
-        }
+//        if (date.isNull()) {
+//            date = new Settings().evaluationDate();
+//        }
 
         final DayCounter dayCounter = rate.dayCounter();
 
@@ -541,9 +547,10 @@ public class CashFlows {
     }
 
     final public int previousCashFlow(final Leg leg, Date refDate) {
-        if (refDate.isNull()) {
-            refDate = new Settings().evaluationDate();
-        }
+    	QL.require(!refDate.isNull(), "default refDate date not allowed");
+//        if (refDate.isNull()) {
+//            refDate = new Settings().evaluationDate();
+//        }
 
         if (!(leg.get(0).hasOccurred(refDate)))
             return leg.size();
@@ -579,9 +586,10 @@ public class CashFlows {
      * @return
      */
     final public CashFlow nextCashFlow(final Leg cashFlows, Date settlement) {
-        if (settlement.isNull()) {
-            settlement = new Settings().evaluationDate();
-        }
+    	QL.require(!settlement.isNull(), "default settlement date not allowed");
+//        if (settlement.isNull()) {
+//            settlement = new Settings().evaluationDate();
+//        }
         for (int i = 0; i < cashFlows.size(); ++i) {
             // the first coupon paying after d is the one we're after
             if (!cashFlows.get(i).hasOccurred(settlement))
@@ -599,9 +607,10 @@ public class CashFlows {
      * @return
      */
     final public int nextCashFlowIndex(final Leg cashFlows, Date settlement) {
-        if (settlement.isNull()) {
-            settlement = new Settings().evaluationDate();
-        }
+    	QL.require(!settlement.isNull(), "default settlement date not allowed");
+//        if (settlement.isNull()) {
+//            settlement = new Settings().evaluationDate();
+//        }
         for (int i = 0; i < cashFlows.size(); ++i) {
             // the first coupon paying after d is the one we're after
             if (!cashFlows.get(i).hasOccurred(settlement))

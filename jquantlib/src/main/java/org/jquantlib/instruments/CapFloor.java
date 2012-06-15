@@ -110,7 +110,7 @@ public class CapFloor extends Instrument {
             }
         }
 
-        final Date evaluationDate = new Settings().evaluationDate();
+//        final Date evaluationDate = new Settings().evaluationDate();
         for (final CashFlow cashFlow : floatingLeg_) {
             cashFlow.addObserver(this);
         }
@@ -119,7 +119,7 @@ public class CapFloor extends Instrument {
         // seems like we should have this.evaluationDate
 
         this.termStructure_.addObserver(this);
-        evaluationDate.addObserver(this);
+//        evaluationDate.addObserver(this);
     }
 
     public CapFloor(
@@ -154,7 +154,7 @@ public class CapFloor extends Instrument {
         } else
             throw new LibraryException("only Cap/Floor types allowed in this constructor"); // TODO: message
 
-        final Date evaluationDate = new Settings().evaluationDate();
+//        final Date evaluationDate = new Settings().evaluationDate();
         for (final CashFlow cashFlow : floatingLeg_) {
             cashFlow.addObserver(this);
         }
@@ -163,7 +163,7 @@ public class CapFloor extends Instrument {
         // Seems like we should have this.evaluationDate
 
         this.termStructure_.addObserver(this);
-        evaluationDate.addObserver(this);
+//        evaluationDate.addObserver(this);
     }
 
     public /*@Rate*/double atmRate(){

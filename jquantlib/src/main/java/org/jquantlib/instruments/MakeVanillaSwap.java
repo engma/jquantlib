@@ -145,16 +145,18 @@ public class MakeVanillaSwap {
 
     public VanillaSwap value() /* @ReadOnly */ {
         QL.validateExperimentalMode();
+        QL.require(!effectiveDate.isNull(), "effective date should not be null");
 
         Date startDate;
-        if (!effectiveDate.isNull()) {
-            startDate = effectiveDate;
-        } else {
-            /*@Natural*/ final int fixingDays = iborIndex.fixingDays();
-            final Date referenceDate = new Settings().evaluationDate();
-            final Date spotDate = floatCalendar.advance(referenceDate, fixingDays, TimeUnit.Days);
-            startDate = spotDate.add(forwardStart);
-        }
+        startDate = effectiveDate;
+//        if (!effectiveDate.isNull()) {
+//            startDate = effectiveDate;
+//        } else {
+//            /*@Natural*/ final int fixingDays = iborIndex.fixingDays();
+//            final Date referenceDate = new Settings().evaluationDate();
+//            final Date spotDate = floatCalendar.advance(referenceDate, fixingDays, TimeUnit.Days);
+//            startDate = spotDate.add(forwardStart);
+//        }
 
         Date endDate;
         if (terminationDate != null && !terminationDate.isNull()) {

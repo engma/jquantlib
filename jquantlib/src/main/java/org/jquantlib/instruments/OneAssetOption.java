@@ -77,7 +77,9 @@ public class OneAssetOption extends Option {
     
     @Override
 	public boolean isExpired() /* @ReadOnly */ {
-        return exercise.lastDate().lt(new Settings().evaluationDate() );
+    	QL.require(super.valuedate != null, "usage of default value date is blocked");
+//        return exercise.lastDate().lt(new Settings().evaluationDate() );
+        return exercise.lastDate().lt(super.valuedate);
     }
     
     public double delta() {

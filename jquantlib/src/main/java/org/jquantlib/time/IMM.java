@@ -155,13 +155,14 @@ public class IMM {
     // FIXME: this method is potentially harmful in heavily multi-threaded environments
     public static Date date(final String immCode, final Date refDate) {
         QL.require(isIMMcode(immCode, false) , "not a valid IMM code"); // TODO: message
+    	QL.require(!refDate.isNull(), "default ref date not allowed");
 
         Date referenceDate;
-        if (refDate.isNull()) {
-            referenceDate = new Settings().evaluationDate();
-        } else {
+//        if (refDate.isNull()) {
+//            referenceDate = new Settings().evaluationDate();
+//        } else {
             referenceDate = refDate;
-        }
+//        }
 
         final char code = immCode.charAt(0);
         final Month m = Month.valueOf(code);
@@ -217,11 +218,12 @@ public class IMM {
      */
     public static Date nextDate(final Date date, final boolean mainCycle) {
         Date refDate;
-        if (date.isNull()) {
-            refDate = new Settings().evaluationDate();
-        } else {
+    	QL.require(!date.isNull(), "default ref date not allowed");
+//        if (date.isNull()) {
+//            refDate = new Settings().evaluationDate();
+//        } else {
             refDate = date;
-        }
+//        }
 
         int y = refDate.year();
         int m = refDate.month().value();

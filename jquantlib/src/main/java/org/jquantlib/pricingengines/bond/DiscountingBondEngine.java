@@ -47,14 +47,13 @@ public class DiscountingBondEngine extends Bond.EngineImpl {
         final Bond.ResultsImpl   r = (Bond.ResultsImpl)results_;
 
     	final Leg cashflows = a.cashflows;
-    	final Date settlementDate = a.settlementDate;
+//    	final Date settlementDate = a.settlementDate;
     	final Date valuationDate = discountCurve.referenceDate();
         QL.require(discountCurve != null , "no discounting term structure set"); //// TODO: message
 
         r.value           = CashFlows.getInstance().npv(cashflows, discountCurve, valuationDate,  valuationDate);
-        r.settlementValue = CashFlows.getInstance().npv(cashflows, discountCurve, settlementDate, settlementDate);
-        System.out.println("r.value:" + r.value + " valuationdate:" + valuationDate);
-        System.out.println("r.settlementvalue:" + r.settlementValue + " settlementdate:" + settlementDate);
+//        r.settlementValue = CashFlows.getInstance().npv(cashflows, discountCurve, settlementDate, settlementDate);
+        r.settlementValue = r.value;
     }
 
 

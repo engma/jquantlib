@@ -72,16 +72,16 @@ public abstract class RelativeDateRateHelper extends RateHelper {
         super(d);
         QL.validateExperimentalMode();
 
-        this.evaluationDate = new Settings().evaluationDate();
-        this.evaluationDate.addObserver(this);
+//        this.evaluationDate = new Settings().evaluationDate();
+//        this.evaluationDate.addObserver(this);
         // XXX:registerWith
         //registerWith(this.evaluationDate);
     }
 
     public RelativeDateRateHelper(Quote quote) {
         super(quote);
-        this.evaluationDate = new Settings().evaluationDate();
-        this.evaluationDate.addObserver(this);
+//        this.evaluationDate = new Settings().evaluationDate();
+//        this.evaluationDate.addObserver(this);
         // XXX:registerWith
         //registerWith(this.evaluationDate);
     }

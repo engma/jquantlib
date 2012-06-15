@@ -61,7 +61,7 @@
 package org.jquantlib.pricingengines;
 
 import org.jquantlib.util.Observable;
-
+import org.jquantlib.time.Date;
 
 /**
  * interface for pricing engines
@@ -77,6 +77,8 @@ public interface PricingEngine extends Observable {
 
 	public abstract void reset();
 	public abstract void calculate() /* @ReadOnly */;
+	
+//	public Date valuedate();
 
 
 

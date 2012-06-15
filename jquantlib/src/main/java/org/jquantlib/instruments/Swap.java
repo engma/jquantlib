@@ -168,7 +168,9 @@ public class Swap extends Instrument {
 
     @Override
     public boolean isExpired() /* @ReadOnly */ {
-        final Date today = new Settings().evaluationDate();
+//        final Date today = new Settings().evaluationDate();
+    	QL.require(super.valuedate != null, "default value date is blocked");
+        final Date today = super.valuedate;
         for (int i = 0; i < legs.size(); i++) {
             for (final CashFlow item : legs.get(i)) {
                 if (!item.hasOccurred(today)) {

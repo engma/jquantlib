@@ -51,6 +51,7 @@ import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.lang.reflect.ReflectConstants;
 import org.jquantlib.pricingengines.PricingEngine;
 import org.jquantlib.util.LazyObject;
+import org.jquantlib.time.Date;
 
 
 /**
@@ -83,6 +84,11 @@ public abstract class Instrument extends LazyObject {
      * @see PricingEngine
      */
     protected PricingEngine engine;
+
+    /**
+     * Represents the net present value of the instrument.
+     */
+    protected Date valuedate;
 
     /**
      * Represents the net present value of the instrument.
@@ -148,6 +154,15 @@ public abstract class Instrument extends LazyObject {
             this.engine.addObserver(this);
         //XXX:OBS update(this, null);
         update();
+    }
+    
+    public final void setPricingEngine(final PricingEngine engine, final Date valuedate) {
+    	this.valuedate = valuedate;
+    	setPricingEngine(engine);
+    }
+    
+    public Date valuedate() {
+    	return this.valuedate;
     }
 
     /**

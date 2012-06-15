@@ -143,10 +143,10 @@ public class Bond extends Instrument {
             addRedemptionsToCashflows();
         }
 
-        //TODO:Review translation of Settings.java. QL097 has singleton or session based instances of Settings.
-        // Current implementation of Settings appears to be thread based
-        final Date evaluationDate = new Settings().evaluationDate();
-        evaluationDate.addObserver(this);
+//        //TODO:Review translation of Settings.java. QL097 has singleton or session based instances of Settings.
+//        // Current implementation of Settings appears to be thread based
+//        final Date evaluationDate = new Settings().evaluationDate();
+//        evaluationDate.addObserver(this);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
@@ -207,8 +207,8 @@ public class Bond extends Instrument {
             cashflows.add(last);
         }
 
-        final Date evaluationDate = new Settings().evaluationDate();
-        evaluationDate.addObserver(this);
+//        final Date evaluationDate = new Settings().evaluationDate();
+//        evaluationDate.addObserver(this);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
@@ -316,11 +316,16 @@ public class Bond extends Instrument {
     }
 
     public Date settlementDate() {
-        return settlementDate(new Date());
+    	QL.require(super.valuedate != null,"undefined settlement date"); 
+//    	return settlementDate(new Date());
+    	return super.valuedate;
     }
 
     public Date settlementDate(final Date date) {
-        final Date d = date.isNull() ? new Settings().evaluationDate() : date;
+    	QL.require(!date.isNull() || super.valuedate != null,"input date is null & undefined settlement date"); 
+    	if (date.isNull()) { return settlementDate(); }
+//        final Date d = date.isNull() ? new Settings().evaluationDate() : date;
+    	final Date d = date;
 
         // usually, the settlement is at T+n...
         final Date settlement = calendar_.advance(d, settlementDays_, TimeUnit.Days);

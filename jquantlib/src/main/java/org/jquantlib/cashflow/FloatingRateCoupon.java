@@ -99,9 +99,9 @@ public class FloatingRateCoupon extends Coupon implements Observer {
         if (dayCounter_.empty())
             dayCounter_ = index.dayCounter();
 
-        Date evaluationDate = new Settings().evaluationDate();
+//        Date evaluationDate = new Settings().evaluationDate();
         this.index_.addObserver(this);
-        evaluationDate.addObserver(this);
+//        evaluationDate.addObserver(this);
     }
 
     public void setPricer(final FloatingRateCouponPricer pricer){

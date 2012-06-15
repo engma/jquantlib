@@ -107,7 +107,7 @@ public class FixedRateBondHelper extends RateHelper {
 				coupons, dayCounter, paymentConvention, redemption, issueDate);
 		
 		this.latestDate = this.bond.maturityDate();
-		new Settings().evaluationDate().addObserver(this);
+//		new Settings().evaluationDate().addObserver(this);
 		
 		final PricingEngine bondEngine = new DiscountingBondEngine(this.termStructureHandle);
 		this.bond.setPricingEngine(bondEngine);
@@ -130,7 +130,7 @@ public class FixedRateBondHelper extends RateHelper {
   		QL.validateExperimentalMode();   
 		
 		this.latestDate = bond.maturityDate();
-		new Settings().evaluationDate().addObserver(this);
+//		new Settings().evaluationDate().addObserver(this);
 		
 		final PricingEngine bondEngine = new DiscountingBondEngine(this.termStructureHandle);
 		this.bond.setPricingEngine(bondEngine);
