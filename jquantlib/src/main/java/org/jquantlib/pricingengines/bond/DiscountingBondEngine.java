@@ -53,6 +53,8 @@ public class DiscountingBondEngine extends Bond.EngineImpl {
 
         r.value           = CashFlows.getInstance().npv(cashflows, discountCurve, valuationDate,  valuationDate);
         r.settlementValue = CashFlows.getInstance().npv(cashflows, discountCurve, settlementDate, settlementDate);
+        System.out.println("r.value:" + r.value + " valuationdate:" + valuationDate);
+        System.out.println("r.settlementvalue:" + r.settlementValue + " settlementdate:" + settlementDate);
     }
 
 

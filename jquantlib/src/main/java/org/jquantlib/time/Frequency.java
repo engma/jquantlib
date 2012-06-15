@@ -111,5 +111,9 @@ public enum Frequency {
     public int tenor(){
     	return 12 / this.toInteger();
     }
+    
+    public Period toPeriod() {
+        return new Period(this);
+    }
 
 }
