@@ -516,7 +516,8 @@ public class Bond extends Instrument {
 
         final NewtonIncremental solver = new NewtonIncremental();
         solver.setMaxEvaluations(maxEvaluations);
-        final double dirtyPrice = cleanPrice + accruedAmount(settlementDate);
+        final double accrued = accruedAmount(settlementDate);
+        final double dirtyPrice = cleanPrice + accrued;
         final YieldFinder objective = new YieldFinder(notional(settlementDate),
                 							this.cashflows_,dirtyPrice,
                 							dc, comp, freq,	settlementDate);
@@ -525,10 +526,13 @@ public class Bond extends Instrument {
         java.util.Iterator<CashFlow> cfs = cashflows_.iterator();
         while (cfs.hasNext())
         {
-        	fullcashflow += cfs.next().amount();
+        	CashFlow cf = cfs.next();
+        	if (cf.date().gt(settlementDate)) {
+            	fullcashflow += cf.amount();
+        	}
         }
         
-        double simpleyield = (fullcashflow - dirtyPrice) / dc.yearFraction(settlementDate, maturityDate_) / cleanPrice; 
+        double simpleyield = (fullcashflow - cleanPrice - accrued) / (dc.yearFraction(settlementDate, maturityDate_) * cleanPrice); 
         return (comp == Compounding.None) ? simpleyield : solver.solve(objective, accuracy, simpleyield, -5.0, 5.0);
     }
 
