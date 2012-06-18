@@ -230,48 +230,48 @@ public abstract class AbstractTermStructure implements TermStructure {
         this.referenceDate = referenceDate;
     }
 
-//    /**
-//     * Calculate the reference date based on the global evaluation date
-//     *
-//     * <p>This constructor takes a number of days and a calendar to be used
-//     * so that {@link TermStructure#referenceDate()} will return a date calculated based on the
-//     * current evaluation date and the term structure. This class will be notified when the
-//     * evaluation date changes.
-//     * This is the <i>Case 2</i> described on the top of this class.
-//     *
-//     * @see TermStructure documentation for more details about constructors.
-//     */
-//    public AbstractTermStructure(final int settlementDays, final Calendar calendar) {
-//        this(settlementDays, calendar, new Actual365Fixed());
-//    }
-//
-//
-//    /**
-//     * Calculate the reference date based on the global evaluation date
-//     *
-//     * <p>This constructor takes a number of days and a calendar to be used
-//     * so that {@link TermStructure#referenceDate()} will return a date calculated based on the
-//     * current evaluation date and the term structure. This class will be notified when the
-//     * evaluation date changes.
-//     * This is the <i>Case 2</i> described on the top of this class.
-//     *
-//     * @see TermStructure documentation for more details about constructors.
-//     */
-//    public AbstractTermStructure(final int settlementDays, final Calendar calendar, final DayCounter dc) {
-//        this.settlementDays = settlementDays;
-//        this.calendar = calendar;
-//        this.dayCounter = dc;
-//
-//        // When Case 2
-//        this.moving = true;
-//        this.updated = false;
-//
-//        // observes date changes
-//        final Date today = new Settings().evaluationDate();
-//        today.addObserver(this);
-//
-//        this.referenceDate = calendar.advance(today, settlementDays, TimeUnit.Days);
-//    }
+    /**
+     * Calculate the reference date based on the global evaluation date
+     *
+     * <p>This constructor takes a number of days and a calendar to be used
+     * so that {@link TermStructure#referenceDate()} will return a date calculated based on the
+     * current evaluation date and the term structure. This class will be notified when the
+     * evaluation date changes.
+     * This is the <i>Case 2</i> described on the top of this class.
+     *
+     * @see TermStructure documentation for more details about constructors.
+     */
+    public AbstractTermStructure(final int settlementDays, final Calendar calendar) {
+        this(settlementDays, calendar, new Actual365Fixed());
+    }
+
+
+    /**
+     * Calculate the reference date based on the global evaluation date
+     *
+     * <p>This constructor takes a number of days and a calendar to be used
+     * so that {@link TermStructure#referenceDate()} will return a date calculated based on the
+     * current evaluation date and the term structure. This class will be notified when the
+     * evaluation date changes.
+     * This is the <i>Case 2</i> described on the top of this class.
+     *
+     * @see TermStructure documentation for more details about constructors.
+     */
+    public AbstractTermStructure(final int settlementDays, final Calendar calendar, final DayCounter dc) {
+        this.settlementDays = settlementDays;
+        this.calendar = calendar;
+        this.dayCounter = dc;
+
+        // When Case 2
+        this.moving = true;
+        this.updated = false;
+
+        // observes date changes
+        final Date today = new Settings().evaluationDate();
+        today.addObserver(this);
+
+        this.referenceDate = calendar.advance(today, settlementDays, TimeUnit.Days);
+    }
 
 
     //
