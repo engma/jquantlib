@@ -23,6 +23,8 @@
 
 package org.jquantlib.time;
 
+import java.util.Map;
+
 
 /**
  * Container for historical data
@@ -43,6 +45,10 @@ public class TimeSeries<V> extends Series<Date,V> {
 	
 	public TimeSeries(final Class<V> classV) {
 		super(Date.class, classV);
+	}
+	
+	public TimeSeries(final Class<V> classV, final Map<? extends Date, ? extends V> m) {
+		super(Date.class, classV, m);
 	}
 	
 }

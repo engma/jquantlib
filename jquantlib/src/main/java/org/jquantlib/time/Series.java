@@ -75,6 +75,11 @@ public class Series<K,V> implements NavigableMap<K,V> {
         this.delegate = new TreeMap<K,V>();
     }
 
+    public Series(final Class<K> classK, final Class<V> classV, final Map<? extends K, ? extends V> m) {
+		this(classK, classV);
+		putAll(m);
+    }
+    
     
     //
     // implements NavigableMap<K,V>
