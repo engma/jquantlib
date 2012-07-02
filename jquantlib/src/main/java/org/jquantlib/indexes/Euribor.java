@@ -24,7 +24,7 @@ package org.jquantlib.indexes;
 import org.jquantlib.QL;
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.Actual360;
-;
+
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Period;
 import org.jquantlib.time.TimeUnit;
