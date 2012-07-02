@@ -109,6 +109,24 @@ public class Asia {
         }
     };
     
+    /**
+     * Indonesian rupiah
+     * <p> 
+     * The ISO three-letter code is IDR; the numeric code is 360. It is divided in 100 sen.
+     * 
+     * @category currencies
+     */
+    public static class IDRCurrency extends Currency {
+      public
+      	IDRCurrency() {
+            Data idrData 
+                                          =new Data("Indonesian rupiah", "IDR", 360,
+                                                   "Rp", "", 100,
+                                                   new Rounding(),
+                                                   "%3% %1$.2f");
+            data = idrData;
+        }
+    };
 
     /**
      * Israeli shekel 

@@ -102,7 +102,7 @@ public class Europe {
     };
 
     /**
-     * Danish krone The ISO three-letter code is DKK; the numeric code is 208. It is divided in 100 �re.
+     * Danish krone The ISO three-letter code is DKK; the numeric code is 208. It is divided in 100 �ｽre.
      * 
      * @category currencies
      */
@@ -210,7 +210,7 @@ public class Europe {
     };
 
     /**
-     * Norwegian krone The ISO three-letter code is NOK; the numeric code is 578. It is divided in 100 �re.
+     * Norwegian krone The ISO three-letter code is NOK; the numeric code is 578. It is divided in 100 �ｽre.
      * 
      * @category currencies
      */
@@ -260,7 +260,7 @@ public class Europe {
     };
 
     /**
-     * Swedish krona The ISO three-letter code is SEK; the numeric code is 752. It is divided in 100 �re.
+     * Swedish krona The ISO three-letter code is SEK; the numeric code is 752. It is divided in 100 �ｽre.
      * 
      * @category currencies
      */
@@ -376,7 +376,7 @@ public class Europe {
     };
 
     /**
-     * Finnish markka The ISO three-letter code was FIM; the numeric code was 246.It was divided in 100 penni�. Obsoleted by the
+     * Finnish markka The ISO three-letter code was FIM; the numeric code was 246.It was divided in 100 penni�ｽ. Obsoleted by the
      * Euro since 1999
      * 
      * @category currencies
@@ -488,4 +488,16 @@ public class Europe {
         }
     };
 
+    /**
+     * Russian ruble The ISO three-letter code is RUB; the numeric code was 643.It was divided in 100 kopecks. 
+     * 
+     * @category currencies
+     */
+    public static class RUBCurrency extends Currency {
+        public RUBCurrency() {
+            Data rubData = new Data("Russian Ruble", "RUB", 643, "Rub", "", 100, new Rounding.ClosestRounding(2), "%2% %1$.2f");
+            data = rubData;
+        }
+    };
+    
 }
