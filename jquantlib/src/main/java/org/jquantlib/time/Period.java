@@ -135,6 +135,23 @@ public class Period implements Cloneable, Comparable<Period> {
             this.units = units;
         }
     }
+    
+    /**
+     * To construct period representing the specified string
+     *
+     * @param string representation of period eg "6M" or "1Y"
+     */
+    public Period(String s) {
+    	String unitstr = s.substring(s.length() - 1);
+    	if (unitstr.equals("D")) this.units = TimeUnit.Days;
+    	else if (unitstr.equals("W")) this.units = TimeUnit.Weeks;
+    	else if (unitstr.equals("M")) this.units = TimeUnit.Months;
+    	else if (unitstr.equals("Y")) this.units = TimeUnit.Years;
+    	else throw new LibraryException(UNKNOWN_FREQUENCY) ;
+    	
+    	this.length = Integer.parseInt(s.substring(0, s.length() - 1));
+    }
+    
 
     /**
      * To create a period by Frequency
