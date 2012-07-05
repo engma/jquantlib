@@ -63,10 +63,11 @@ public class ZeroCouponBond extends Bond {
             final Date maturityDate,
             final BusinessDayConvention paymentConvention,
             final double redemption,
-            final Date issueDate, 
+            final Date issueDate,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
-		super(settlementDays, calendar, issueDate, currency, creditSpreadID);
+		super(settlementDays, calendar, issueDate, id, currency, creditSpreadID);
         maturityDate_ = maturityDate.clone();
         final Date redemptionDate = calendar_.adjust(maturityDate,
                                                paymentConvention);
@@ -78,9 +79,10 @@ public class ZeroCouponBond extends Bond {
             final Calendar calendar,
             final double faceAmount,
             final Date maturityDate,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
-		this(settlementDays, calendar, faceAmount, maturityDate, BusinessDayConvention.Following, 100.0, new Date(), currency, creditSpreadID);
+		this(settlementDays, calendar, faceAmount, maturityDate, BusinessDayConvention.Following, 100.0, new Date(), id, currency, creditSpreadID);
 	}
 
 	public ZeroCouponBond(
@@ -90,9 +92,10 @@ public class ZeroCouponBond extends Bond {
             final Date maturityDate,
             final BusinessDayConvention paymentConvention,
             final double redemption,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
-		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, redemption, new Date(), currency, creditSpreadID);
+		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, redemption, new Date(), id, currency, creditSpreadID);
 	}
 
 	public ZeroCouponBond(
@@ -101,8 +104,9 @@ public class ZeroCouponBond extends Bond {
             final double faceAmount,
             final Date maturityDate,
             final BusinessDayConvention paymentConvention,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
-		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, 100.0, new Date(), currency, creditSpreadID);
+		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, 100.0, new Date(), id, currency, creditSpreadID);
 	}
 }

@@ -123,7 +123,7 @@ public class InterestRate {
     public final/* @CompoundFactor */double compoundFactor(final/* @Time */double time) {
         /* @Time */final double t = time;
         QL.require(t >= 0.0 , "negative time not allowed"); // TODO: message
-        QL.require(!Double.isNaN(rate) , "null interest rate"); // TODO: message
+        QL.require(!Double.isNaN(rate) , "null interest rate" + time); // TODO: message
 
         // TODO: code review :: please verify against QL/C++ code
         // if (rate<0.0) throw new IllegalArgumentException("null interest rate");

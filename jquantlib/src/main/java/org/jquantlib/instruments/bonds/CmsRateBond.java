@@ -55,10 +55,11 @@ public class CmsRateBond extends Bond {
             final boolean inArrears,
             final /*Real*/ double  redemption,
             final Date issueDate,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
 		
-		super(settlementDays, schedule.calendar(), issueDate, currency, creditSpreadID);
+		super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID);
 		maturityDate_ = schedule.endDate().clone();
 		cashflows_ = new CmsLeg(schedule, index)
 				.withNotionals(faceAmount)
@@ -84,6 +85,7 @@ public class CmsRateBond extends Bond {
             final Schedule schedule,
             final SwapIndex index,
             final DayCounter paymentDayCounter,
+            final String id, 
             final Currency currency,
             final String creditSpreadID) {
 		
@@ -97,6 +99,7 @@ public class CmsRateBond extends Bond {
 				false, 							//defaul in Arrears
 				100.0,							// default redemption
 				new Date(), 					// default issue date
+				id,
 				currency,
 				creditSpreadID
 				);

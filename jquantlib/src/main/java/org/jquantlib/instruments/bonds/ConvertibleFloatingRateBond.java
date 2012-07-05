@@ -61,10 +61,11 @@ public class ConvertibleFloatingRateBond extends ConvertibleBond {
 	          final /*@Spread*/ double[] spreads,
 	          final DayCounter dayCounter,
 	          final Schedule schedule,
+	          final String id, 
 	          final Currency currency,
 	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		     issueDate, settlementDays, index, fixingDays, spreads, dayCounter, schedule, 100, currency, creditSpreadID);
+		     issueDate, settlementDays, index, fixingDays, spreads, dayCounter, schedule, 100, id, currency, creditSpreadID);
 	}
 
 	public ConvertibleFloatingRateBond(
@@ -81,10 +82,11 @@ public class ConvertibleFloatingRateBond extends ConvertibleBond {
 			final DayCounter dayCounter,
 			final Schedule schedule,
 			final double redemption,
+			final String id, 
 			final Currency currency,
 			final String creditSpreadID) {
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		      issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
+		      issueDate, settlementDays, dayCounter, schedule, redemption, id, currency, creditSpreadID);
 
         // notional forcibly set to 100
         this.cashflows_ = new IborLeg(schedule, index)

@@ -56,10 +56,11 @@ public class ConvertibleZeroCouponBond extends ConvertibleBond {
 	          final int settlementDays,
 	          final DayCounter dayCounter,
 	          final Schedule schedule,
+	          final String id, 
 	          final Currency currency,
 	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		        issueDate, settlementDays, dayCounter, schedule, 100, currency, creditSpreadID);
+		        issueDate, settlementDays, dayCounter, schedule, 100, id, currency, creditSpreadID);
 	}
 
 	public ConvertibleZeroCouponBond(
@@ -73,10 +74,11 @@ public class ConvertibleZeroCouponBond extends ConvertibleBond {
 			final DayCounter dayCounter,
 			final Schedule schedule,
 			final double redemption,
+			final String id, 
 			final Currency currency,
 			final String creditSpreadID){
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		        issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
+		        issueDate, settlementDays, dayCounter, schedule, redemption, id, currency, creditSpreadID);
 
 		cashflows_ = new Leg();
 

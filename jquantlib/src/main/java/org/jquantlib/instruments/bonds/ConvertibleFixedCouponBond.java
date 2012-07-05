@@ -61,10 +61,11 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 	          /*@Rate*/final double[] coupons,
 	          final DayCounter dayCounter,
 	          final Schedule schedule,
+	          final String id, 
 	          final Currency currency,
 	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		     issueDate, settlementDays, coupons, dayCounter, schedule, 100, currency, creditSpreadID);
+		     issueDate, settlementDays, coupons, dayCounter, schedule, 100, id, currency, creditSpreadID);
 	}
 
 	public ConvertibleFixedCouponBond(
@@ -79,10 +80,11 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 			final DayCounter dayCounter,
 			final Schedule schedule,
 			final double redemption,
+			final String id, 
 			final Currency currency,
 			final String creditSpreadID) {
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		      issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
+		      issueDate, settlementDays, dayCounter, schedule, redemption, id, currency, creditSpreadID);
 
 		// notional forcibly set to 100
         this.cashflows_ = new FixedRateLeg(schedule,dayCounter)

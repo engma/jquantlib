@@ -113,6 +113,7 @@ public class Bond extends Instrument {
     protected Date issueDate_;
     protected /*Real*/ double settlementValue_;
     
+    protected String bondid_;
     protected Currency currency_;
     protected String creditSpreadID_;
     
@@ -131,6 +132,7 @@ public class Bond extends Instrument {
             	   final Calendar calendar,
             	   final Date issueDate,
             	   final Leg coupons,
+            	   final String id,
             	   final Currency currency,
             	   final String creditSpreadID) {
 
@@ -141,6 +143,7 @@ public class Bond extends Instrument {
         this.notionals_ = new ArrayList<Double>();
         this.notionalSchedule_ = new ArrayList<Date>();
         this.redemptions_ = new Leg();
+        this.bondid_ = id;
         this.currency_ = currency;
         this.creditSpreadID_ = creditSpreadID;
 
@@ -157,14 +160,14 @@ public class Bond extends Instrument {
     }
 
     protected Bond(final /* @Natural */int settlementDays,
-            	   final Calendar calendar, final Currency currency, final String creditSpreadID) {
-        this(settlementDays, calendar, new Date(), new Leg(), currency, creditSpreadID);
+            	   final Calendar calendar, final String id, final Currency currency, final String creditSpreadID) {
+        this(settlementDays, calendar, new Date(), new Leg(), id, currency, creditSpreadID);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
             	   final Calendar calendar,
-            	   final Date issueDate, final Currency currency, final String creditSpreadID) {
-        this(settlementDays, calendar, issueDate, new Leg(), currency, creditSpreadID);
+            	   final Date issueDate, final String id, final Currency currency, final String creditSpreadID) {
+        this(settlementDays, calendar, issueDate, new Leg(), id, currency, creditSpreadID);
     }
 
     /**
@@ -185,6 +188,7 @@ public class Bond extends Instrument {
             	final Date maturityDate,
             	final Date issueDate,
             	final Leg cashflows,
+            	final String id, 
             	final Currency currency,
             	final String creditSpreadID) {
 
@@ -193,6 +197,7 @@ public class Bond extends Instrument {
         this.cashflows_ = cashflows;
         this.maturityDate_ = maturityDate.clone();
         this.issueDate_ = issueDate.clone();
+        this.bondid_ = id;
         
         this.notionalSchedule_ = new ArrayList<Date>();
         this.notionals_ = new ArrayList<Double>();
@@ -227,9 +232,10 @@ public class Bond extends Instrument {
             	   final Calendar calendar,
             	   final /* @Real */double faceAmount,
             	   final Date maturityDate,
+            	   final String id, 
             	   final Currency currency,
             	   final String creditSpreadID) {
-        this(settlementDays, calendar, faceAmount, maturityDate, new Date(), new Leg(), currency, creditSpreadID);
+        this(settlementDays, calendar, faceAmount, maturityDate, new Date(), new Leg(), id, currency, creditSpreadID);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
@@ -237,9 +243,10 @@ public class Bond extends Instrument {
             	   final /* @Real */double faceAmount,
             	   final Date maturityDate,
             	   final Date issueDate,
+            	   final String id, 
             	   final Currency currency,
             	   final String creditSpreadID) {
-        this(settlementDays, calendar, faceAmount, maturityDate, issueDate, new Leg(), currency, creditSpreadID);
+        this(settlementDays, calendar, faceAmount, maturityDate, issueDate, new Leg(), id, currency, creditSpreadID);
     }
 
     // inline definitions
@@ -248,6 +255,10 @@ public class Bond extends Instrument {
         return settlementDays_;
     }
     
+    public String bondid() {
+    	return bondid_;
+    }
+
     public String creditSpreadID() {
     	return creditSpreadID_;
     }
