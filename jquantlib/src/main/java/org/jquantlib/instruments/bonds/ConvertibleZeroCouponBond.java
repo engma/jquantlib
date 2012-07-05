@@ -26,6 +26,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.exercise.Exercise;
 import org.jquantlib.instruments.CallabilitySchedule;
 import org.jquantlib.instruments.DividendSchedule;
+import org.jquantlib.currencies.Currency;
 
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
@@ -54,9 +55,11 @@ public class ConvertibleZeroCouponBond extends ConvertibleBond {
 	          final Date issueDate,
 	          final int settlementDays,
 	          final DayCounter dayCounter,
-	          final Schedule schedule){
+	          final Schedule schedule,
+	          final Currency currency,
+	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		        issueDate, settlementDays, dayCounter, schedule, 100);
+		        issueDate, settlementDays, dayCounter, schedule, 100, currency, creditSpreadID);
 	}
 
 	public ConvertibleZeroCouponBond(
@@ -69,9 +72,11 @@ public class ConvertibleZeroCouponBond extends ConvertibleBond {
 			final int settlementDays,
 			final DayCounter dayCounter,
 			final Schedule schedule,
-			final double redemption){
+			final double redemption,
+			final Currency currency,
+			final String creditSpreadID){
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		        issueDate, settlementDays, dayCounter, schedule, redemption);
+		        issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
 
 		cashflows_ = new Leg();
 

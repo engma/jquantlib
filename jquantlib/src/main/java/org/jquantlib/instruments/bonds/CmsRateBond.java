@@ -30,6 +30,7 @@ import org.jquantlib.math.matrixutilities.Array;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Date;
 import org.jquantlib.time.Schedule;
+import org.jquantlib.currencies.Currency;
 
 /**
 *
@@ -53,9 +54,11 @@ public class CmsRateBond extends Bond {
             final Array floors,
             final boolean inArrears,
             final /*Real*/ double  redemption,
-            final Date issueDate) {
+            final Date issueDate,
+            final Currency currency,
+            final String creditSpreadID) {
 		
-		super(settlementDays, schedule.calendar(), issueDate);
+		super(settlementDays, schedule.calendar(), issueDate, currency, creditSpreadID);
 		maturityDate_ = schedule.endDate().clone();
 		cashflows_ = new CmsLeg(schedule, index)
 				.withNotionals(faceAmount)
@@ -80,7 +83,9 @@ public class CmsRateBond extends Bond {
             final /*Real*/ double faceAmount,
             final Schedule schedule,
             final SwapIndex index,
-            final DayCounter paymentDayCounter) {
+            final DayCounter paymentDayCounter,
+            final Currency currency,
+            final String creditSpreadID) {
 		
 		this(settlementDays, faceAmount, schedule, index, paymentDayCounter,
 				BusinessDayConvention.Following, //default
@@ -91,7 +96,9 @@ public class CmsRateBond extends Bond {
 				new Array(0), 					//default floor
 				false, 							//defaul in Arrears
 				100.0,							// default redemption
-				new Date() 						// default issue date
+				new Date(), 					// default issue date
+				currency,
+				creditSpreadID
 				);
 	}
 

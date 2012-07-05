@@ -31,6 +31,7 @@ import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.exercise.Exercise;
 import org.jquantlib.instruments.CallabilitySchedule;
 import org.jquantlib.instruments.DividendSchedule;
+import org.jquantlib.currencies.Currency;
 
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
@@ -59,9 +60,11 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 	          final int settlementDays,
 	          /*@Rate*/final double[] coupons,
 	          final DayCounter dayCounter,
-	          final Schedule schedule){
+	          final Schedule schedule,
+	          final Currency currency,
+	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		     issueDate, settlementDays, coupons, dayCounter, schedule, 100);
+		     issueDate, settlementDays, coupons, dayCounter, schedule, 100, currency, creditSpreadID);
 	}
 
 	public ConvertibleFixedCouponBond(
@@ -75,9 +78,11 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 			/*Rate*/final double[] coupons,
 			final DayCounter dayCounter,
 			final Schedule schedule,
-			final double redemption) {
+			final double redemption,
+			final Currency currency,
+			final String creditSpreadID) {
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		      issueDate, settlementDays, dayCounter, schedule, redemption);
+		      issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
 
 		// notional forcibly set to 100
         this.cashflows_ = new FixedRateLeg(schedule,dayCounter)

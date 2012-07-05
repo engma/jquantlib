@@ -46,6 +46,7 @@ import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.instruments.Bond;
 import org.jquantlib.math.Constants;
 import org.jquantlib.math.matrixutilities.Array;
+import org.jquantlib.currencies.Currency;
 
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
@@ -80,9 +81,11 @@ public class FloatingRateBond extends Bond {
 			final Array floors,
 			final boolean inArrears,
 			final double redemption,
-			final Date issueDate) {
+			final Date issueDate,
+			final Currency currency,
+			final String creditSpreadID) {
 
-		super(settlementDays, schedule.calendar(), issueDate);
+		super(settlementDays, schedule.calendar(), issueDate, currency, creditSpreadID);
 		maturityDate_ = schedule.endDate().clone();
 
 		cashflows_ = new IborLeg(schedule, index)
@@ -108,11 +111,13 @@ public class FloatingRateBond extends Bond {
 			final double faceAmount,
 			final Schedule schedule,
 			final IborIndex index,
-			final DayCounter accrualDayCounter) {
+			final DayCounter accrualDayCounter,
+			final Currency currency,
+			final String creditSpreadID) {
 		this(settlementDays, faceAmount, schedule,index, accrualDayCounter, 
 				BusinessDayConvention.Following, Constants.NULL_INTEGER, 
 				new Array(new double[] { 1.0 }), new Array(new double[] { 0.0 }), 
-				new Array(0), new Array(0), false, 100.0, new Date());
+				new Array(0), new Array(0), false, 100.0, new Date(), currency, creditSpreadID);
 
 	}
 
@@ -136,8 +141,10 @@ public class FloatingRateBond extends Bond {
 							final Date issueDate,
 							final Date stubDate,
 							final DateGeneration.Rule rule,
-							final boolean endOfMonth) {
-		super(settlementDays, calendar, issueDate);
+							final boolean endOfMonth, 
+							final Currency currency,
+							final String creditSpreadID) {
+		super(settlementDays, calendar, issueDate, currency, creditSpreadID);
 
 		maturityDate_ = maturityDate.clone();
 
@@ -192,13 +199,15 @@ public class FloatingRateBond extends Bond {
 			final Frequency couponFrequency,
 			final Calendar calendar,
 			IborIndex index,
-			final DayCounter accrualDayCounter) {
+			final DayCounter accrualDayCounter,
+			final Currency currency,
+			final String creditSpreadID) {
 		this(settlementDays, faceAmount, startDate, maturityDate,
 				couponFrequency, calendar, index,
 				accrualDayCounter, BusinessDayConvention.Following, BusinessDayConvention.Following,
 				Constants.NULL_INTEGER, new Array(new double[] { 1.0 }),
 				new Array(new double[] { 0.0 }), new Array(0), new Array(0),
 				false, 100.0, new Date(), new Date(),
-				DateGeneration.Rule.Backward, false);
+				DateGeneration.Rule.Backward, false, currency, creditSpreadID);
 	}
 }

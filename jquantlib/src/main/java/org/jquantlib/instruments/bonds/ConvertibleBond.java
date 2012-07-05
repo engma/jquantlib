@@ -30,6 +30,7 @@ import org.jquantlib.exercise.Exercise;
 import org.jquantlib.instruments.Bond;
 import org.jquantlib.instruments.Option;
 import org.jquantlib.math.Constants;
+import org.jquantlib.currencies.Currency;
 
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
@@ -59,9 +60,11 @@ public class ConvertibleBond extends Bond {
             final int settlementDays,
             final DayCounter dayCounter,
             final Schedule schedule,
-            final double redemption) {
+            final double redemption,
+            final Currency currency,
+            final String creditSpreadID) {
 
-        super(settlementDays, schedule.calendar(), issueDate);
+        super(settlementDays, schedule.calendar(), issueDate, currency, creditSpreadID);
         this.conversionRatio = conversionRatio;
         this.callability = callability;
         this.dividends = dividends;

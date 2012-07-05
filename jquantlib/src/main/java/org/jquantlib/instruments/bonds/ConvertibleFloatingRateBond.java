@@ -29,6 +29,7 @@ import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.instruments.CallabilitySchedule;
 import org.jquantlib.instruments.DividendSchedule;
 import org.jquantlib.math.matrixutilities.Array;
+import org.jquantlib.currencies.Currency;
 
 import org.jquantlib.quotes.Quote;
 import org.jquantlib.time.Date;
@@ -59,9 +60,11 @@ public class ConvertibleFloatingRateBond extends ConvertibleBond {
 	          final /*@Natural*/ int fixingDays,
 	          final /*@Spread*/ double[] spreads,
 	          final DayCounter dayCounter,
-	          final Schedule schedule){
+	          final Schedule schedule,
+	          final Currency currency,
+	          final String creditSpreadID){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		     issueDate, settlementDays, index, fixingDays, spreads, dayCounter, schedule, 100);
+		     issueDate, settlementDays, index, fixingDays, spreads, dayCounter, schedule, 100, currency, creditSpreadID);
 	}
 
 	public ConvertibleFloatingRateBond(
@@ -77,9 +80,11 @@ public class ConvertibleFloatingRateBond extends ConvertibleBond {
             final /*@Spread*/ double[] spreads,
 			final DayCounter dayCounter,
 			final Schedule schedule,
-			final double redemption) {
+			final double redemption,
+			final Currency currency,
+			final String creditSpreadID) {
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		      issueDate, settlementDays, dayCounter, schedule, redemption);
+		      issueDate, settlementDays, dayCounter, schedule, redemption, currency, creditSpreadID);
 
         // notional forcibly set to 100
         this.cashflows_ = new IborLeg(schedule, index)

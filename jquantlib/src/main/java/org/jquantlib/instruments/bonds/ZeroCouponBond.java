@@ -42,6 +42,7 @@ import org.jquantlib.instruments.Bond;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Calendar;
 import org.jquantlib.time.Date;
+import org.jquantlib.currencies.Currency;
 
 /**
  * ZeroCouponBond class
@@ -62,8 +63,10 @@ public class ZeroCouponBond extends Bond {
             final Date maturityDate,
             final BusinessDayConvention paymentConvention,
             final double redemption,
-            final Date issueDate) {
-		super(settlementDays, calendar, issueDate);
+            final Date issueDate, 
+            final Currency currency,
+            final String creditSpreadID) {
+		super(settlementDays, calendar, issueDate, currency, creditSpreadID);
         maturityDate_ = maturityDate.clone();
         final Date redemptionDate = calendar_.adjust(maturityDate,
                                                paymentConvention);
@@ -74,8 +77,10 @@ public class ZeroCouponBond extends Bond {
 	        final /* @Natural */ int settlementDays,
             final Calendar calendar,
             final double faceAmount,
-            final Date maturityDate) {
-		this(settlementDays, calendar, faceAmount, maturityDate, BusinessDayConvention.Following, 100.0, new Date());
+            final Date maturityDate,
+            final Currency currency,
+            final String creditSpreadID) {
+		this(settlementDays, calendar, faceAmount, maturityDate, BusinessDayConvention.Following, 100.0, new Date(), currency, creditSpreadID);
 	}
 
 	public ZeroCouponBond(
@@ -84,8 +89,10 @@ public class ZeroCouponBond extends Bond {
             final double faceAmount,
             final Date maturityDate,
             final BusinessDayConvention paymentConvention,
-            final double redemption) {
-		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, redemption, new Date());
+            final double redemption,
+            final Currency currency,
+            final String creditSpreadID) {
+		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, redemption, new Date(), currency, creditSpreadID);
 	}
 
 	public ZeroCouponBond(
@@ -93,7 +100,9 @@ public class ZeroCouponBond extends Bond {
             final Calendar calendar,
             final double faceAmount,
             final Date maturityDate,
-            final BusinessDayConvention paymentConvention) {
-		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, 100.0, new Date());
+            final BusinessDayConvention paymentConvention,
+            final Currency currency,
+            final String creditSpreadID) {
+		this(settlementDays, calendar, faceAmount, maturityDate, paymentConvention, 100.0, new Date(), currency, creditSpreadID);
 	}
 }
