@@ -164,6 +164,11 @@ public abstract class Instrument extends LazyObject {
     public Date valuedate() {
     	return this.valuedate;
     }
+    
+    public final PricingEngine getPricingEngine()
+    {
+    	return this.engine;
+    }
 
     /**
      * returns the net present value of the instrument.

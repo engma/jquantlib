@@ -580,5 +580,27 @@ public class FixedRateBond extends Bond {
         sb.append("stub date (").append(stubDate).append(") not allowed with DateGeneration.Rule (").append(rule).append(")");
         return sb.toString();
     }
+    
+    public String describe(){
+    	String eol = System.getProperty("line.separator");
+		String result = 
+		 "bond id:\t" + bondid() + eol 
+		 + "spreadid:\t" + creditSpreadID() + eol 
+		 + "currency:\t" + currency() + eol 
+		 + "notional:\t" + notional(issueDate()) + eol 
+		 + "issue date:\t" + issueDate() + eol 
+		 + "maturity date:\t" + maturityDate() + eol 
+		 + "frequency:\t" + frequency().name() + eol 
+		 + "calendar:\t" + calendar().name() + eol 
+		 + "redemption:\t" + redemption().amount() + " vd " + redemption().date().shortDate().toString() + eol
+		 + "cashflow schedule:" + eol;
+		
+		java.util.Iterator<org.jquantlib.cashflow.CashFlow> cashflowlegs = cashflows().iterator();
+		while (cashflowlegs.hasNext()) { 
+			org.jquantlib.cashflow.CashFlow c = cashflowlegs.next(); 
+			result = result + c.date().shortDate().toString() + " - " + c.amount() + eol;
+		}
+		return result;
+    }
 
 }
