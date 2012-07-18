@@ -283,7 +283,7 @@ public abstract class AbstractTermStructure implements TermStructure {
      */
     protected void checkRange(final Date d, final boolean extrapolate) /* @ReadOnly */ {
         QL.require(d.ge(referenceDate()) , "date before reference date"); // TODO: message
-        QL.require(extrapolate || allowsExtrapolation() || d.le(maxDate()) , "date is past max curve"); // TODO: message
+        QL.require(extrapolate || allowsExtrapolation() || d.le(maxDate()) , "date is past max curve (" + d.shortDate().toString() + " > " + maxDate().shortDate().toString() + ")"); // TODO: message
     }
 
     /**

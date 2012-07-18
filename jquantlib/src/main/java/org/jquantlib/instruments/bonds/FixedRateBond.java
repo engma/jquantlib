@@ -587,6 +587,7 @@ public class FixedRateBond extends Bond {
 		 "bond id:\t" + bondid() + eol 
 		 + "spreadid:\t" + creditSpreadID() + eol 
 		 + "currency:\t" + currency() + eol 
+		 + "product type:\t" + "FixedRateBond" + eol 
 		 + "notional:\t" + notional(issueDate()) + eol 
 		 + "issue date:\t" + issueDate() + eol 
 		 + "maturity date:\t" + maturityDate() + eol 
