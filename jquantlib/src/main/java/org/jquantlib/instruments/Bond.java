@@ -427,36 +427,6 @@ public class Bond extends Instrument {
     }
 
     /**
-     * Theoretical bond yield /* The default bond settlement and theoretical
-     * price are used for calculation.
-     *
-     * @param dc
-     * @param comp
-     * @param freq
-     */
-    public/* @Rate */double yield(final DayCounter dc, 
-    		                      final Compounding comp,
-    		                      final Frequency freq,
-    		                      final /* Real */double accuracy,
-    		                      final /* Size */int maxEvaluations) {
-    	
-        final NewtonIncremental solver = new NewtonIncremental();
-        solver.setMaxEvaluations(maxEvaluations);
-        final YieldFinder objective = new YieldFinder(notional(settlementDate()), cashflows_,
-                dirtyPrice(),
-                dc, comp, freq,
-                settlementDate());
-        return solver.solve(objective, accuracy, 0.02, -5.0, 5.0);
-    }
-
-    public/* @Rate */double yield(final DayCounter dc, 
-    							  final Compounding comp,
-    							  final Frequency freq) {
-    	
-        return yield(dc, comp, freq, 1.0e-8, 100);
-    }
-    
-    /**
      * Clean price given a yield and settlement date
      * The default bond settlement is used if no date is given.
      *
@@ -524,7 +494,58 @@ public class Bond extends Instrument {
             						   final Frequency freq) {
         return dirtyPrice(yield, dc, comp, freq, new Date());
     }
+    
+    /**
+     * Theoretical bond yield /* The default bond settlement and theoretical
+     * price are used for calculation.
+     *
+     * @param dc
+     * @param comp
+     * @param freq
+     */
+    public/* @Rate */double yield(final DayCounter dc, 
+    		                      final Compounding comp,
+    		                      final Frequency freq,
+    		                      final /* Real */double accuracy,
+    		                      final /* Size */int maxEvaluations) {
+    	
+        final NewtonIncremental solver = new NewtonIncremental();
+        solver.setMaxEvaluations(maxEvaluations);
+        final YieldFinder objective = new YieldFinder(notional(settlementDate()), cashflows_,
+                dirtyPrice(),
+                dc, comp, freq,
+                settlementDate());
+        
+        if (comp == Compounding.None)
+        {
+	        double fullcashflow = 0;
+	        java.util.Iterator<CashFlow> cfs = cashflows_.iterator();
+	        while (cfs.hasNext())
+	        {
+	        	CashFlow cf = cfs.next();
+	        	if (cf.date().gt(settlementDate())) {
+	            	fullcashflow += cf.amount();
+	        	}
+	        }
+	
+	        final double accrued = accruedAmount();
+	        final double cleanPrice = cleanPrice();
+	        double simpleyield = (fullcashflow - cleanPrice - accrued) / (dc.yearFraction(valuedate, maturityDate_) * cleanPrice); 
+	        return simpleyield;
+        }
+        else
+        {
+            return solver.solve(objective, accuracy, 0.02, -5.0, 5.0);
+        }
+    }
 
+    public/* @Rate */double yield(final DayCounter dc, 
+    							  final Compounding comp,
+    							  final Frequency freq) {
+    	
+        return yield(dc, comp, freq, 1.0e-8, 100);
+    }
+    
     /**
      * Yield given a (clean) price and settlement date
      * The default bond settlement is used if no date is given.
