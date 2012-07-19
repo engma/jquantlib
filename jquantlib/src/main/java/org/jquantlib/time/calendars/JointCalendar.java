@@ -87,6 +87,18 @@ public class JointCalendar extends Calendar {
         this(JointCalendarRule.JoinHolidays, c1, c2, c3, c4);
     }
 
+    public JointCalendar(final Calendar c1, final Calendar c2, final Calendar c3, final Calendar c4, final Calendar c5) {
+        this(JointCalendarRule.JoinHolidays, c1, c2, c3, c4, c5);
+    }
+
+    public JointCalendar(final Calendar c1, final Calendar c2, final Calendar c3, final Calendar c4, final Calendar c5, final Calendar c6) {
+        this(JointCalendarRule.JoinHolidays, c1, c2, c3, c4, c5, c6);
+    }
+    
+    public JointCalendar(final Calendar[] calendars){
+    	this(JointCalendarRule.JoinHolidays, calendars);
+    }
+    
     //internal
     private JointCalendar(JointCalendarRule rule, final Calendar ...calendars) {
         this.impl = new Impl(rule, calendars);
