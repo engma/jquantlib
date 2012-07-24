@@ -23,6 +23,9 @@
 
 package org.jquantlib.cashflow;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.jquantlib.QL;
 import org.jquantlib.Settings;
 import org.jquantlib.daycounters.DayCounter;
@@ -587,9 +590,6 @@ public class CashFlows {
      */
     final public CashFlow nextCashFlow(final Leg cashFlows, Date settlement) {
     	QL.require(!settlement.isNull(), "default settlement date not allowed");
-//        if (settlement.isNull()) {
-//            settlement = new Settings().evaluationDate();
-//        }
         for (int i = 0; i < cashFlows.size(); ++i) {
             // the first coupon paying after d is the one we're after
             if (!cashFlows.get(i).hasOccurred(settlement))
@@ -597,6 +597,37 @@ public class CashFlows {
         }
         return null;// cashFlows.get(cashFlows.size());
     }
+    
+    
+    /**
+     * Returns multiple cashflows if more than cashflows are found on the same value date.
+     * NOTE: should return empty collection when no cashflow could be found!
+     *
+     * @param cashFlows
+     * @param settlement
+     * @return
+     */
+    final public List<CashFlow> nextCashFlows(final Leg cashFlows, Date settlement) {
+    	QL.require(!settlement.isNull(), "default settlement date not allowed");
+    	List<CashFlow> result = new ArrayList<CashFlow>();
+    	Date vd = null;
+    	
+        for (int i = 0; i < cashFlows.size(); ++i) {
+            // the first coupon paying after d is the one we're after
+        	CashFlow cf = cashFlows.get(i);
+            if (vd == null && !cf.hasOccurred(settlement)) {
+            	result.add(cf);
+            	vd = cf.date();
+            }
+            else if (vd != null && cf.date().eq(vd)) {
+            	result.add(cf);
+            }
+        }
+        
+//        return (result.size() == 0) ? null : result;
+        return result;
+    }
+    
 
     /**
      * NOTE: returns the index! for cashflow.end() the returned index would
