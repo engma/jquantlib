@@ -84,9 +84,10 @@ public class FloatingRateBond extends Bond {
 			final Date issueDate,
 			final String id, 
 			final Currency currency,
-			final String creditSpreadID) {
+			final String creditSpreadID,
+			final Double initialFX) {
 
-		super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID);
+		super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID, initialFX);
 		maturityDate_ = schedule.endDate().clone();
 
 		cashflows_ = new IborLeg(schedule, index)
@@ -115,11 +116,12 @@ public class FloatingRateBond extends Bond {
 			final DayCounter accrualDayCounter,
 			final String id, 
 			final Currency currency,
-			final String creditSpreadID) {
+			final String creditSpreadID,
+			final Double initialFX) {
 		this(settlementDays, faceAmount, schedule,index, accrualDayCounter, 
 				BusinessDayConvention.Following, Constants.NULL_INTEGER, 
 				new Array(new double[] { 1.0 }), new Array(new double[] { 0.0 }), 
-				new Array(0), new Array(0), false, 100.0, new Date(), id, currency, creditSpreadID);
+				new Array(0), new Array(0), false, 100.0, new Date(), id, currency, creditSpreadID, initialFX);
 
 	}
 
@@ -146,8 +148,9 @@ public class FloatingRateBond extends Bond {
 							final boolean endOfMonth, 
 							final String id, 
 							final Currency currency,
-							final String creditSpreadID) {
-		super(settlementDays, calendar, issueDate, id, currency, creditSpreadID);
+							final String creditSpreadID,
+							final Double initialFX) {
+		super(settlementDays, calendar, issueDate, id, currency, creditSpreadID, initialFX);
 
 		maturityDate_ = maturityDate.clone();
 
@@ -205,13 +208,14 @@ public class FloatingRateBond extends Bond {
 			final DayCounter accrualDayCounter,
 			final String id, 
 			final Currency currency,
-			final String creditSpreadID) {
+			final String creditSpreadID,
+			final Double initialFX) {
 		this(settlementDays, faceAmount, startDate, maturityDate,
 				couponFrequency, calendar, index,
 				accrualDayCounter, BusinessDayConvention.Following, BusinessDayConvention.Following,
 				Constants.NULL_INTEGER, new Array(new double[] { 1.0 }),
 				new Array(new double[] { 0.0 }), new Array(0), new Array(0),
 				false, 100.0, new Date(), new Date(),
-				DateGeneration.Rule.Backward, false, id, currency, creditSpreadID);
+				DateGeneration.Rule.Backward, false, id, currency, creditSpreadID, initialFX);
 	}
 }

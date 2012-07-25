@@ -90,9 +90,10 @@ public class FixedRateBond extends Bond {
             final Date  issueDate,
             final String id, 
             final Currency currency,
-            final String creditSpreadID){
+            final String creditSpreadID,
+            final Double initialFX){
     	
-        super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID);
+        super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID, initialFX);
         
         frequency_ = schedule.tenor().frequency();
         dayCounter_ = accrualDayCounter;
@@ -123,7 +124,8 @@ public class FixedRateBond extends Bond {
             /*Real*/final double redemption,
             final String id, 
             final Currency currency,
-            final String creditSpreadID){
+            final String creditSpreadID,
+            final Double initialFX){
     	
     	this(settlementDays,
              faceAmount,
@@ -135,7 +137,8 @@ public class FixedRateBond extends Bond {
              new Date(),
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
 
     /**
@@ -151,7 +154,8 @@ public class FixedRateBond extends Bond {
             final BusinessDayConvention paymentConvention,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
     	
     	this(settlementDays,
                 faceAmount,
@@ -163,7 +167,8 @@ public class FixedRateBond extends Bond {
                 new Date(),
                 id,
                 currency,
-                creditSpreadID);
+                creditSpreadID,
+                initialFX);
     }
 
     /**
@@ -179,7 +184,8 @@ public class FixedRateBond extends Bond {
             final DayCounter accrualDayCounter, 
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
     	
     	this(settlementDays,
                 faceAmount,
@@ -191,7 +197,8 @@ public class FixedRateBond extends Bond {
                 new Date(),
                 id,
                 currency,
-                creditSpreadID);
+                creditSpreadID,
+                initialFX);
     }
 
 
@@ -231,9 +238,10 @@ public class FixedRateBond extends Bond {
             final boolean endOfMonth,
             final String id, 
             final Currency currency,
-            final String creditSpreadID){
+            final String creditSpreadID,
+            final Double initialFX){
 
-    	super(settlementDays, calendar, issueDate, id, currency, creditSpreadID);
+    	super(settlementDays, calendar, issueDate, id, currency, creditSpreadID, initialFX);
         
     	frequency_= tenor.frequency();
         dayCounter_= accrualDayCounter;
@@ -295,7 +303,8 @@ public class FixedRateBond extends Bond {
             final DateGeneration.Rule  rule,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -314,7 +323,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
     /* C'tor with default:
      * DateGeneration::Rule rule = DateGeneration::Backward,
@@ -336,7 +346,8 @@ public class FixedRateBond extends Bond {
             final Date  stubDate,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -355,7 +366,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
 
     /* C'tor with default:
@@ -378,7 +390,8 @@ public class FixedRateBond extends Bond {
             final Date  issueDate,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -397,7 +410,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
     /* C'tor with default:
      * 	issueDate = new Date()
@@ -419,7 +433,8 @@ public class FixedRateBond extends Bond {
             /*@Real*/ final double redemption,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -438,7 +453,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
     
     /** C'tor with default:
@@ -461,7 +477,8 @@ public class FixedRateBond extends Bond {
             final BusinessDayConvention paymentConvention,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -480,7 +497,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
 
     /* C'tor with default:
@@ -503,7 +521,8 @@ public class FixedRateBond extends Bond {
             final BusinessDayConvention accrualConvention,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -522,7 +541,8 @@ public class FixedRateBond extends Bond {
              false,
              id, 
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
 
     /* C'tor with default:
@@ -545,7 +565,8 @@ public class FixedRateBond extends Bond {
             final DayCounter  accrualDayCounter,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
     	this(settlementDays,
              calendar,
@@ -564,7 +585,8 @@ public class FixedRateBond extends Bond {
              false,
              id,
              currency,
-             creditSpreadID);
+             creditSpreadID,
+             initialFX);
     }
 
     public Frequency frequency(){

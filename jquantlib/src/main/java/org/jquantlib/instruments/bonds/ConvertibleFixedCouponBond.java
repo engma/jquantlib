@@ -63,9 +63,10 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 	          final Schedule schedule,
 	          final String id, 
 	          final Currency currency,
-	          final String creditSpreadID){
+	          final String creditSpreadID,
+	          final Double initialFX){
 		this(exercise, conversionRatio, dividends, callability, creditSpread,
-		     issueDate, settlementDays, coupons, dayCounter, schedule, 100, id, currency, creditSpreadID);
+		     issueDate, settlementDays, coupons, dayCounter, schedule, 100, id, currency, creditSpreadID, initialFX);
 	}
 
 	public ConvertibleFixedCouponBond(
@@ -82,9 +83,10 @@ public class ConvertibleFixedCouponBond extends ConvertibleBond {
 			final double redemption,
 			final String id, 
 			final Currency currency,
-			final String creditSpreadID) {
+			final String creditSpreadID,
+			final Double initialFX) {
 		super(exercise, conversionRatio, dividends, callability, creditSpread,
-		      issueDate, settlementDays, dayCounter, schedule, redemption, id, currency, creditSpreadID);
+		      issueDate, settlementDays, dayCounter, schedule, redemption, id, currency, creditSpreadID, initialFX);
 
 		// notional forcibly set to 100
         this.cashflows_ = new FixedRateLeg(schedule,dayCounter)

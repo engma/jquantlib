@@ -63,9 +63,10 @@ public class ConvertibleBond extends Bond {
             final double redemption,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 
-        super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID);
+        super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID, initialFX);
         this.conversionRatio = conversionRatio;
         this.callability = callability;
         this.dividends = dividends;

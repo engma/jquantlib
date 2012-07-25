@@ -116,6 +116,7 @@ public class Bond extends Instrument {
     protected String bondid_;
     protected Currency currency_;
     protected String creditSpreadID_;
+    protected Double initialFX_;
     
 
     /**
@@ -134,7 +135,8 @@ public class Bond extends Instrument {
             	   final Leg coupons,
             	   final String id,
             	   final Currency currency,
-            	   final String creditSpreadID) {
+            	   final String creditSpreadID,
+            	   final Double initialFX) {
 
         this.settlementDays_ = settlementDays;
         this.calendar_ = calendar;
@@ -146,6 +148,7 @@ public class Bond extends Instrument {
         this.bondid_ = id;
         this.currency_ = currency;
         this.creditSpreadID_ = creditSpreadID;
+        this.initialFX_ = initialFX;
 
         if (!coupons.isEmpty()) {
             Collections.sort(cashflows_, new EarlierThanCashFlowComparator());
@@ -160,14 +163,22 @@ public class Bond extends Instrument {
     }
 
     protected Bond(final /* @Natural */int settlementDays,
-            	   final Calendar calendar, final String id, final Currency currency, final String creditSpreadID) {
-        this(settlementDays, calendar, new Date(), new Leg(), id, currency, creditSpreadID);
+            	   final Calendar calendar, 
+            	   final String id, 
+            	   final Currency currency, 
+            	   final String creditSpreadID, 
+            	   final Double initialFX) {
+        this(settlementDays, calendar, new Date(), new Leg(), id, currency, creditSpreadID, initialFX);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
             	   final Calendar calendar,
-            	   final Date issueDate, final String id, final Currency currency, final String creditSpreadID) {
-        this(settlementDays, calendar, issueDate, new Leg(), id, currency, creditSpreadID);
+            	   final Date issueDate, 
+            	   final String id, 
+            	   final Currency currency, 
+            	   final String creditSpreadID,
+            	   final Double initialFX) {
+        this(settlementDays, calendar, issueDate, new Leg(), id, currency, creditSpreadID, initialFX);
     }
 
     /**
@@ -190,7 +201,8 @@ public class Bond extends Instrument {
             	final Leg cashflows,
             	final String id, 
             	final Currency currency,
-            	final String creditSpreadID) {
+            	final String creditSpreadID,
+            	final Double initialFX) {
 
         this.settlementDays_ = settlementDays;
         this.calendar_ = calendar;
@@ -205,6 +217,7 @@ public class Bond extends Instrument {
         
         this.creditSpreadID_ = creditSpreadID;
         this.currency_ = currency;
+        this.initialFX_ = initialFX;
 
         if (!cashflows.isEmpty()) {
             notionalSchedule_.add(new Date());
@@ -234,8 +247,9 @@ public class Bond extends Instrument {
             	   final Date maturityDate,
             	   final String id, 
             	   final Currency currency,
-            	   final String creditSpreadID) {
-        this(settlementDays, calendar, faceAmount, maturityDate, new Date(), new Leg(), id, currency, creditSpreadID);
+            	   final String creditSpreadID,
+            	   final Double initialFX) {
+        this(settlementDays, calendar, faceAmount, maturityDate, new Date(), new Leg(), id, currency, creditSpreadID, initialFX);
     }
 
     protected Bond(final /* @Natural */int settlementDays,
@@ -245,8 +259,9 @@ public class Bond extends Instrument {
             	   final Date issueDate,
             	   final String id, 
             	   final Currency currency,
-            	   final String creditSpreadID) {
-        this(settlementDays, calendar, faceAmount, maturityDate, issueDate, new Leg(), id, currency, creditSpreadID);
+            	   final String creditSpreadID,
+            	   final Double initialFX) {
+        this(settlementDays, calendar, faceAmount, maturityDate, issueDate, new Leg(), id, currency, creditSpreadID, initialFX);
     }
 
     // inline definitions
@@ -261,6 +276,10 @@ public class Bond extends Instrument {
 
     public String creditSpreadID() {
     	return creditSpreadID_;
+    }
+    
+    public Double initialFX() {
+    	return initialFX_;
     }
 
     public Calendar calendar() {

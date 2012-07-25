@@ -57,9 +57,10 @@ public class CmsRateBond extends Bond {
             final Date issueDate,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 		
-		super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID);
+		super(settlementDays, schedule.calendar(), issueDate, id, currency, creditSpreadID, initialFX);
 		maturityDate_ = schedule.endDate().clone();
 		cashflows_ = new CmsLeg(schedule, index)
 				.withNotionals(faceAmount)
@@ -87,7 +88,8 @@ public class CmsRateBond extends Bond {
             final DayCounter paymentDayCounter,
             final String id, 
             final Currency currency,
-            final String creditSpreadID) {
+            final String creditSpreadID,
+            final Double initialFX) {
 		
 		this(settlementDays, faceAmount, schedule, index, paymentDayCounter,
 				BusinessDayConvention.Following, //default
@@ -101,7 +103,8 @@ public class CmsRateBond extends Bond {
 				new Date(), 					// default issue date
 				id,
 				currency,
-				creditSpreadID
+				creditSpreadID,
+				initialFX
 				);
 	}
 
