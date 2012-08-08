@@ -45,7 +45,6 @@ package org.jquantlib.cashflow;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.math.matrixutilities.Array;
-;
 import org.jquantlib.termstructures.volatilities.optionlet.OptionletVolatilityStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Schedule;
