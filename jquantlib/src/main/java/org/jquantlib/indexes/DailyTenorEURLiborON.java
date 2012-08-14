@@ -21,8 +21,6 @@
  */
 package org.jquantlib.indexes;
 
-
-;
 import org.jquantlib.termstructures.YieldTermStructure;
 
 /**

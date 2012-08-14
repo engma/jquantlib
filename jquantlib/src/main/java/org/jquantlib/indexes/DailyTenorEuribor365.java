@@ -23,7 +23,6 @@ package org.jquantlib.indexes;
 
 import org.jquantlib.currencies.Europe.EURCurrency;
 import org.jquantlib.daycounters.Actual365Fixed;
-;
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.Period;
 import org.jquantlib.time.TimeUnit;

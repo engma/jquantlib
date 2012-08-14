@@ -103,8 +103,7 @@ public class FixedRateBondHelper extends RateHelper {
 		super(cleanPrice);
 		QL.validateExperimentalMode();  
 		
-		this.bond = new FixedRateBond(settlementDays, faceAmount, schedule,
-				coupons, dayCounter, paymentConvention, redemption, issueDate);
+		// this.bond = new FixedRateBond(settlementDays, faceAmount, schedule, coupons, dayCounter, paymentConvention, redemption, issueDate);
 		
 		this.latestDate = this.bond.maturityDate();
 //		new Settings().evaluationDate().addObserver(this);
