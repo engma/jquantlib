@@ -86,7 +86,7 @@ public abstract class Instrument extends LazyObject {
     protected PricingEngine engine;
 
     /**
-     * Represents the net present value of the instrument.
+     * Represents the calculation value date.
      */
     protected Date valuedate;
 

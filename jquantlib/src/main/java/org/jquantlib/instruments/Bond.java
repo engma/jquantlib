@@ -291,6 +291,10 @@ public class Bond extends Instrument {
     	return remainingLife(vd, new Thirty360());
     }
     
+    public Double remainingLife() {
+    	return remainingLife(valuedate, new Thirty360());
+    }
+    
     public Calendar calendar() {
         return calendar_;
     }
