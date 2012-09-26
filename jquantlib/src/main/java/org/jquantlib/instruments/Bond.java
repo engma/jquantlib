@@ -55,6 +55,7 @@ import org.jquantlib.cashflow.Coupon;
 import org.jquantlib.cashflow.Leg;
 import org.jquantlib.cashflow.SimpleCashFlow;
 import org.jquantlib.daycounters.DayCounter;
+import org.jquantlib.daycounters.Thirty360;
 import org.jquantlib.lang.iterators.Iterables;
 import org.jquantlib.lang.reflect.ReflectConstants;
 import org.jquantlib.math.Closeness;
@@ -281,7 +282,15 @@ public class Bond extends Instrument {
     public Double initialFX() {
     	return initialFX_;
     }
+    
+    public Double remainingLife(Date vd, DayCounter dcf) {
+    	return dcf.yearFraction(vd, maturityDate());
+    }
 
+    public Double remainingLife(Date vd) {
+    	return remainingLife(vd, new Thirty360());
+    }
+    
     public Calendar calendar() {
         return calendar_;
     }

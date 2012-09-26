@@ -146,7 +146,7 @@ public abstract class Instrument extends LazyObject {
      *
      * @see PricingEngine
      */
-    public final void setPricingEngine(final PricingEngine engine) {
+    private final void setPricingEngine(final PricingEngine engine) {
         if (this.engine != null)
             this.engine.deleteObserver(this);
         this.engine = engine;
