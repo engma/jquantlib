@@ -29,7 +29,7 @@ import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
 import org.jquantlib.time.Period;
 import org.jquantlib.time.TimeUnit;
-import org.jquantlib.time.calendars.Target;
+import org.jquantlib.time.calendars.Japan;
 
 /**
  * 
@@ -54,7 +54,7 @@ public class JpyLiborSwapIsdaFixPm extends SwapIndex {
                 tenor,
                 2, // settlement days
                 new JPYCurrency(),
-                new Target(),
+                new Japan(),
                 new Period(6,TimeUnit.Months),
                 BusinessDayConvention.ModifiedFollowing,
                 new ActualActual(ActualActual.Convention.ISDA),

@@ -891,6 +891,7 @@ public class Bond extends Instrument {
         arguments.settlementDate = settlementDate();
         arguments.cashflows = (Leg)cashflows_.clone();
         arguments.calendar = calendar_;
+        arguments.bondid = bondid_;
     }
     
     @Override
@@ -1215,6 +1216,7 @@ public class Bond extends Instrument {
         public Date settlementDate;
         public Leg cashflows;
         public Calendar calendar;
+        public String bondid;
 
         @Override
         public void validate() {

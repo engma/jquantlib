@@ -23,7 +23,6 @@ package org.jquantlib.indexes;
 
 import org.jquantlib.currencies.Asia.JPYCurrency;
 import org.jquantlib.daycounters.ActualActual;
-import org.jquantlib.indexes.ibor.JPYLibor;
 
 import org.jquantlib.termstructures.YieldTermStructure;
 import org.jquantlib.time.BusinessDayConvention;
@@ -43,23 +42,21 @@ import org.jquantlib.time.calendars.Japan;
  * 
  * @author Tim Blackler
  */
-public class JpyLiborSwapIsdaFixAm extends SwapIndex {
+public class JpyJGBYieldIndex extends BondYieldIndex {
 
-    public JpyLiborSwapIsdaFixAm(final Period tenor) {
+    public JpyJGBYieldIndex(final Period tenor) {
     	this(tenor, null);
     }
 	
-    public JpyLiborSwapIsdaFixAm(final Period tenor, YieldTermStructure h) {
-        super( "JpyLiborSwapIsdaFixAm",
+    public JpyJGBYieldIndex(final Period tenor, YieldTermStructure h) {
+        super( "JpyJGBYieldIndex",
                 tenor,
-                2, // settlement days
+                0, // settlement days
                 new JPYCurrency(),
                 new Japan(),
                 new Period(6,TimeUnit.Months),
                 BusinessDayConvention.ModifiedFollowing,
-                new ActualActual(ActualActual.Convention.ISDA),
-                new JPYLibor(new Period(6,TimeUnit.Months), h)
-                		
+                new ActualActual(ActualActual.Convention.ISDA)
                 );
         }
 }
