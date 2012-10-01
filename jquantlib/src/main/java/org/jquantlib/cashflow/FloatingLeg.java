@@ -47,10 +47,13 @@ When applicable, the original copyright notice follows this notice.
 
 package org.jquantlib.cashflow;
 
+import java.lang.reflect.Constructor;
+
 import org.jquantlib.QL;
 import org.jquantlib.daycounters.DayCounter;
 import org.jquantlib.indexes.IborIndex;
 import org.jquantlib.indexes.InterestRateIndex;
+import org.jquantlib.indexes.SwapIndex;
 import org.jquantlib.lang.exceptions.LibraryException;
 import org.jquantlib.math.Constants;
 import org.jquantlib.math.matrixutilities.Array;
@@ -180,7 +183,7 @@ public class FloatingLeg< InterestRateIndexType extends InterestRateIndex,
                       Date.class, // start date
                       Date.class, // enddate
                       int.class, // fixing days
-                      IborIndex.class, // IbotIndex
+                      typeIRT, // IbotIndex
                       double.class, // gearing
                       double.class, // spread
                       Date.class, // refperiodstart
@@ -210,13 +213,13 @@ public class FloatingLeg< InterestRateIndexType extends InterestRateIndex,
          else {
                 CappedFlooredCouponType cfctc;
                 try {
-                    cfctc = (CappedFlooredCouponType) typeCFC.getConstructor(
+                	cfctc = (CappedFlooredCouponType) typeCFC.getConstructor(
                             Date.class, // paymentdate
                             double.class, // nominal
                             Date.class, // start date
                             Date.class, // enddate
                             int.class, // fixing days
-                            IborIndex.class, // IborIndex
+                            typeIRT, // IborIndex
                             double.class, // gearing
                             double.class, // spread
                             double.class, //caps
@@ -241,6 +244,9 @@ public class FloatingLeg< InterestRateIndexType extends InterestRateIndex,
                                     refEnd,
                                     paymentDayCounter,
                                     isInArrears);
+                } catch (final java.lang.reflect.InvocationTargetException e) {
+                	e.getCause().printStackTrace();
+                    throw new LibraryException("Couldn't construct new instance from generic type:CappedFlooredCouponType");
                 } catch (final Exception e) {
                     throw new LibraryException("Couldn't construct new instance from generic type:CappedFlooredCouponType");
                 }

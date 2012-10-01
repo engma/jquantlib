@@ -142,6 +142,6 @@ public class CappedFlooredCmtCoupon extends CappedFlooredCoupon {
         super (new CmtCoupon(paymentDate, nominal, startDate, endDate, fixingDays,
             index, gearing, spread, refPeriodStart, refPeriodEnd,
                 dayCounter, isInArrears), cap, floor);
-        throw new UnsupportedOperationException ("work in progress...");
+//        throw new UnsupportedOperationException ("work in progress...");
     }
 }
