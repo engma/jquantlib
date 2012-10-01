@@ -37,6 +37,9 @@ public abstract class CmtCouponPricer extends FloatingRateCouponPricer {
     private SwaptionVolatilityStructure bondOptionVol_;
     private static final String no_adequate_swaptionVol_given = "no adequate swaptionVol given";
 
+    public CmtCouponPricer() {
+    }
+    
     public CmtCouponPricer(final SwaptionVolatilityStructure bondOptionVol) {
         this.bondOptionVol_ = bondOptionVol;
         this.bondOptionVol_.addObserver(this);

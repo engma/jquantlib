@@ -781,7 +781,7 @@ public class Bond extends Instrument {
      * @return The accrued amount. double
      */
     public double accruedAmount() {
-        return accruedAmount(new Date());
+        return accruedAmount(settlementDate());
     }
 
     public double accruedAmount(Date settlement) {
