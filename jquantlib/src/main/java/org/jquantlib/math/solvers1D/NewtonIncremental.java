@@ -27,13 +27,11 @@ import org.jquantlib.math.AbstractSolver1D;
 import org.jquantlib.math.Ops;
 
 /**
-* Bisection 1-D solver<br/>
+* Incremental 1-D solver<br/>
 * <p>
-* The implementation of the algorithm was inspired by
-* <i>Press, Teukolsky, Vetterling, and Flannery, "Numerical Recipes
-* in C", 2nd edition, Cambridge University Press</i>
+* Simple Newton-Raphson method.
 * 
-* @author Dominik Holenstein
+* @author Masakatsu Wakayu
 */
 public class NewtonIncremental extends AbstractSolver1D<Ops.DoubleOp>  {
 
