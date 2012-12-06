@@ -639,7 +639,7 @@ public class Date implements Observable, Comparable<Date>, Serializable, Cloneab
     
     @Override
     public String toString() {
-        return longDate().toString();
+        return shortDate().toString();
     }
 
 
